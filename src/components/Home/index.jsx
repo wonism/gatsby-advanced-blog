@@ -1,0 +1,78 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import Link from 'gatsby-link';
+import fp from 'lodash/fp';
+import Wrapper from '~/components/Common/Wrapper';
+import SimpleWrapper from '~/components/Common/SimpleWrapper';
+import PortfolioCard from '~/components/Common/PortfolioCard';
+import './index.css';
+
+const Title = styled.h1`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+  width: 80%;
+  height: 1.5em;
+  line-height: 1.5em;
+  font-size: 48px;
+  font-size: 10vw;
+  font-family: 'Kaushan Script';
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
+const Home = ({
+  portfolios,
+}) => ([
+  <Wrapper key="main" isHome>
+    <Title>
+      Hello, Blog!
+    </Title>
+  </Wrapper>,
+  fp.size(portfolios) >= 4 ? (
+    <SimpleWrapper key="portfolios">
+      {fp.flow(
+        fp.slice(0, 4),
+        fp.map((edge) => {
+          const portfolio = fp.get('node.frontmatter')(edge);
+          const { path, title, images } = portfolio;
+
+          if (fp.size(images)) {
+            return (
+              <PortfolioCard key={path}>
+                <Link to={path}>
+                  <img src={fp.first(images)} alt="portfolio" />
+                  <h6>{title}</h6>
+                </Link>
+              </PortfolioCard>
+            );
+          }
+
+          return (
+            <PortfolioCard key={path}>
+              <Link to={path}>
+                <h4>{title}</h4>
+              </Link>
+            </PortfolioCard>
+          );
+        })
+      )(portfolios)}
+    </SimpleWrapper>
+  ) : null,
+]);
+
+Home.propTypes = {
+  portfolios: PropTypes.arrayOf(PropTypes.shape({})),
+};
+
+Home.defaultProps = {
+  portfolios: [],
+};
+
+export default Home;

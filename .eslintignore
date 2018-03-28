@@ -1,0 +1,3 @@
+**/node_modules
+**/external_dependencies
+src/html.jsx
