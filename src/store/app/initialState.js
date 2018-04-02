@@ -7,4 +7,6 @@ export default {
   portfolios: [],
   postInformations: [],
   categories: [],
+  isMenuOpened: false,
+  isSubMenuOpened: false,
 };

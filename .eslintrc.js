@@ -69,50 +69,11 @@ module.exports = {
     'react/no-typos': error,
   },
   parser: 'babel-eslint',
-  settings: {
-    'import/resolver': {
-      webpack: {
-        config: 'webpack.config.js',
-      },
-    },
-  },
   overrides: [{
-    files: ['src/layouts/index.jsx'],
-    rules: {
-      'global-require': off,
-    },
-  }, {
-    files: ['src/shared/store/**/*.js'],
+    files: ['src/layouts/index.jsx', 'src/components/Home/index.jsx', 'src/templates/Portfolio.jsx', 'src/templates/Portfolios.jsx'],
     rules: {
       'global-require': off,
       'import/no-dynamic-require': off,
-      'import/no-extraneous-dependencies': off,
-      'import/no-unresolved': off,
-      'no-empty': [error, { allowEmptyCatch: true }],
-      'prefer-spread': off,
-    },
-  }, {
-    files: ['src/**/sagas.js', 'src/*/utils/*.js'],
-    rules: {
-      'import/no-extraneous-dependencies': off,
-      'no-new': off,
-      'new-cap': off,
-    },
-  }, {
-    files: ['src/shared/constants/*.js'],
-    rules: {
-      'import/no-extraneous-dependencies': off,
-    },
-  }, {
-    files: ['src/shared/**/*.test.js'],
-    rules: {
-      'max-len': off,
-      'no-undef': off,
-    },
-  }, {
-    files: ['src/shared/setupJest.js'],
-    rules: {
-      'import/no-extraneous-dependencies': off,
     },
   }],
 };

@@ -9,6 +9,10 @@ export default styled.section`
   height: 0;
   background-color: #eee;
   overflow: hidden;
+  @media (max-width: 414px) {
+    padding: 56.25% 0 0;
+    width: 100%;
+  }
 
   &:nth-child(4n + 2),
   &:nth-child(4n + 3) {
@@ -32,6 +36,7 @@ export default styled.section`
     left: 0;
     width: 100%;
     height: 100%;
+    color: #000;
   }
 
   img {
@@ -51,6 +56,7 @@ export default styled.section`
     bottom: 16px;
     left: 16px;
     font-size: 14px;
+    text-decoration: underline;
   }
 
   h4 {

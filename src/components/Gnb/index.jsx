@@ -8,7 +8,38 @@ import FaSearch from 'react-icons/lib/fa/search';
 import FaTags from 'react-icons/lib/fa/tags';
 import fp from 'lodash/fp';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '~/components/Common/constants';
-import './index.css';
+import './index.less';
+
+const Hamburger = styled.div`
+  position: fixed;
+  display: none;
+  top: 0;
+  right: 0;
+  z-index: 5000;
+  @media (max-width: 414px) {
+    display: block;
+  }
+
+  &:before,
+  &:after {
+    display: block;
+    content: '';
+    clear: both;
+  }
+
+  & > div {
+    float: left;
+  }
+`;
+
+const MovableFaCaretDown = styled(FaCaretDown)`
+  transition: transform .4s ease-out .1s;
+  transform: rotate(180deg);
+
+  &.is-active {
+    transform: rotate(0deg);
+  }
+`;
 
 const GnbWrapper = styled.div`
   position: fixed;
@@ -20,6 +51,11 @@ const GnbWrapper = styled.div`
   font-family: Lato;
   font-weight: 600;
   z-index: 3000;
+  @media (max-width: 414px) {
+    height: 60px;
+    line-height: 60px;
+    background-color: transparent;
+  }
 `;
 
 const SubMenu = styled.ul`
@@ -45,6 +81,9 @@ const ListMenu = styled.li`
   position: relative;
   padding: 0 0 0 2em;
   width: 120px;
+  @media (max-width: 414px) {
+    display: none;
+  }
 
   a {
     color: #000;
@@ -56,8 +95,8 @@ const ListMenu = styled.li`
   }
 
   &:hover {
-      max-height: 360px;
     ${SubMenu} {
+      max-height: 360px;
     }
   }
 
@@ -91,6 +130,9 @@ const SearchBarWrapper = styled.div`
   margin: auto;
   padding: 0 36px 0 0;
   text-align: right;
+  @media (max-width: 414px) {
+    display: none;
+  }
 
   label {
     position: relative;
@@ -114,6 +156,9 @@ const SearchBar = styled.input`
   font-size: 18px;
   outline: 0;
   z-index: 1000;
+  @media (max-width: 414px) {
+    display: none;
+  }
 
   &:focus {
     border-color: ${PRIMARY_COLOR};
@@ -127,10 +172,13 @@ const SearchedPosts = styled.div`
   width: 317px;
   max-height: 500px;
   background-color: #fff;
-  box-shadow: ${({ isEmpty }) => (isEmpty ? '0' : '0 2px 4px rgba(0,0,0,0.2)')};
-  box-shadow: ${({ isEmpty }) => (isEmpty ? '0' : '0 3px 8px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.08)')};
+  box-shadow: ${({ isEmpty }) => (isEmpty ? '0 0 0' : '0 2px 4px rgba(0,0,0,0.2)')};
+  box-shadow: ${({ isEmpty }) => (isEmpty ? '0 0 0' : '0 3px 8px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.08)')};
   font-weight: 400;
   overflow-y: auto;
+  @media (max-width: 414px) {
+    display: none;
+  }
 `;
 
 const Title = styled.h4`
@@ -180,6 +228,100 @@ const SearchedPost = styled.article`
   }
 `;
 
+const Background = styled.div`
+  display: none;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  transition: opacity .4s ease-out .1s;
+  @media (max-width: 414px) {
+    display: block;
+  }
+`;
+
+const MobileMenus = styled.div`
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0 16px;
+  width: 80%;
+  height: 100%;
+  background-color: #fff;
+  transition: left.4s ease-out .1s;
+  z-index: 3;
+  overflow-y: auto;
+  @media (max-width: 414px) {
+    display: block;
+  }
+`;
+
+const MobileMenu = styled.section`
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  @media (max-width: 414px) {
+    display: block;
+    line-height: 60px;
+    pointer-events: ${({ isActive }) => (isActive ? 'all' : 'none')};
+
+    ${SearchBarWrapper},
+    ${SearchBar},
+    ${SearchedPosts},
+    ${SearchBar},
+    ${ListMenu} {
+      display: block;
+    }
+  }
+
+  ${ListMenu} {
+    padding: 0;
+    width: 100%;
+
+    ${SubMenu} {
+      position: static;
+      max-height: ${({ isSubActive }) => (isSubActive ? '0' : '360px')}
+    }
+  }
+
+  ${MobileMenus} {
+    left: ${({ isActive }) => (isActive ? '0' : '-100%')};
+    box-shadow: ${({ isActive }) => (isActive ? '0 2px 4px rgba(0,0,0,0.2)' : '0 0 0')};
+    box-shadow: ${({ isActive }) => (isActive ? '0 3px 8px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.08)' : '0 0 0')};
+  }
+
+  ${Background} {
+    opacity: ${({ isActive }) => (isActive ? '.5' : '0')};
+  }
+
+  ${SearchBarWrapper},
+  ${SearchedPosts} {
+    position: relative;
+  }
+
+  ${SearchBarWrapper} {
+    padding: 0;
+    width: 100%;
+  }
+
+  ${SearchBar} {
+    right: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  ${SearchedPosts} {
+    position: static;
+    width: 100%;
+    max-height: none;
+    box-shadow: 0 0 0;
+  }
+`;
+
 const Gnb = ({
   location,
   categories,
@@ -188,6 +330,12 @@ const Gnb = ({
   navigateToPath,
   inputKeyword,
   searchKeyword,
+  isMenuOpened,
+  openMenu,
+  closeMenu,
+  isSubMenuOpened,
+  openSubMenu,
+  closeSubMenu,
 }) => {
   const filteredPosts = !fp.isEmpty(searchKeyword) ?
     fp.filter(({ category = '', title = '', tags = [] }) => {
@@ -221,6 +369,108 @@ const Gnb = ({
 
   return (
     <GnbWrapper>
+      <MobileMenu isActive={isMenuOpened} isSubActive={isSubMenuOpened}>
+        <Background onClick={closeMenu} />
+        <MobileMenus>
+          <ul>
+            <ListMenu>
+              <StyledLink to="/" onClick={closeMenu}>
+                <Home />
+              </StyledLink>
+            </ListMenu>
+            <ListMenu>
+              <StyledLink to="/pages/1" className={isPost ? 'active' : ''} onClick={closeMenu}>
+                Posts
+              </StyledLink>
+              {
+                fp.size(categories) ?
+                  [
+                    ' ',
+                    <MovableFaCaretDown
+                      className={isSubMenuOpened ? 'is-active' : ''}
+                      key="arrow"
+                      onClick={isSubMenuOpened ? closeSubMenu : openSubMenu}
+                    />,
+                  ] :
+                  null
+              }
+              <SubMenu>
+                <div>
+                  {fp.flow(
+                    fp.filter(({ key }) => !fp.isEqual('__ALL__')(key)),
+                    fp.map(({ key, length }) => (
+                      <li key={key}>
+                        <Link to={`/categories/${key}/1`} onClick={closeMenu}>
+                          {key} <small>({length})</small>
+                        </Link>
+                      </li>
+                    ))
+                  )(categories)}
+                </div>
+              </SubMenu>
+            </ListMenu>
+            {hasPortfolio ? (
+              <ListMenu>
+                <StyledLink to="/portfolios" className={isPortfolio ? 'active' : ''} onClick={closeMenu}>
+                  Portfolio
+                </StyledLink>
+              </ListMenu>
+            ) : null}
+            <ListMenu>
+              <StyledLink to="/resume" className={isResume ? 'active' : ''} onClick={closeMenu}>
+                Resume
+              </StyledLink>
+            </ListMenu>
+            <SearchBarWrapper>
+              <label htmlFor="search">
+                <FaSearch />
+              </label>
+              <SearchBar
+                id="search"
+                type="text"
+                value={searchKeyword}
+                onChange={fp.flow(
+                  fp.get('target.value'),
+                  inputKeyword,
+                )}
+              />
+            </SearchBarWrapper>
+            <SearchedPosts isEmpty={fp.isEmpty(filteredPosts)}>
+              {fp.map(({ path, title, summary, tags }) => (
+                <SearchedPost key={path}>
+                  <Title onClick={() => { navigateToPath(path); }}>
+                    {title}
+                  </Title>
+                  <Summary onClick={() => { navigateToPath(path); }}>
+                    {summary}
+                  </Summary>
+                  {fp.size(tags) ? (
+                    <FaTags />
+                  ) : null}
+                  {fp.flow(
+                    fp.uniq,
+                    fp.map(tag => (
+                      <Tag key={tag} onClick={() => { navigateToPath(`/tags/${tag}/1`); }}>
+                        <small>
+                          {tag}
+                        </small>
+                      </Tag>
+                    ))
+                  )(tags)}
+                </SearchedPost>
+              ))(filteredPosts)}
+            </SearchedPosts>
+          </ul>
+        </MobileMenus>
+      </MobileMenu>
+      <Hamburger
+        className={`hamburger hamburger--spin js-hamburger ${isMenuOpened ? 'is-active' : ''}`}
+        onClick={isMenuOpened ? closeMenu : openMenu}
+      >
+        <div className="hamburger-box">
+          <div className="hamburger-inner" />
+        </div>
+      </Hamburger>
       <ul>
         <ListMenu>
           <StyledLink to="/">
@@ -310,6 +560,12 @@ Gnb.propTypes = {
   navigateToPath: PropTypes.func.isRequired,
   inputKeyword: PropTypes.func.isRequired,
   searchKeyword: PropTypes.string.isRequired,
+  isMenuOpened: PropTypes.bool.isRequired,
+  openMenu: PropTypes.func.isRequired,
+  closeMenu: PropTypes.func.isRequired,
+  isSubMenuOpened: PropTypes.bool.isRequired,
+  openSubMenu: PropTypes.func.isRequired,
+  closeSubMenu: PropTypes.func.isRequired,
 };
 
 Gnb.defaultProps = {

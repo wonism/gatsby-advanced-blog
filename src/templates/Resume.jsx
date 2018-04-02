@@ -15,6 +15,9 @@ import * as profileUrl from '~/resources/me.png';
 
 const Wrapper = styled.section`
   padding: 100px 0 0;
+  @media (max-width: 414px) {
+    padding: 70px 16px 0;
+  }
 
   & > ${Clearfix} {
     margin: auto;
@@ -189,7 +192,7 @@ export const pageQuery = graphql`
       frontmatter {
         title
         path
-        date(formatString: "MMMM DD, YYYY")
+        date
       }
     }
   }

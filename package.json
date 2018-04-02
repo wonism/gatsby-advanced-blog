@@ -1,16 +1,14 @@
 {
   "name": "gatsby-advanced-blog",
-  "version": "0.1.0-alpha",
+  "version": "0.1.1-alpha",
   "description": "Gatsby starter for advanced blog",
-  "main": "index.js",
+  "main": "n/a",
   "author": "wonism",
   "license": "MIT",
   "homepage": "https://github.com/wonism/gatsby-advanced-blog",
   "keywords": [
     "gatsby"
   ],
-  "license": "MIT",
-  "main": "n/a",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wonism/gatsby-advanced-blog.git"
@@ -26,7 +24,6 @@
     "babel-polyfill": "^6.26.0",
     "gatsby": "^2.0.0-alpha.12",
     "gatsby-link": "^1.6.40",
-    "gatsby-plugin-sass": "^1.0.25",
     "lodash": "^4.17.5",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
@@ -58,11 +55,13 @@
     "eslint-plugin-lodash-fp": "^2.1.3",
     "eslint-plugin-react": "^7.7.0",
     "extract-text-webpack-plugin": "^3.0.2",
+    "fs": "0.0.1-security",
     "gatsby-plugin-google-analytics": "^1.0.24",
-    "gatsby-plugin-less": "^1.1.8",
+    "gatsby-plugin-less": "^2.0.0-alpha.5",
     "gatsby-plugin-manifest": "^1.0.15",
     "gatsby-plugin-offline": "^1.0.15",
     "gatsby-plugin-react-helmet": "^2.0.8",
+    "gatsby-plugin-sass": "^2.0.0-alpha.5",
     "gatsby-plugin-styled-components": "^2.0.9",
     "gatsby-remark-copy-linked-files": "^1.5.30",
     "gatsby-remark-images": "^1.5.59",

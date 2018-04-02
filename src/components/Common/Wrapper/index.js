@@ -7,6 +7,9 @@ const WrapperOuter = styled.section`
   padding: 56.25% 0 0;
   width: 100%;
   height: 0;
+  @media (max-width: 414px) {
+    padding: 178% 0 0;
+  }
 `;
 
 const WrapperInner = styled.div`

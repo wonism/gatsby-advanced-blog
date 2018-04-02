@@ -53,10 +53,10 @@ const CategorizedList = ({
       {fp.map((post) => {
         if (post.node.path !== '/404/') {
           const frontmatter = fp.get('node.frontmatter')(post);
-          const { tags, path } = frontmatter;
+          const { images, tags, path } = frontmatter;
 
           return (
-            <Card key={path} path={path} tags={tags} {...frontmatter} hasTags={!fp.isEmpty(tags)} />
+            <Card key={path} path={path} images={images} tags={tags} {...frontmatter} hasTags={!fp.isEmpty(tags)} />
           );
         }
 
@@ -108,10 +108,11 @@ export const pageQuery = graphql`
           frontmatter {
             type
             title
+            images
             path
             category
             tags
-            date(formatString: "DD MMMM, YYYY")
+            date
             summary
           }
         }

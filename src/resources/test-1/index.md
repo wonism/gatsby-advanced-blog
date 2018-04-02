@@ -4,8 +4,8 @@ title: "Gatsby Advanced Blog"
 date: "2018-01-01T00:00:00.000Z"
 path: "/portfolios/portfolio-1/"
 images: [
-  "https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png",
-  "https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png"
+  "test-1/1.png",
+  "test-1/2.png",
 ]
 ---
 

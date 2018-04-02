@@ -55,6 +55,7 @@ module.exports = {
     'gatsby-plugin-offline',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-styled-components',
+    'gatsby-plugin-less',
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
@@ -62,7 +63,7 @@ module.exports = {
         short_name: 'Gatsby Blog',
         start_url: '/',
         background_color: '#fff',
-        theme_color: '#9f63f0',
+        theme_color: '#3B9CFF',
         display: 'minimal-ui',
         /*
         icons: [{

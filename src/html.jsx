@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
 let stylesStr;
-if (process.env.NODE_ENV === 'production') {
+if (JSON.stringify(process.env.NODE_ENV) === 'production') {
   try {
-    stylesStr = require('!raw-loader!../public/styles.css');
+    stylesStr = require('!raw-loader!./components/Layout/index.css');
   } catch (e) {
     console.error(e);
   }
@@ -30,8 +30,7 @@ export default class HTML extends Component {
           <meta httpEquiv="Access-Control-Expose-Headers" content="*" />
           <meta httpEquiv="Access-Control-Allow-Credentials" content="true" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          {/* <meta id="viewport" name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1" /> */}
-          <meta name="theme-color" content="#47c5d5" />
+          <meta id="viewport" name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1" />
           <meta name="description" content="Gatsby Advanced Blog" />
           <meta name="keywords" content="Gatsby, ReactJS" />
           <meta name="author" content="wonism" />
@@ -45,7 +44,7 @@ export default class HTML extends Component {
           {/* <meta name="msapplication-TileImage" content="" /> */}
           {/* <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="" /> */}
           {/* <link rel="apple-touch-icon" type="image/vnd.microsoft.icon" href="" /> */}
-          {process.env.NODE_ENV === 'production' ? (
+          {JSON.stringify(process.env.NODE_ENV) === 'production' ? (
             <style id="gatsby-inlined-css" dangerouslySetInnerHTML={{ __html: stylesStr }} />
           ) : null}
         </head>

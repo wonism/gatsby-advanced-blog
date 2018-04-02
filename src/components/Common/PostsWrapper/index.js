@@ -5,6 +5,9 @@ export default styled.section`
   padding: 120px 0 0;
   max-width: 1176px;
   font-size: ${({ post }) => (post ? '14px' : '0')};
+  @media (max-width: 414px) {
+    padding: 70px 16px 0;
+  }
 
   &:before,
   &:after {

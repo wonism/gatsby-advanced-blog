@@ -7,7 +7,7 @@ import Gnb from '~/containers/Gnb';
 import Footer from '~/components/Footer';
 
 // common styles
-import './index.css';
+import './index.less';
 
 const Background = styled.div`
   min-height: 100vh;

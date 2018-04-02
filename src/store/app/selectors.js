@@ -32,3 +32,13 @@ export const getPortfolios = createSelector(
   getAppSubState,
   fp.get('portfolios')
 );
+
+export const isMenuOpened = createSelector(
+  getAppSubState,
+  fp.get('isMenuOpened')
+);
+
+export const isSubMenuOpened = createSelector(
+  getAppSubState,
+  fp.get('isSubMenuOpened')
+);

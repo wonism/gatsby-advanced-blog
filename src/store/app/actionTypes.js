@@ -17,5 +17,11 @@ export const PRINT = 'PRINT';
 export const PRINT_SUCCESS = 'PRINT_SUCCESS';
 export const PRINT_FAILED = 'PRINT_FAILED';
 
-/* Inpu */
+/* Input */
 export const INPUT_KEYWORD = 'INPUT_KEYWORD';
+
+/* Menu */
+export const OPEN_MENU = 'OPEN_MENU';
+export const CLOSE_MENU = 'CLOSE_MENU';
+export const OPEN_SUB_MENU = 'OPEN_SUB_MENU';
+export const CLOSE_SUB_MENU = 'CLOSE_SUB_MENU';

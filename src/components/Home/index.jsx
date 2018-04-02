@@ -6,7 +6,7 @@ import fp from 'lodash/fp';
 import Wrapper from '~/components/Common/Wrapper';
 import SimpleWrapper from '~/components/Common/SimpleWrapper';
 import PortfolioCard from '~/components/Common/PortfolioCard';
-import './index.css';
+import './index.less';
 
 const Title = styled.h1`
   position: absolute;
@@ -42,12 +42,17 @@ const Home = ({
         fp.map((edge) => {
           const portfolio = fp.get('node.frontmatter')(edge);
           const { path, title, images } = portfolio;
+          const image = fp.isArray(images) ? fp.first(images) : null;
 
-          if (fp.size(images)) {
+          if (!fp.isEmpty(image)) {
             return (
               <PortfolioCard key={path}>
                 <Link to={path}>
-                  <img src={fp.first(images)} alt="portfolio" />
+                  {fp.includes('//')(image) ? (
+                    <img src={image} alt="portfolio" />
+                  ) : (
+                    <img src={require(`~/resources/${image}`)} alt="portfolio" />
+                  )}
                   <h6>{title}</h6>
                 </Link>
               </PortfolioCard>

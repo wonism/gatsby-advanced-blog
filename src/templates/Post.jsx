@@ -16,7 +16,8 @@ import {
 } from '~/store/app/actions';
 import Bio from '~/components/Bio';
 import { SITE_URL } from '~/constants';
-import './post.css';
+import formattedDate from '~/utils/formattedDate';
+import './post.less';
 
 const Tags = styled.div`
   margin: 1em 0;
@@ -178,7 +179,7 @@ class Post extends PureComponent {
           {fp.get('frontmatter.title')(post)}
         </h1>
         <time>
-          {fp.get('frontmatter.date')(post)}
+          {fp.flow(fp.get('frontmatter.date'), formattedDate)(post)}
         </time>
         {fp.isEmpty(tags) ? null : (
           <Tags>
@@ -186,7 +187,7 @@ class Post extends PureComponent {
             {fp.map(tag => (
               <Link
                 key={tag}
-                to={`/tags/${tag}`}
+                to={`/tags/${tag}/1`}
               >
                 <small>{tag}</small>
               </Link>
@@ -236,7 +237,7 @@ export const pageQuery = graphql`
         path
         category
         tags
-        date(formatString: "MMMM DD, YYYY")
+        date
         components {
           rootId
           fileName

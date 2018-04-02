@@ -16,6 +16,7 @@ Desktop.ini
 node_modules/
 *.log
 *.gz
+build/
 
 # configure
 config/

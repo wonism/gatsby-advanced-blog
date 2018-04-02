@@ -8,6 +8,9 @@ import PortfolioCard from '~/components/Common/PortfolioCard';
 
 const Wrapper = SimpleWrapper.extend`
   padding: 100px 0 0;
+  @media (max-width: 414px) {
+    padding: 70px 0 0;
+  }
 `;
 
 const Portfolios = ({
@@ -26,12 +29,17 @@ const Portfolios = ({
         if (portfolio.node.path !== '/404/') {
           const frontmatter = fp.get('node.frontmatter')(portfolio);
           const { path, title, images } = frontmatter;
+          const image = fp.isArray(images) ? fp.first(images) : null;
 
-          if (fp.size(images)) {
+          if (!fp.isEmpty(image)) {
             return (
               <PortfolioCard key={path}>
                 <Link to={path}>
-                  <img src={fp.first(images)} alt="portfolio" />
+                  {fp.includes('//')(image) ? (
+                    <img src={image} alt="portfolio" />
+                  ) : (
+                    <img src={require(`~/resources/${image}`)} alt="portfolio" />
+                  )}
                   <h6>{title}</h6>
                 </Link>
               </PortfolioCard>
@@ -84,7 +92,7 @@ export const pageQuery = graphql`
             title
             path
             images
-            date(formatString: "DD MMMM, YYYY")
+            date
           }
         }
       }
