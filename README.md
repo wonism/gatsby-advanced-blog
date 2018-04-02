@@ -6,6 +6,11 @@
 $ npm i -S gatsby-advanced-blog
 ```
 
+## Start with gatsby-cli
+```
+$ gatsby new PROJECT_NAME https://github.com/wonism/gatsby-advanced-blog
+```
+
 ## Features
 - Post
   - Pagination
