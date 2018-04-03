@@ -36,6 +36,12 @@ const ImageWrapper = styled.figure`
 `;
 /* eslint-enable max-len */
 
+const TagWrapper = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 const StyledArticle = styled.article`
   display: inline-block;
   padding: 0 16px 16px;
@@ -110,7 +116,6 @@ const Card = ({
   title,
   date,
   summary,
-  hasTags,
 }) => (
   <StyledArticle>
     <div>
@@ -129,19 +134,17 @@ const Card = ({
           </Truncate>
         </p>
       </Link>
-      {hasTags ? (
-        <div>
-          <FaTags />
-          {fp.map(tag => (
-            <Link
-              key={tag}
-              to={`/tags/${tag}/1`}
-            >
-              <small>{tag}</small>
-            </Link>
-          ))(tags)}
-        </div>
-      ) : null}
+      <TagWrapper>
+        <FaTags />
+        {fp.map(tag => (
+          <Link
+            key={tag}
+            to={`/tags/${tag}/1`}
+          >
+            <small>{tag}</small>
+          </Link>
+        ))(tags)}
+      </TagWrapper>
       <time>{date}</time>
     </div>
   </StyledArticle>
@@ -154,7 +157,6 @@ Card.propTypes = {
   title: PropTypes.string,
   date: PropTypes.string,
   summary: PropTypes.string,
-  hasTags: PropTypes.bool.isRequired,
 };
 
 Card.defaultProps = {

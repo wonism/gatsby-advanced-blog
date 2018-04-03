@@ -8,37 +8,49 @@ import createReducer from '~/utils/createReducer';
 
 /* reducers */
 import appReducers from '~/store/app/reducers';
+import postsReducers from '~/store/posts/reducers';
 
 /* sagas */
 import * as appSagas from '~/store/app/sagas';
+import * as postsSagas from '~/store/posts/sagas';
 
 /* initial states */
 import appInitialState from '~/store/app/initialState';
+import postsInitialState from '~/store/posts/initialState';
 
 /* initializers */
 import appInitializer from '~/store/app/initializer';
+import postsInitializer from '~/store/posts/initializer';
 
 import {
-  INIT_CLIPBOARD_SUPPORT,
   HISTORY_GO_BACK,
   NAVIGATE_TO_PATH,
-  COPY_TEXT,
   PRINT,
 } from '~/store/app/actionTypes';
+import {
+  INIT_COPY,
+  CREATE_COPY_BUTTON,
+  LOAD_DISQUS_SCRIPT,
+  INIT_DISQUS_CONFIG,
+  RENDER_TWEETS,
+  RENDER_COMPONENTS,
+} from '~/store/posts/actionTypes';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 const reducers = combineReducers({
   app: createReducer(appReducers, appInitialState),
+  posts: createReducer(postsReducers, postsInitialState),
 });
 
 const initialState = {
   app: appInitialState,
+  posts: postsInitialState,
 };
 
 const initializeStore = fp.flow(
   appInitializer,
-  _ => _
+  postsInitializer,
 );
 
 const sagaMiddleware = createSagaMiddleware();
@@ -55,9 +67,16 @@ function* sagas() {
   yield takeEvery(HISTORY_GO_BACK, appSagas.historyGoBack);
   yield takeEvery(NAVIGATE_TO_PATH, appSagas.navigateToPath);
   // clipboard
-  yield takeLatest(INIT_CLIPBOARD_SUPPORT, appSagas.initClipboardSupport);
-  yield takeEvery(COPY_TEXT, appSagas.copyText);
+  yield takeLatest(INIT_COPY, postsSagas.initCopy);
+  yield takeLatest(CREATE_COPY_BUTTON, postsSagas.createCopyButton);
+  // print
   yield takeEvery(PRINT, appSagas.printPage);
+  // disqus
+  yield takeEvery(LOAD_DISQUS_SCRIPT, postsSagas.loadDisqusScript);
+  yield takeEvery(INIT_DISQUS_CONFIG, postsSagas.initDisqusConfig);
+  // twitter
+  yield takeEvery(RENDER_TWEETS, postsSagas.renderTweets);
+  yield takeEvery(RENDER_COMPONENTS, postsSagas.renderComponents);
 }
 
 const composeEnhancers = isProduction ?

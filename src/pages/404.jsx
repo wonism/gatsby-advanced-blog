@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'gatsby-link';
 import SimpleWrapper from '~/components/Common/SimpleWrapper';
+
 const Wrapper = SimpleWrapper.extend`
   padding: 100px 0 0;
   text-align: center;

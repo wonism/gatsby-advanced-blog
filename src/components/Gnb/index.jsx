@@ -61,8 +61,10 @@ const GnbWrapper = styled.div`
 const SubMenu = styled.ul`
   position: absolute;
   top: 100px;
-  line-height: 2em;
+  line-height: 1.8em;
   background-color: #fff;
+  font-size: 16px;
+  font-weight: 500;
   overflow: hidden;
   transition: max-height .4s ease-out .1s;
 
@@ -81,6 +83,7 @@ const ListMenu = styled.li`
   position: relative;
   padding: 0 0 0 2em;
   width: 120px;
+  font-weight: 500;
   @media (max-width: 414px) {
     display: none;
   }

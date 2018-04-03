@@ -5,17 +5,22 @@ import Link from 'gatsby-link';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Helmet from 'react-helmet';
-import { Tweet } from 'react-twitter-widgets';
 import FaTags from 'react-icons/lib/fa/tags';
 import fp from 'lodash/fp';
-import PostsWrapper from '~/components/Common/PostsWrapper';
 import {
   historyGoBack,
-  copyText,
-  printPage,
 } from '~/store/app/actions';
+import {
+  copyText,
+  initDisqusConfig,
+  renderTweets,
+  renderComponents,
+  createCopyButton,
+} from '~/store/posts/actions';
 import Bio from '~/components/Bio';
+import PostWrapper from '~/components/Common/PostWrapper';
 import { SITE_URL } from '~/constants';
+import { PRIMARY_COLOR } from '~/components/Common/constants';
 import formattedDate from '~/utils/formattedDate';
 import './post.less';
 
@@ -25,75 +30,67 @@ const Tags = styled.div`
   a {
     margin: 0 0 0 4px;
     color: #000;
-    text-decoration: underline;
+    text-decoration: blink;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;
 
 const PostContent = styled.section`
   padding: 1em 0 4em;
+
+  h2 {
+    margin: 24px 0 10px;
+    font-size: 28px;
+  }
+
+  h3 {
+    margin: 24px 0 10px;
+    font-size: 24px;
+  }
+
+  h4 {
+    margin: 24px 0 10px;
+    font-size: 21px;
+  }
+
+  p {
+    margin: 16px 0 0;
+    font-size: 16px;
+  }
+
+  blockquote {
+    margin: 40px 0 0;
+    padding: 0 0 0 2em;
+    line-height: 1.2em;
+    color: #aaa;
+    font-style: italic;
+    font-family: 'Kaushan Script';
+    font-size: 24px;
+  }
+
+  pre {
+    margin: 20px 0 0;
+  }
 `;
 
-const ComponentInPost = styled.div`
+const ImageWrapper = styled.figure`
   position: relative;
-  margin: 1em 0 1em;
-  padding: 55px 16px 16px;
-  color: #263238;
-  border: 1px solid #263238;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  width: 100%;
+  padding: 56.25% 0 0;
   overflow: hidden;
 
-  &:before {
+  img {
     position: absolute;
     top: 0;
+    bottom: 0;
     right: 0;
     left: 0;
-    padding: 0 0 0 80px;
+    margin: auto;
     width: 100%;
-    height: 35px;
-    line-height: 35px;
-    color: #fff;
-    background-color: #263238;
-    font-weight: 100;
-    content: 'Application for example';
-  }
-
-  &:after {
-    display: inline-block;
-    position: absolute;
-    top: 15px;
-    left: 20px;
-    width: 10px;
-    height: 10px;
-    background-color: #ff5f56;
-    border-radius: 50%;
-    content: '';
-  }
-
-  & > *:first-child {
-    &:before {
-      display: inline-block;
-      position: absolute;
-      top: 15px;
-      left: 40px;
-      width: 10px;
-      height: 10px;
-      background-color: #ffbd2e;
-      border-radius: 50%;
-      content: '';
-    }
-
-    &:after {
-      display: inline-block;
-      position: absolute;
-      top: 15px;
-      left: 60px;
-      width: 10px;
-      height: 10px;
-      background-color: #27c93f;
-      border-radius: 50%;
-      content: '';
-    }
+    height: auto;
   }
 `;
 
@@ -101,65 +98,34 @@ class Post extends PureComponent {
   static propTypes = {
     data: PropTypes.shape({ date: PropTypes.object }).isRequired,
     location: PropTypes.shape({}).isRequired,
+    initDisqusConfig: PropTypes.func.isRequired,
+    renderTweets: PropTypes.func.isRequired,
+    renderComponents: PropTypes.func.isRequired,
+    createCopyButton: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    const { location } = this.props;
+    const { pathname: identifier } = location;
+    const url = fp.add(SITE_URL, identifier);
+    const title = fp.get('data.markdownRemark.frontmatter.title')(this.props);
+
+    this.props.initDisqusConfig({
+      url,
+      identifier,
+      title,
+    });
+  }
+
   componentDidMount() {
-    const { data, location } = this.props;
-    const slug = fp.get('pathname')(location);
-    const disqusConfig = 'discus_config';
+    const { data } = this.props;
+    const frontmatter = fp.get('markdownRemark.frontmatter')(data);
+    const { tweets, components } = frontmatter;
 
-    window[disqusConfig] = function disqusCallback() {
-      this.page.url = `${SITE_URL}${slug}`;
-      this.page.identifier = slug;
-      this.page.title = fp.get('markdownRemark.frontmatter.title')(data);
-    };
-
-    const d = document;
-    const s = d.createElement('script');
-    s.src = 'https://jaewonism.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', Date.now());
-    (d.head || d.body).appendChild(s);
-
-    const tweets = fp.get('markdownRemark.frontmatter.tweets')(data);
-    const components = fp.get('markdownRemark.frontmatter.components')(data);
-
-    fp.each((tweet) => {
-      const tweetRootId = fp.get('rootId')(tweet);
-      const tweetContainer$ = global.document.getElementById(tweetRootId);
-      const tweetId = fp.get('tweetId')(tweet);
-      const username = fp.get('userId')(tweet);
-
-      render(
-        <div>
-          <Tweet
-            tweetId={tweetId}
-            options={{
-              username,
-            }}
-          />
-        </div>,
-        tweetContainer$
-      );
-    })(tweets);
-
-    fp.each((component) => {
-      const componentRootId = fp.get('rootId')(component);
-      const componentContainer$ = global.document.getElementById(componentRootId);
-      const componentFileName = fp.get('fileName')(component);
-
-      try {
-        const App = require(`~/postComponents/${componentFileName}`).default; // eslint-disable-line
-
-        render(
-          <ComponentInPost>
-            <App />
-          </ComponentInPost>,
-          componentContainer$
-        );
-      } catch (e) {
-        console.log(e);
-      }
-    })(components);
+    this.props.createCopyButton();
+    this.props.renderTweets(tweets);
+    this.props.renderComponents(components);
   }
 
   render() {
@@ -168,13 +134,19 @@ class Post extends PureComponent {
     const siteTitle = fp.get('site.siteMetadata.title')(data);
     const title = `${fp.get('frontmatter.title')(post)} | ${siteTitle}`;
     const tags = fp.get('frontmatter.tags')(post);
+    const image = fp.flow(fp.get('frontmatter.images'), fp.first)(post);
 
     return (
-      <PostsWrapper post>
+      <PostWrapper>
         <Helmet>
           <title>{title}</title>
           <meta name="og:title" content={title} />
         </Helmet>
+        {fp.isNil(image) ? null : (
+          <ImageWrapper>
+            <img src={image} alt={title} />
+          </ImageWrapper>
+        )}
         <h1>
           {fp.get('frontmatter.title')(post)}
         </h1>
@@ -197,14 +169,14 @@ class Post extends PureComponent {
         <Bio />
         <PostContent>
           {/* eslint-disable react/no-danger */}
-          <div dangerouslySetInnerHTML={{ __html: fp.get('html')(post) }} />
+          <div id="post-contents" dangerouslySetInnerHTML={{ __html: fp.get('html')(post) }} />
           {/* eslint-enable react/no-danger */}
         </PostContent>
         <div id="disqus_thread" />
         <noscript>
           Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
         </noscript>
-      </PostsWrapper>
+      </PostWrapper>
     );
   }
 }
@@ -214,7 +186,10 @@ export default connect(
   {
     historyGoBack,
     copyText,
-    printPage,
+    initDisqusConfig,
+    renderTweets,
+    renderComponents,
+    createCopyButton,
   }
 )(Post);
 
@@ -235,6 +210,7 @@ export const pageQuery = graphql`
       frontmatter {
         title
         path
+        images
         category
         tags
         date

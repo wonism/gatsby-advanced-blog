@@ -3,9 +3,9 @@ import styled from 'styled-components';
 export default styled.section`
   margin: auto;
   padding: 120px 0 0;
-  max-width: 1176px;
+  max-width: 720px;
   min-height: 100vh;
-  font-size: 0;
+  font-size: 14px;
   @media (max-width: 414px) {
     padding: 70px 16px 0;
   }
@@ -19,7 +19,7 @@ export default styled.section`
 
   h1 {
     margin: .67em 0;
-    font-size: 32px;
+    font-size: 36px;
   }
 
   time {

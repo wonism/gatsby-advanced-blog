@@ -1,7 +1,6 @@
 import {
   HISTORY_GO_BACK,
   NAVIGATE_TO_PATH,
-  COPY_TEXT,
   PRINT,
   INPUT_KEYWORD,
   OPEN_MENU,
@@ -21,13 +20,6 @@ export const navigateToPath = path =>
     dispatch({
       type: NAVIGATE_TO_PATH,
       path,
-    });
-
-export const copyText = query =>
-  dispatch =>
-    dispatch({
-      type: COPY_TEXT,
-      query,
     });
 
 export const printPage = () =>

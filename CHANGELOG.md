@@ -21,3 +21,11 @@
 - update `READEME.md`
 - customize `404` page
 - add `min-height` to contents wrapper
+
+## 0.1.3-alpha - 2018-04-04
+- add image to post
+- add copy button in post
+- add `border-radius` to profile image
+- fix card UI (tags are overflowed)
+- improve post readablity
+- move logics for rendering tweets & components into `redux-saga`

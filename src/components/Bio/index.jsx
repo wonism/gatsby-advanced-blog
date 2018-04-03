@@ -14,6 +14,10 @@ const Wrapper = styled.section`
     vertical-align: middle;
   }
 
+  img {
+    border-radius: 50%;
+  }
+
   small {
     color: #999;
     font-size: 90%;

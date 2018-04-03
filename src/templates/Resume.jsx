@@ -41,6 +41,10 @@ const BasicInformation = styled.section`
   p {
     margin: .67em 0;
   }
+
+  img {
+    border-radius: 50%;
+  }
 `;
 
 const SocialInformation = styled.section`

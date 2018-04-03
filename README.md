@@ -20,6 +20,7 @@ $ gatsby new PROJECT_NAME https://github.com/wonism/gatsby-advanced-blog
   - Put React Application into post
   - Put Tweet into post
   - Draft (set `hide` to `true`)
+  - Copy codes with clicking button
 - Portfolio
 - Resume
 
