@@ -92,13 +92,13 @@ const ListMenu = styled.li`
     color: #000;
   }
 
-  ${SubMenu} {
+  ul {
     max-height: 0;
     white-space: nowrap;
   }
 
   &:hover {
-    ${SubMenu} {
+    ul {
       max-height: 360px;
     }
   }
@@ -135,6 +135,9 @@ const SearchBarWrapper = styled.div`
   text-align: right;
   @media (max-width: 414px) {
     display: none;
+    position: relative;
+    padding: 0;
+    width: 100%;
   }
 
   label {
@@ -161,6 +164,9 @@ const SearchBar = styled.input`
   z-index: 1000;
   @media (max-width: 414px) {
     display: none;
+    right: 0;
+    left: 0;
+    width: 100%;
   }
 
   &:focus {
@@ -181,6 +187,10 @@ const SearchedPosts = styled.div`
   overflow-y: auto;
   @media (max-width: 414px) {
     display: none;
+    position: static;
+    width: 100%;
+    max-height: none;
+    box-shadow: 0 0 0;
   }
 `;
 
@@ -224,7 +234,8 @@ const SearchedPost = styled.article`
   border-bottom: 1px solid #eee;
   line-height: 1.4em;
 
-  ${Title}, ${Summary} {
+  h4,
+  p {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -238,6 +249,7 @@ const Background = styled.div`
   height: 100%;
   background-color: #000;
   transition: opacity .4s ease-out .1s;
+  opacity: ${({ isActive }) => (isActive ? '.5' : '0')};
   @media (max-width: 414px) {
     display: block;
   }
@@ -272,56 +284,28 @@ const MobileMenu = styled.section`
     line-height: 60px;
     pointer-events: ${({ isActive }) => (isActive ? 'all' : 'none')};
 
-    ${SearchBarWrapper},
-    ${SearchBar},
-    ${SearchedPosts},
-    ${SearchBar},
-    ${ListMenu} {
+    ul,
+    li,
+    div,
+    input {
       display: block;
     }
   }
 
-  ${ListMenu} {
+  li {
     padding: 0;
     width: 100%;
 
-    ${SubMenu} {
+    & > ul {
       position: static;
-      max-height: ${({ isSubActive }) => (isSubActive ? '0' : '360px')}
+      max-height: ${({ isSubActive }) => (isSubActive ? '0' : '360px')} !important;
     }
   }
 
-  ${MobileMenus} {
+  & > div + div {
     left: ${({ isActive }) => (isActive ? '0' : '-100%')};
     box-shadow: ${({ isActive }) => (isActive ? '0 2px 4px rgba(0,0,0,0.2)' : '0 0 0')};
     box-shadow: ${({ isActive }) => (isActive ? '0 3px 8px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.08)' : '0 0 0')};
-  }
-
-  ${Background} {
-    opacity: ${({ isActive }) => (isActive ? '.5' : '0')};
-  }
-
-  ${SearchBarWrapper},
-  ${SearchedPosts} {
-    position: relative;
-  }
-
-  ${SearchBarWrapper} {
-    padding: 0;
-    width: 100%;
-  }
-
-  ${SearchBar} {
-    right: 0;
-    left: 0;
-    width: 100%;
-  }
-
-  ${SearchedPosts} {
-    position: static;
-    width: 100%;
-    max-height: none;
-    box-shadow: 0 0 0;
   }
 `;
 
@@ -373,7 +357,7 @@ const Gnb = ({
   return (
     <GnbWrapper>
       <MobileMenu isActive={isMenuOpened} isSubActive={isSubMenuOpened}>
-        <Background onClick={closeMenu} />
+        <Background onClick={closeMenu} isActive={isMenuOpened} />
         <MobileMenus>
           <ul>
             <ListMenu>
