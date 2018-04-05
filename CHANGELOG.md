@@ -32,3 +32,6 @@
 
 ## 0.1.4 - 2018-04-05
 - fix ui bug in production mode
+
+## 0.1.5 - 2018-04-06
+- remove `height: 100vh;`

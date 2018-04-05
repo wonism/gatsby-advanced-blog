@@ -10,7 +10,6 @@ import Footer from '~/components/Footer';
 import './index.less';
 
 const Background = styled.div`
-  min-height: 100vh;
   background-color: #fff;
 `;
 

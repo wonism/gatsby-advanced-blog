@@ -55,7 +55,7 @@ const PortfolioImages = styled.section`
   float: left;
   padding: 0 36px 0 0;
   width: 50%;
-  height: calc(100vh - 100px);
+  max-height: calc(100vh - 100px);
   overflow-y: scroll;
   @media (max-width: 414px) {
     padding: 0;

@@ -4,7 +4,6 @@ export default styled.section`
   margin: auto;
   padding: 120px 0 0;
   max-width: 720px;
-  min-height: 100vh;
   font-size: 14px;
   @media (max-width: 414px) {
     padding: 70px 16px 0;
