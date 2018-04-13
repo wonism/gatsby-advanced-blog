@@ -1,6 +1,6 @@
 {
   "name": "gatsby-advanced-blog",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Gatsby starter for advanced blog",
   "main": "n/a",
   "author": "wonism",
@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "clipboard": "^2.0.0",
     "gatsby": "^2.0.0-alpha.12",
     "gatsby-link": "^1.6.40",
     "lodash": "^4.17.5",
@@ -70,6 +71,7 @@
     "gatsby-remark-smartypants": "^1.4.12",
     "gatsby-source-filesystem": "^1.5.27",
     "gatsby-transformer-remark": "^1.7.37",
+    "husky": "^1.0.0-rc.1",
     "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.7",
     "sharp": "^0.20.1"
@@ -84,5 +86,10 @@
     "> 10%",
     "IE >= 9",
     "last 2 versions"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  }
 }

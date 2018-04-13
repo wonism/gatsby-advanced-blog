@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { historyGoBack, printPage } from '~/store/app/actions';
-import { copyText } from '~/store/posts/actions';
 import * as appSelectors from '~/store/app/selectors';
 import Layout from '~/components/Layout';
 
@@ -12,7 +11,6 @@ export default connect(
   }),
   {
     historyGoBack,
-    copyText,
     printPage,
   }
 )(Layout);

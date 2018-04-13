@@ -35,3 +35,7 @@
 
 ## 0.1.5 - 2018-04-06
 - remove `height: 100vh;`
+
+## 0.1.6 - 2018-04-14
+- fix lint
+- add husky for hooking commit

@@ -16,7 +16,6 @@ const Background = styled.div`
 export default class Layout extends PureComponent {
   static propTypes = {
     // historyGoBack: PropTypes.func.isRequired,
-    copyText: PropTypes.func.isRequired,
     printPage: PropTypes.func.isRequired,
     categories: PropTypes.arrayOf(PropTypes.shape({})),
     postInformations: PropTypes.arrayOf(PropTypes.shape({
@@ -41,7 +40,6 @@ export default class Layout extends PureComponent {
   render() {
     const {
       // historyGoBack,
-      copyText,
       printPage,
       categories,
       postInformations,
@@ -53,7 +51,6 @@ export default class Layout extends PureComponent {
     const childrenWithProps = Children.map(children, child =>
       cloneElement(child, {
         location,
-        copyText,
         printPage,
         portfolios,
       }));

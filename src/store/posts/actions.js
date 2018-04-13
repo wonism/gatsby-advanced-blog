@@ -1,17 +1,9 @@
 import {
-  COPY_TEXT,
   INIT_DISQUS_CONFIG,
   RENDER_TWEETS,
   RENDER_COMPONENTS,
   CREATE_COPY_BUTTON,
 } from './actionTypes';
-
-export const copyText = query =>
-  dispatch =>
-    dispatch({
-      type: COPY_TEXT,
-      query,
-    });
 
 export const initDisqusConfig = ({ url, identifier, title }) =>
   dispatch =>

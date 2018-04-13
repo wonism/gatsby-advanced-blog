@@ -5,7 +5,6 @@ import Helmet from 'react-helmet';
 import fp from 'lodash/fp';
 import {
   historyGoBack,
-  copyText,
   printPage,
 } from '~/store/app/actions';
 import PostsWrapper from '~/components/Common/PostsWrapper';
@@ -81,7 +80,6 @@ export default connect(
   state => state,
   {
     historyGoBack,
-    copyText,
     printPage,
   }
 )(TaggedList);
