@@ -107,7 +107,6 @@ class Post extends PureComponent {
     const { pathname: identifier } = location;
     const url = fp.add(SITE_URL, identifier);
     const title = fp.get('data.markdownRemark.frontmatter.title')(this.props);
-    console.log('@@@@@@@@@');
 
     this.props.loadDisqus({
       url,
@@ -170,7 +169,7 @@ class Post extends PureComponent {
         <Bio />
         <PostContent>
           {/* eslint-disable react/no-danger */}
-          <div id="post-contents" dangerouslySetInnerHTML={{ __html: fp.get('html')(post) }} />
+          <div id="post-contents" dangerouslySetInnerHTML={{ __html: fp.get('markdownRemark.html')(data) }} />
           {/* eslint-enable react/no-danger */}
         </PostContent>
         <div id="disqus_thread" />

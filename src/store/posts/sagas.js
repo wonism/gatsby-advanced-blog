@@ -107,7 +107,6 @@ export function* renderTweets({ tweets }) {
     })(tweets));
     yield put({ type: RENDER_TWEETS_SUCCESS });
   } catch (e) {
-    console.log(e);
     yield put({ type: RENDER_TWEETS_FAILED });
   }
 }

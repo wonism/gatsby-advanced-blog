@@ -46,3 +46,8 @@
 - add `react-helmet` into some pages
 - change some styles
   - add font(`Inconsolata`) for `<code>`'s `font-family`
+
+## 0.1.9 - 2018-04-22
+- fix bug (post's html)
+- remove console
+- change eslint rules
