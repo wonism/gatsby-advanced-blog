@@ -39,3 +39,10 @@
 ## 0.1.6 - 2018-04-14
 - fix lint
 - add husky for hooking commit
+
+## 0.1.7 - 2018-04-22
+- fix bug (related with `styled-components`)
+- change logics for adding image into post
+- add `react-helmet` into some pages
+- change some styles
+  - add font(`Inconsolata`) for `<code>`'s `font-family`

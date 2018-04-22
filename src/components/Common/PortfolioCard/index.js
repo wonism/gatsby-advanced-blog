@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export default styled.section`
+const PortfolioCard = styled.section`
   display: inline-block;
   position: relative;
   float: left;
@@ -77,3 +77,5 @@ export default styled.section`
     white-space: nowrap;
   }
 `;
+
+export default PortfolioCard;

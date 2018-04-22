@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export default styled.div`
+const Clearfix = styled.div`
   &:before,
   &:after {
     display: block;
@@ -8,3 +8,5 @@ export default styled.div`
     content: '';
   }
 `;
+
+export default Clearfix;

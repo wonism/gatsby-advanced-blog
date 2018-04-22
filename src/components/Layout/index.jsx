@@ -1,4 +1,4 @@
-import React, { Children, cloneElement, PureComponent } from 'react';
+import React, { Children, cloneElement, Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import fp from 'lodash/fp';
@@ -13,7 +13,8 @@ const Background = styled.div`
   background-color: #fff;
 `;
 
-export default class Layout extends PureComponent {
+/* eslint-disable react/prefer-stateless-function */
+export default class Layout extends Component {
   static propTypes = {
     // historyGoBack: PropTypes.func.isRequired,
     printPage: PropTypes.func.isRequired,
@@ -80,3 +81,4 @@ export default class Layout extends PureComponent {
     );
   }
 }
+/* eslint-enable react/prefer-stateless-function */

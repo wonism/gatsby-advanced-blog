@@ -14,7 +14,6 @@ const List = ({
   location,
 }) => {
   const page = getPage(2)(location);
-  const siteTitle = fp.get('site.siteMetadata.title')(data);
   const allPosts = getPosts(data);
   const postCount = fp.size(allPosts);
   const posts = fp.slice(
@@ -25,8 +24,8 @@ const List = ({
   return ([
     <PostsWrapper key="posts-wrapper">
       <Helmet>
-        <title>{siteTitle}</title>
-        <meta name="og:title" content={siteTitle} />
+        <title>WONISM | POST</title>
+        <meta name="og:title" content="WONISM | POST" />
       </Helmet>
       {fp.map((post) => {
         if (post.node.path !== '/404/') {
@@ -55,12 +54,6 @@ export default List;
 /* eslint-disable no-undef */
 export const pageQuery = graphql`
   query ListQuery {
-    site {
-      siteMetadata {
-        title
-        author
-      }
-    }
     allMarkdownRemark (
       filter: {
         frontmatter: {

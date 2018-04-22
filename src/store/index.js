@@ -31,7 +31,7 @@ import {
   INIT_COPY,
   CREATE_COPY_BUTTON,
   LOAD_DISQUS_SCRIPT,
-  INIT_DISQUS_CONFIG,
+  LOAD_DISQUS_SCRIPT_SUCCESS,
   RENDER_TWEETS,
   RENDER_COMPONENTS,
 } from '~/store/posts/actionTypes';
@@ -73,7 +73,7 @@ function* sagas() {
   yield takeEvery(PRINT, appSagas.printPage);
   // disqus
   yield takeEvery(LOAD_DISQUS_SCRIPT, postsSagas.loadDisqusScript);
-  yield takeEvery(INIT_DISQUS_CONFIG, postsSagas.initDisqusConfig);
+  yield takeEvery(LOAD_DISQUS_SCRIPT_SUCCESS, postsSagas.initDisqusConfig);
   // twitter
   yield takeEvery(RENDER_TWEETS, postsSagas.renderTweets);
   yield takeEvery(RENDER_COMPONENTS, postsSagas.renderComponents);

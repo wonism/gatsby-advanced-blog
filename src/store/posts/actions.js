@@ -1,14 +1,14 @@
 import {
-  INIT_DISQUS_CONFIG,
+  LOAD_DISQUS_SCRIPT,
   RENDER_TWEETS,
   RENDER_COMPONENTS,
   CREATE_COPY_BUTTON,
 } from './actionTypes';
 
-export const initDisqusConfig = ({ url, identifier, title }) =>
+export const loadDisqus = ({ url, identifier, title }) =>
   dispatch =>
     dispatch({
-      type: INIT_DISQUS_CONFIG,
+      type: LOAD_DISQUS_SCRIPT,
       url,
       identifier,
       title,

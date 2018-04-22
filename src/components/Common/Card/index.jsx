@@ -101,6 +101,10 @@ const StyledArticle = styled.article`
     height: 106px;
     line-height: 1.4em;
     font-size: 16px;
+
+    span {
+      white-space: nowrap;
+    }
   }
 
   small {
@@ -109,6 +113,7 @@ const StyledArticle = styled.article`
   }
 `;
 
+/* eslint-disable global-require, import/no-dynamic-require */
 const Card = ({
   tags,
   path,
@@ -116,39 +121,49 @@ const Card = ({
   title,
   date,
   summary,
-}) => (
-  <StyledArticle>
-    <div>
-      <Link to={path}>
-        <ImageWrapper>
-          {fp.size(images) ? <img src={fp.first(images)} alt={title} /> : null}
-        </ImageWrapper>
-        <h3>
-          <Truncate lines={2} ellipsis={<span>...</span>}>
-            {title}
-          </Truncate>
-        </h3>
-        <p>
-          <Truncate lines={3} ellipsis={<span>...</span>}>
-            {summary}
-          </Truncate>
-        </p>
-      </Link>
-      <TagWrapper>
-        <FaTags />
-        {fp.map(tag => (
-          <Link
-            key={tag}
-            to={`/tags/${tag}/1`}
-          >
-            <small>{tag}</small>
-          </Link>
-        ))(tags)}
-      </TagWrapper>
-      <time>{date}</time>
-    </div>
-  </StyledArticle>
-);
+}) => {
+  const image = fp.first(images);
+
+  return (
+    <StyledArticle>
+      <div>
+        <Link to={path}>
+          <ImageWrapper>
+            {fp.isNil(image) ? null : (
+              <img
+                src={fp.includes('//')(image) ? image : require(`~/resources/${image}`)}
+                alt={title}
+              />
+            )}
+          </ImageWrapper>
+          <h3>
+            <Truncate lines={2} ellipsis={<span>...</span>}>
+              {title}
+            </Truncate>
+          </h3>
+          <p>
+            <Truncate lines={3} ellipsis={<span>...</span>}>
+              {summary}
+            </Truncate>
+          </p>
+        </Link>
+        <TagWrapper>
+          <FaTags />
+          {fp.map(tag => (
+            <Link
+              key={tag}
+              to={`/tags/${tag}/1`}
+            >
+              <small>{tag}</small>
+            </Link>
+          ))(tags)}
+        </TagWrapper>
+        <time>{date}</time>
+      </div>
+    </StyledArticle>
+  );
+};
+/* eslint-enable global-require, import/no-dynamic-require */
 
 Card.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string),

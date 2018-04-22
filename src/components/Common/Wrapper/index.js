@@ -9,6 +9,7 @@ const WrapperOuter = styled.section`
   height: 0;
   @media (max-width: 414px) {
     padding: 178% 0 0;
+    padding: 100vh 0 0;
   }
 `;
 

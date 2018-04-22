@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import fp from 'lodash/fp';
-import {
-  historyGoBack,
-  printPage,
-} from '~/store/app/actions';
 import PostsWrapper from '~/components/Common/PostsWrapper';
 import Card from '~/components/Common/Card';
 import Pagination from '~/components/Common/Pagination';
@@ -19,7 +15,6 @@ const TaggedList = ({
   location,
 }) => {
   const page = getPage(3)(location);
-  const siteTitle = fp.get('site.siteMetadata.title')(data);
   const tag = fp.flow(
     fp.get('pathname'),
     fp.split('/'),
@@ -43,8 +38,8 @@ const TaggedList = ({
   return ([
     <PostsWrapper key="posts-wrapper">
       <Helmet>
-        <title>{siteTitle}</title>
-        <meta name="og:title" content={siteTitle} />
+        <title>WONISM | {fp.toUpper(tag)}</title>
+        <meta name="og:title" content={`WONISM | ${fp.toUpper(tag)}`} />
       </Helmet>
       {fp.isEmpty(posts) ? (
         <div>검색된 게시물이 없습니다.</div>
@@ -79,21 +74,12 @@ TaggedList.propTypes = {
 export default connect(
   state => state,
   {
-    historyGoBack,
-    printPage,
   }
 )(TaggedList);
 
-// tags
 /* eslint-disable no-undef */
 export const pageQuery = graphql`
   query TaggedListQuery {
-    site {
-      siteMetadata {
-        title
-        author
-      }
-    }
     allMarkdownRemark (
       filter: {
         frontmatter: {

@@ -82,7 +82,6 @@ const ListMenu = styled.li`
   display: inline-block;
   position: relative;
   padding: 0 0 0 2em;
-  width: 120px;
   font-weight: 500;
   @media (max-width: 414px) {
     display: none;
@@ -342,7 +341,7 @@ const Gnb = ({
   const { pathname } = location;
   const isPortfolio = fp.flow(
     fp.replace(/\/$/, ''),
-    fp.includes('/portfolios')
+    fp.startsWith('/portfolios')
   )(pathname);
   const isHome = fp.flow(
     fp.replace(/\/$/, ''),

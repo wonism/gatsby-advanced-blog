@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export default styled.div`
+const SimpleWrapper = styled.div`
   position: relative;
 
   &:before,
@@ -10,3 +10,5 @@ export default styled.div`
     clear: both;
   }
 `;
+
+export default SimpleWrapper;

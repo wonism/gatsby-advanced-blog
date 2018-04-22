@@ -1,6 +1,6 @@
 {
   "name": "gatsby-advanced-blog",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Gatsby starter for advanced blog",
   "main": "n/a",
   "author": "wonism",
@@ -77,9 +77,11 @@
     "sharp": "^0.20.1"
   },
   "scripts": {
-    "lint": "eslint ./src --ext .js --ext .jsx --config .eslintrc.js",
+    "lint": "eslint ./src --ext .js,.jsx --config .eslintrc.js",
     "dev": "gatsby develop",
     "build": "gatsby build",
+    "serve": "gatsby serve",
+    "deploy": "gatsby build --prefix-paths && gh-pages -d public -b master",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "browserslist": [

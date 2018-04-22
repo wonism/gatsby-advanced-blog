@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export default styled.section`
+const PostWrapper = styled.section`
   margin: auto;
   padding: 120px 0 0;
   max-width: 720px;
@@ -26,3 +26,5 @@ export default styled.section`
     font-size: 14px;
   }
 `;
+
+export default PostWrapper;

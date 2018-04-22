@@ -103,15 +103,13 @@ class Resume extends PureComponent {
   render() {
     const { data } = this.props;
     const resume = fp.get('markdownRemark')(data);
-    const siteTitle = fp.get('site.siteMetadata.title')(data);
-    const title = `${fp.get('frontmatter.title')(resume)} | ${siteTitle}`;
 
     return (
       <Wrapper>
         <Clearfix>
           <Helmet>
-            <title>{title}</title>
-            <meta name="og:title" content={title} />
+            <title>WONISM | RESUME</title>
+            <meta name="og:title" content="WONISM | RESUME" />
           </Helmet>
           <Clearfix>
             <button onClick={this.props.printPage}>
@@ -182,12 +180,6 @@ export default connect(
 /* eslint-disable no-undef */
 export const pageQuery = graphql`
   query ResumeQuery ($path: String!) {
-    site {
-      siteMetadata {
-        title
-        author
-      }
-    }
     markdownRemark (
       frontmatter: { path: { eq: $path } }
     ) {
@@ -195,7 +187,6 @@ export const pageQuery = graphql`
       html
       frontmatter {
         title
-        path
         date
       }
     }

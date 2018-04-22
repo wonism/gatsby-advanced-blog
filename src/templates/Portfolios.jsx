@@ -16,14 +16,13 @@ const Wrapper = SimpleWrapper.extend`
 const Portfolios = ({
   data,
 }) => {
-  const siteTitle = fp.get('site.siteMetadata.title')(data);
   const portfolios = fp.get('allMarkdownRemark.edges')(data);
 
   return (
     <Wrapper>
       <Helmet>
-        <title>{siteTitle}</title>
-        <meta name="og:title" content={siteTitle} />
+        <title>WONISM | PORTFOLIOS</title>
+        <meta name="og:title" content="WONISM | PORTFOLIOS" />
       </Helmet>
       {fp.map((portfolio) => {
         if (portfolio.node.path !== '/404/') {
@@ -70,12 +69,6 @@ export default Portfolios;
 /* eslint-disable no-undef */
 export const pageQuery = graphql`
   query PortfoliosQuery {
-    site {
-      siteMetadata {
-        title
-        author
-      }
-    }
     allMarkdownRemark (
       filter: {
         frontmatter: {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Link from 'gatsby-link';
 import fp from 'lodash/fp';
+import Helmet from 'react-helmet';
 import Wrapper from '~/components/Common/Wrapper';
 import SimpleWrapper from '~/components/Common/SimpleWrapper';
 import PortfolioCard from '~/components/Common/PortfolioCard';
@@ -27,6 +28,7 @@ const Title = styled.h1`
   white-space: nowrap;
 `;
 
+/* eslint-disable react/no-unescaped-entities */
 const Home = ({
   portfolios,
 }) => ([
@@ -34,6 +36,10 @@ const Home = ({
     <Title>
       Hello, Blog!
     </Title>
+    <Helmet>
+      <title>I'm Wonism!</title>
+      <meta name="og:title" content="I'm Wonism!" />
+    </Helmet>
   </Wrapper>,
   fp.size(portfolios) >= 4 ? (
     <SimpleWrapper key="portfolios">
@@ -71,6 +77,7 @@ const Home = ({
     </SimpleWrapper>
   ) : null,
 ]);
+/* eslint-enable react/no-unescaped-entities */
 
 Home.propTypes = {
   portfolios: PropTypes.arrayOf(PropTypes.shape({})),

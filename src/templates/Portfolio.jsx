@@ -93,15 +93,14 @@ const Portfolio = ({
   data,
 }) => {
   const portfolio = fp.get('markdownRemark')(data);
-  const siteTitle = fp.get('site.siteMetadata.title')(data);
-  const title = `${fp.get('frontmatter.title')(portfolio)} | ${siteTitle}`;
-  const images = fp.get('frontmatter.images')(portfolio);
+  const { frontmatter } = portfolio;
+  const { title, images } = frontmatter;
 
   return (
     <Wrapper>
       <Helmet>
-        <title>{title}</title>
-        <meta name="og:title" content={title} />
+        <title>WONISM | {fp.toUpper(title)}</title>
+        <meta name="og:title" content={`WONISM | ${fp.toUpper(title)}`} />
       </Helmet>
       <PortfolioDescription>
         {/* eslint-disable react/no-danger */}
@@ -144,12 +143,6 @@ export default Portfolio;
 /* eslint-disable no-undef */
 export const pageQuery = graphql`
   query PortfolioQuery ($path: String!) {
-    site {
-      siteMetadata {
-        title
-        author
-      }
-    }
     markdownRemark(frontmatter: { path: { eq: $path } }) {
       id
       html
