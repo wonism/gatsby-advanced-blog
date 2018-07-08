@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Tweet } from 'react-twitter-widgets';
 import { all, call, put } from 'redux-saga/effects';
 import Clipboard from 'clipboard';
-import fp from 'lodash/fp';
+import { each, get } from 'lodash/fp';
 import {
   INIT_COPY_SUCCESS,
   INIT_COPY_FAILED,
@@ -24,7 +24,7 @@ export function* initCopy() {
   try {
     yield call(() => {
       const clipboard = new Clipboard('.copy-button', {
-        target: fp.get('previousElementSibling'),
+        target: get('previousElementSibling'),
       });
       clipboard.on('success', (e) => {
         e.clearSelection();
@@ -39,7 +39,7 @@ export function* initCopy() {
 export function* createCopyButton() {
   try {
     const codes = yield call(() => global.document.querySelectorAll('#post-contents .gatsby-highlight'));
-    yield all(fp.each((code) => {
+    yield all(each((code) => {
       const button = document.createElement('button');
       button.setAttribute('class', 'copy-button');
       button.innerHTML = 'COPY';
@@ -89,7 +89,7 @@ export function* initDisqusConfig({ url, identifier, title }) {
 
 export function* renderTweets({ tweets }) {
   try {
-    yield all(fp.each((tweet) => {
+    yield all(each((tweet) => {
       const { rootId: tweetRootId, tweetId, userId: username } = tweet;
       const tweetContainer$ = global.document.getElementById(tweetRootId);
 
@@ -177,7 +177,7 @@ export function* renderComponents({ components }) {
       }
     `;
 
-    yield all(fp.each((component) => {
+    yield all(each((component) => {
       const { rootId: componentRootId, fileName: componentFileName } = component;
       const componentContainer$ = global.document.getElementById(componentRootId);
       const App = require(`~/postComponents/${componentFileName}`).default; // eslint-disable-line

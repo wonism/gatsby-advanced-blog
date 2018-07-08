@@ -24,9 +24,14 @@ module.exports = {
       },
     ],
     'function-paren-newline': [error, 'consistent'],
-    'import/no-unresolved': off,
+    'global-require': off,
+    'implicit-arrow-linebreak': off,
     'import/extensions': off,
     'import/no-deprecated': warn,
+    'import/no-dynamic-require': off,
+    'import/no-unresolved': off,
+    'import/no-webpack-loader-syntax': off,
+    'import/prefer-default-export': off,
     indent: off,
     'jsx-a11y/anchor-is-valid': off,
     'jsx-a11y/click-events-have-key-events': error,
@@ -56,7 +61,7 @@ module.exports = {
     'lodash-fp/preferred-alias': off,
     'lodash-fp/use-fp': error,
     'max-len': [error, 150, { ignoreComments: true }],
-    'no-console': error,
+    'no-console': isProduction ? error : off,
     'no-multiple-empty-lines': [error, { max: error, maxEOF: error }],
     'no-implicit-coercion': error,
     'no-shadow': off,
@@ -67,13 +72,42 @@ module.exports = {
     'react/jsx-filename-extension': [error, { extensions: ['.js', '.jsx'] }],
     'react/jsx-no-target-blank': error,
     'react/no-typos': error,
+    'react/no-unescaped-entities': off,
   },
   parser: 'babel-eslint',
-  overrides: [{
-    files: ['src/layouts/index.jsx', 'src/components/Home/index.jsx', 'src/templates/Portfolio.jsx', 'src/templates/Portfolios.jsx'],
-    rules: {
-      'global-require': off,
-      'import/no-dynamic-require': off,
+  overrides: [
+    {
+      files: ['src/components/HigherOrderLayout/index.jsx'],
+      rules: {
+        'react/prefer-stateless-function': off,
+      },
     },
-  }],
+    {
+      files: ['src/components/Post/index.jsx', 'src/templates/*.jsx'],
+      rules: {
+        'react/no-danger': off,
+      },
+    },
+    {
+      files: ['src/html.jsx'],
+      rules: {
+        'react/prefer-stateless-function': off,
+        'react/prop-types': off,
+        'react/no-danger': off,
+      },
+    },
+    {
+      files: ['src/store/**/*.js'],
+      rules: {
+        'react/button-has-type': off,
+      },
+    },
+    {
+      files: ['src/**/*.test.js'],
+      rules: {
+        'max-len': off,
+        'no-undef': off,
+      },
+    },
+  ],
 };

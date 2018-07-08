@@ -41,7 +41,9 @@ const Bio = () => (
       <span>
         Gatsby Advanced Blog
         <br />
-        <small>Gatsby Starter for Advanced Blog</small>
+        <small>
+          Gatsby Starter for Advanced Blog
+        </small>
       </span>
     </a>
   </Wrapper>

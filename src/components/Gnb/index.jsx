@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'gatsby-link';
 import styled from 'styled-components';
@@ -6,9 +6,9 @@ import FaCaretDown from 'react-icons/lib/fa/caret-down';
 import FaHome from 'react-icons/lib/fa/home';
 import FaSearch from 'react-icons/lib/fa/search';
 import FaTags from 'react-icons/lib/fa/tags';
-import fp from 'lodash/fp';
+import { flow, isEmpty, isEqual, filter, map, uniq, get, size, toLower, replace, startsWith } from 'lodash/fp';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '~/components/Common/constants';
-import './index.less';
+import './index.css';
 
 const Hamburger = styled.div`
   position: fixed;
@@ -323,33 +323,34 @@ const Gnb = ({
   openSubMenu,
   closeSubMenu,
 }) => {
-  const filteredPosts = !fp.isEmpty(searchKeyword) ?
-    fp.filter(({ category = '', title = '', tags = [] }) => {
-      const c = fp.toLower(category);
-      const h = fp.toLower(title);
-      const t = fp.map(fp.toLower)(tags);
+  const filteredPosts = !isEmpty(searchKeyword)
+    ? filter(({ category = '', title = '', tags = [] }) => {
+      const c = toLower(category);
+      const h = toLower(title);
+      const t = map(toLower)(tags);
 
       const searchedWithCategory = c.search(searchKeyword) !== -1;
       const searchedWithTitle = h.search(searchKeyword) !== -1;
-      const searchedWithTags = fp.flow(
-        fp.filter(t => (t.search(searchKeyword) !== -1)),
-        filtered => !fp.isEmpty(filtered)
+      const searchedWithTags = flow(
+        filter(t => (t.search(searchKeyword) !== -1)),
+        filtered => !isEmpty(filtered)
       )(t);
 
       return searchedWithCategory || searchedWithTitle || searchedWithTags;
-    })(postInformations) : [];
+    })(postInformations)
+    : [];
   const { pathname } = location;
-  const isPortfolio = fp.flow(
-    fp.replace(/\/$/, ''),
-    fp.startsWith('/portfolios')
+  const isPortfolio = flow(
+    replace(/\/$/, ''),
+    startsWith('/portfolios')
   )(pathname);
-  const isHome = fp.flow(
-    fp.replace(/\/$/, ''),
-    fp.isEqual('')
+  const isHome = flow(
+    replace(/\/$/, ''),
+    isEqual('')
   )(pathname);
-  const isResume = fp.flow(
-    fp.replace(/\/$/, ''),
-    fp.isEqual('/resume')
+  const isResume = flow(
+    replace(/\/$/, ''),
+    isEqual('/resume')
   )(pathname);
   const isPost = !(isPortfolio || isHome || isResume);
 
@@ -369,25 +370,30 @@ const Gnb = ({
                 Posts
               </StyledLink>
               {
-                fp.size(categories) ?
-                  [
-                    ' ',
-                    <MovableFaCaretDown
-                      className={isSubMenuOpened ? 'is-active' : ''}
-                      key="arrow"
-                      onClick={isSubMenuOpened ? closeSubMenu : openSubMenu}
-                    />,
-                  ] :
-                  null
+                size(categories)
+                  ? (
+                    <Fragment>
+                      &nbsp;
+                      <MovableFaCaretDown
+                        className={isSubMenuOpened ? 'is-active' : ''}
+                        onClick={isSubMenuOpened ? closeSubMenu : openSubMenu}
+                      />
+                    </Fragment>
+                  )
+                  : null
               }
               <SubMenu>
                 <div>
-                  {fp.flow(
-                    fp.filter(({ key }) => !fp.isEqual('__ALL__')(key)),
-                    fp.map(({ key, length }) => (
+                  {flow(
+                    filter(({ key }) => !isEqual('__ALL__')(key)),
+                    map(({ key, length }) => (
                       <li key={key}>
                         <Link to={`/categories/${key}/1`} onClick={closeMenu}>
-                          {key} <small>({length})</small>
+                          {key}
+                          &nbsp;
+                          <small>
+                            {`(${length})`}
+                          </small>
                         </Link>
                       </li>
                     ))
@@ -415,14 +421,14 @@ const Gnb = ({
                 id="search"
                 type="text"
                 value={searchKeyword}
-                onChange={fp.flow(
-                  fp.get('target.value'),
+                onChange={flow(
+                  get('target.value'),
                   inputKeyword,
                 )}
               />
             </SearchBarWrapper>
-            <SearchedPosts isEmpty={fp.isEmpty(filteredPosts)}>
-              {fp.map(({ path, title, summary, tags }) => (
+            <SearchedPosts isEmpty={isEmpty(filteredPosts)}>
+              {map(({ path, title, summary, tags }) => (
                 <SearchedPost key={path}>
                   <Title onClick={() => { navigateToPath(path); }}>
                     {title}
@@ -430,12 +436,12 @@ const Gnb = ({
                   <Summary onClick={() => { navigateToPath(path); }}>
                     {summary}
                   </Summary>
-                  {fp.size(tags) ? (
+                  {size(tags) ? (
                     <FaTags />
                   ) : null}
-                  {fp.flow(
-                    fp.uniq,
-                    fp.map(tag => (
+                  {flow(
+                    uniq,
+                    map(tag => (
                       <Tag key={tag} onClick={() => { navigateToPath(`/tags/${tag}/1`); }}>
                         <small>
                           {tag}
@@ -465,16 +471,22 @@ const Gnb = ({
         </ListMenu>
         <ListMenu>
           <StyledLink to="/pages/1" className={isPost ? 'active' : ''}>
-            Posts {fp.size(categories) ? <FaCaretDown /> : null}
+            Posts
+            &nbsp;
+            {size(categories) ? <FaCaretDown /> : null}
           </StyledLink>
           <SubMenu>
             <div>
-              {fp.flow(
-                fp.filter(({ key }) => !fp.isEqual('__ALL__')(key)),
-                fp.map(({ key, length }) => (
+              {flow(
+                filter(({ key }) => !isEqual('__ALL__')(key)),
+                map(({ key, length }) => (
                   <li key={key}>
                     <Link to={`/categories/${key}/1`}>
-                      {key} <small>({length})</small>
+                      {key}
+                      &nbsp;
+                      <small>
+                        {`(${length})`}
+                      </small>
                     </Link>
                   </li>
                 ))
@@ -502,14 +514,14 @@ const Gnb = ({
             id="search"
             type="text"
             value={searchKeyword}
-            onChange={fp.flow(
-              fp.get('target.value'),
+            onChange={flow(
+              get('target.value'),
               inputKeyword,
             )}
           />
         </SearchBarWrapper>
-        <SearchedPosts isEmpty={fp.isEmpty(filteredPosts)}>
-          {fp.map(({ path, title, summary, tags }) => (
+        <SearchedPosts isEmpty={isEmpty(filteredPosts)}>
+          {map(({ path, title, summary, tags }) => (
             <SearchedPost key={path}>
               <Title onClick={() => { navigateToPath(path); }}>
                 {title}
@@ -517,12 +529,12 @@ const Gnb = ({
               <Summary onClick={() => { navigateToPath(path); }}>
                 {summary}
               </Summary>
-              {fp.size(tags) ? (
+              {size(tags) ? (
                 <FaTags />
               ) : null}
-              {fp.flow(
-                fp.uniq,
-                fp.map(tag => (
+              {flow(
+                uniq,
+                map(tag => (
                   <Tag key={tag} onClick={() => { navigateToPath(`/tags/${tag}/1`); }}>
                     <small>
                       {tag}

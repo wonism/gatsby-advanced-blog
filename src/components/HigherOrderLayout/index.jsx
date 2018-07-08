@@ -1,23 +1,16 @@
 import React, { Children, cloneElement, Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import fp from 'lodash/fp';
-// import Header from '~/components/Header';
+import { size } from 'lodash/fp';
 import Gnb from '~/containers/Gnb';
 import Footer from '~/components/Footer';
-
-// common styles
-import './index.less';
 
 const Background = styled.div`
   background-color: #fff;
 `;
 
-/* eslint-disable react/prefer-stateless-function */
-export default class Layout extends Component {
+export default class HigherOrderLayout extends Component {
   static propTypes = {
-    // historyGoBack: PropTypes.func.isRequired,
-    printPage: PropTypes.func.isRequired,
     categories: PropTypes.arrayOf(PropTypes.shape({})),
     postInformations: PropTypes.arrayOf(PropTypes.shape({
       path: PropTypes.string.isRequired,
@@ -30,6 +23,10 @@ export default class Layout extends Component {
     location: PropTypes.shape({
       pathname: PropTypes.string,
     }).isRequired,
+    loadDisqus: PropTypes.func.isRequired,
+    renderTweets: PropTypes.func.isRequired,
+    renderComponents: PropTypes.func.isRequired,
+    createCopyButton: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -40,35 +37,35 @@ export default class Layout extends Component {
 
   render() {
     const {
-      // historyGoBack,
-      printPage,
       categories,
       postInformations,
       portfolios,
       children,
       location,
+      loadDisqus,
+      renderTweets,
+      renderComponents,
+      createCopyButton,
     } = this.props;
 
     const childrenWithProps = Children.map(children, child =>
       cloneElement(child, {
         location,
-        printPage,
         portfolios,
+        loadDisqus,
+        renderTweets,
+        renderComponents,
+        createCopyButton,
       }));
 
     return (
       <Background>
-        {/*
-        <header>
-          <Header pathname={location.pathname} historyGoBack={historyGoBack} />
-        </header>
-        */}
         <nav>
           <Gnb
             location={location}
             categories={categories}
             postInformations={postInformations}
-            hasPortfolio={fp.size(portfolios) > 0}
+            hasPortfolio={size(portfolios) > 0}
           />
         </nav>
         <main>
@@ -81,4 +78,3 @@ export default class Layout extends Component {
     );
   }
 }
-/* eslint-enable react/prefer-stateless-function */

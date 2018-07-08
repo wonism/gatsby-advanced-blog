@@ -51,3 +51,10 @@
 - fix bug (post's html)
 - remove console
 - change eslint rules
+
+## 0.2.0 - 2018-07-08
+- migrate `gatsby` into `v2 beta` (from `v2 alpha`)
+  - add `gatsby` with specific `version` into `peerDependencies`
+- use `css` instead of `less`
+- update `dependencides`
+  - `babel`, `redux`, `react` etcetera

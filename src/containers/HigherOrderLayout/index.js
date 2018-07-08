@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import { historyGoBack, printPage } from '~/store/app/actions';
+import { createCopyButton, loadDisqus, renderTweets, renderComponents } from '~/store/posts/actions';
 import * as appSelectors from '~/store/app/selectors';
-import Layout from '~/components/Layout';
+import HigherOrderLayout from '~/components/HigherOrderLayout';
 
 export default connect(
   state => ({
@@ -12,5 +13,9 @@ export default connect(
   {
     historyGoBack,
     printPage,
+    createCopyButton,
+    loadDisqus,
+    renderTweets,
+    renderComponents,
   }
-)(Layout);
+)(HigherOrderLayout);

@@ -24,11 +24,17 @@ const Wrapper = SimpleWrapper.extend`
 const NotFoundPage = () => (
   <Wrapper>
     <Helmet>
-      <title>WONISM | PAGE NOT FOUND</title>
+      <title>
+        WONISM | PAGE NOT FOUND
+      </title>
       <meta name="og:title" content="WONISM | PAGE NOT FOUND" />
     </Helmet>
-    <h1>Page Not Found</h1>
-    <Link to="/">← Go Home</Link>
+    <h1>
+      Page Not Found
+    </h1>
+    <Link to="/">
+      ← Go Home
+    </Link>
   </Wrapper>
 );
 

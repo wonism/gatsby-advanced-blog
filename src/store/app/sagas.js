@@ -1,7 +1,5 @@
 import { call, put } from 'redux-saga/effects';
-// import { delay } from 'redux-saga';
 import { navigateTo } from 'gatsby-link';
-// import fp from 'lodash/fp';
 import {
   HISTORY_GO_BACK_SUCCESS,
   HISTORY_GO_BACK_FAILED,

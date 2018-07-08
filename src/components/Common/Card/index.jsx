@@ -4,7 +4,7 @@ import Link from 'gatsby-link';
 import Truncate from 'react-truncate';
 import FaTags from 'react-icons/lib/fa/tags';
 import styled from 'styled-components';
-import fp from 'lodash/fp';
+import { isNil, includes, map, first } from 'lodash/fp';
 
 /* eslint-disable max-len */
 const ImageWrapper = styled.figure`
@@ -113,7 +113,6 @@ const StyledArticle = styled.article`
   }
 `;
 
-/* eslint-disable global-require, import/no-dynamic-require */
 const Card = ({
   tags,
   path,
@@ -122,48 +121,65 @@ const Card = ({
   date,
   summary,
 }) => {
-  const image = fp.first(images);
+  const image = first(images);
 
   return (
     <StyledArticle>
       <div>
         <Link to={path}>
           <ImageWrapper>
-            {fp.isNil(image) ? null : (
+            {isNil(image) ? null : (
               <img
-                src={fp.includes('//')(image) ? image : require(`~/resources/${image}`)}
+                src={includes('//')(image) ? image : require(`~/resources/${image}`)}
                 alt={title}
               />
             )}
           </ImageWrapper>
           <h3>
-            <Truncate lines={2} ellipsis={<span>...</span>}>
+            <Truncate
+              lines={2}
+              ellipsis={(
+                <span>
+                  ...
+                </span>
+              )}
+            >
               {title}
             </Truncate>
           </h3>
           <p>
-            <Truncate lines={3} ellipsis={<span>...</span>}>
+            <Truncate
+              lines={3}
+              ellipsis={(
+                <span>
+                  ...
+                </span>
+              )}
+            >
               {summary}
             </Truncate>
           </p>
         </Link>
         <TagWrapper>
           <FaTags />
-          {fp.map(tag => (
+          {map(tag => (
             <Link
               key={tag}
               to={`/tags/${tag}/1`}
             >
-              <small>{tag}</small>
+              <small>
+                {tag}
+              </small>
             </Link>
           ))(tags)}
         </TagWrapper>
-        <time>{date}</time>
+        <time>
+          {date}
+        </time>
       </div>
     </StyledArticle>
   );
 };
-/* eslint-enable global-require, import/no-dynamic-require */
 
 Card.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string),

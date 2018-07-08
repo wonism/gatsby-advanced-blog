@@ -3,7 +3,8 @@ require('dotenv').config({
 });
 
 const path = require('path');
-const fp = require('lodash/fp');
+const { flow, isNull, isArray, isString, each, filter, reduce, range, flatten, uniq, includes, get, size } = require('lodash/fp');
+const { createFilePath } = require('gatsby-source-filesystem');
 const {
   CONTENT_PER_PAGE,
   POST,
@@ -66,24 +67,25 @@ exports.createPages = ({ graphql, actions }) => {
         }
       `).then((result) => {
         if (result.errors) {
+          console.log(result.errors);
           reject(result.errors);
         }
 
-        const edges = fp.get('data.allMarkdownRemark.edges')(result);
+        const edges = get('data.allMarkdownRemark.edges')(result);
         const tagMatrix = [];
         const categoryMatrix = [];
 
         // Create blog posts pages.
-        fp.each((edge) => {
-          const frontmatter = fp.get('node.frontmatter')(edge);
+        each((edge) => {
+          const frontmatter = get('node.frontmatter')(edge);
           const { tags, category, type, hide } = frontmatter;
 
           if (hide !== true) {
-            if (fp.isArray(tags)) {
+            if (isArray(tags)) {
               tagMatrix.push(tags);
             }
 
-            if (fp.isString(category)) {
+            if (isString(category)) {
               categoryMatrix.push(category);
             }
 
@@ -101,7 +103,7 @@ exports.createPages = ({ graphql, actions }) => {
                 break;
             }
 
-            if (!fp.isNull(component)) {
+            if (!isNull(component)) {
               createPage({
                 path: edge.node.frontmatter.path,
                 component,
@@ -112,14 +114,14 @@ exports.createPages = ({ graphql, actions }) => {
           }
         })(edges);
 
-        const portfoliosCount = fp.flow(
-          fp.filter((edge) => {
-            const frontmatter = fp.get('node.frontmatter')(edge);
+        const portfoliosCount = flow(
+          filter((edge) => {
+            const frontmatter = get('node.frontmatter')(edge);
             const { type } = frontmatter;
 
             return type === PORTFOLIO;
           }),
-          fp.size
+          size
         )(edges);
 
         if (portfoliosCount) {
@@ -131,20 +133,20 @@ exports.createPages = ({ graphql, actions }) => {
           });
         }
 
-        const postsCount = fp.flow(
-          fp.filter((edge) => {
-            const frontmatter = fp.get('node.frontmatter')(edge);
+        const postsCount = flow(
+          filter((edge) => {
+            const frontmatter = get('node.frontmatter')(edge);
             const { hide, type } = frontmatter;
 
             return !hide && (type || POST) === POST;
           }),
-          fp.size
+          size
         )(edges);
         const pagesCount = postsCount ? (Math.ceil(postsCount / CONTENT_PER_PAGE) + 1) : 1;
-        const pages = fp.range(1, pagesCount);
+        const pages = range(1, pagesCount);
 
-        if (fp.size(pages)) {
-          fp.each((page) => {
+        if (size(pages)) {
+          each((page) => {
             createPage({
               path: `/pages/${page}`,
               component: list,
@@ -161,16 +163,16 @@ exports.createPages = ({ graphql, actions }) => {
           });
         }
 
-        const tags = fp.flow(
-          fp.flatten,
-          fp.uniq
+        const tags = flow(
+          flatten,
+          uniq
         )(tagMatrix);
 
-        fp.each((tag) => {
-          const taggedPostCount = fp.reduce((count, edge) => {
-            const postTags = fp.get('node.frontmatter.tags')(edge);
+        each((tag) => {
+          const taggedPostCount = reduce((count, edge) => {
+            const postTags = get('node.frontmatter.tags')(edge);
 
-            if (fp.includes(tag)(postTags)) {
+            if (includes(tag)(postTags)) {
               return count + 1;
             }
 
@@ -178,9 +180,9 @@ exports.createPages = ({ graphql, actions }) => {
           }, 0)(edges);
           const taggedListCount = taggedPostCount ?
             (Math.ceil(taggedPostCount / CONTENT_PER_PAGE) + 1) : 1;
-          const taggedListPages = fp.range(1, taggedListCount);
+          const taggedListPages = range(1, taggedListCount);
 
-          fp.each((taggedListPage) => {
+          each((taggedListPage) => {
             createPage({
               path: `/tags/${tag}/${taggedListPage}`,
               component: taggedList,
@@ -190,16 +192,16 @@ exports.createPages = ({ graphql, actions }) => {
           })(taggedListPages);
         })(tags);
 
-        const categories = fp.flow(
-          fp.flatten,
-          fp.uniq
+        const categories = flow(
+          flatten,
+          uniq
         )(categoryMatrix);
 
-        fp.each((category) => {
-          const categorizedPostCount = fp.reduce((count, edge) => {
-            const postCategory = fp.get('node.frontmatter.category')(edge);
+        each((category) => {
+          const categorizedPostCount = reduce((count, edge) => {
+            const postCategory = get('node.frontmatter.category')(edge);
 
-            if (fp.includes(category)(postCategory)) {
+            if (includes(category)(postCategory)) {
               return count + 1;
             }
 
@@ -207,9 +209,9 @@ exports.createPages = ({ graphql, actions }) => {
           }, 0)(edges);
           const categorizedListCount = categorizedPostCount ?
             (Math.ceil(categorizedPostCount / CONTENT_PER_PAGE) + 1) : 1;
-          const categorizedListPages = fp.range(1, categorizedListCount);
+          const categorizedListPages = range(1, categorizedListCount);
 
-          fp.each((categorizedListPage) => {
+          each((categorizedListPage) => {
             createPage({
               path: `/categories/${category}/${categorizedListPage}`,
               component: categorizedList,
@@ -221,4 +223,18 @@ exports.createPages = ({ graphql, actions }) => {
       })
     );
   });
+};
+
+exports.onCreateNode = ({ node, actions, getNode }) => {
+  const { createNodeField } = actions;
+
+  if (node.internal.type === `MarkdownRemark`) {
+    const value = createFilePath({ node, getNode });
+
+    createNodeField({
+      name: `slug`,
+      node,
+      value,
+    });
+  }
 };

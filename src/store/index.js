@@ -3,7 +3,7 @@ import createSagaMiddleware from 'redux-saga';
 import { takeLatest, takeEvery } from 'redux-saga/effects';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import fp from 'lodash/fp';
+import { flow } from 'lodash/fp';
 import createReducer from '~/utils/createReducer';
 
 /* reducers */
@@ -48,7 +48,7 @@ const initialState = {
   posts: postsInitialState,
 };
 
-const initializeStore = fp.flow(
+const initializeStore = flow(
   appInitializer,
   postsInitializer,
 );
@@ -79,8 +79,8 @@ function* sagas() {
   yield takeEvery(RENDER_COMPONENTS, postsSagas.renderComponents);
 }
 
-const composeEnhancers = isProduction ?
-  compose :
-  global.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || composeWithDevTools;
+const composeEnhancers = isProduction
+  ? compose
+  : global.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || composeWithDevTools;
 
 export { reducers, initialState, composeEnhancers, middleware, sagaMiddleware, sagas, initializeStore };

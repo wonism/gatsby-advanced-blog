@@ -1,11 +1,11 @@
-import fp from 'lodash/fp';
+import { flow, split, toNumber, get, defaultTo } from 'lodash/fp';
 
-const getPage = index => fp.flow(
-  fp.get('pathname'),
-  fp.split('/'),
-  fp.get(index),
-  fp.defaultTo('1'),
-  fp.toNumber
+const getPage = index => flow(
+  get('pathname'),
+  split('/'),
+  get(index),
+  defaultTo('1'),
+  toNumber
 );
 
 export default getPage;

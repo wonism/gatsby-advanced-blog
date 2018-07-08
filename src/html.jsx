@@ -54,6 +54,6 @@ export default class HTML extends Component {
           {postBodyComponents}
         </body>
       </html>
-    )
+    );
   }
-};
+}
