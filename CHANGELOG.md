@@ -58,3 +58,6 @@
 - use `css` instead of `less`
 - update `dependencides`
   - `babel`, `redux`, `react` etcetera
+
+## 0.2.0-1 - 2018-07-22
+- add `LICENCE.md`
