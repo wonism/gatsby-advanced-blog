@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from 'gatsby-link';
+import { Link } from 'gatsby';
 import Truncate from 'react-truncate';
 import FaTags from 'react-icons/lib/fa/tags';
 import styled from 'styled-components';
 import { isNil, includes, map, first } from 'lodash/fp';
 
-/* eslint-disable max-len */
 const ImageWrapper = styled.figure`
   position: relative;
   margin: -14px -14px 14px;
@@ -34,7 +33,6 @@ const ImageWrapper = styled.figure`
     height: auto;
   }
 `;
-/* eslint-enable max-len */
 
 const TagWrapper = styled.div`
   white-space: nowrap;

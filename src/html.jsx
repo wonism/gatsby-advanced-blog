@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 
-let stylesStr;
-if (JSON.stringify(process.env.NODE_ENV) === 'production') {
-  try {
-    stylesStr = require('!raw-loader!./components/Layout/index.css');
-  } catch (e) {
-    console.error(e);
-  }
-}
+const stylesStr = require('!raw-loader!./reset.css');
 
 export default class HTML extends Component {
   render() {
@@ -44,9 +37,7 @@ export default class HTML extends Component {
           {/* <meta name="msapplication-TileImage" content="" /> */}
           {/* <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="" /> */}
           {/* <link rel="apple-touch-icon" type="image/vnd.microsoft.icon" href="" /> */}
-          {JSON.stringify(process.env.NODE_ENV) === 'production' ? (
-            <style id="gatsby-inlined-css" dangerouslySetInnerHTML={{ __html: stylesStr }} />
-          ) : null}
+          <style id="gatsby-inlined-css" dangerouslySetInnerHTML={{ __html: stylesStr }} />
         </head>
         <body {...bodyAttributes}>
           {preBodyComponents}

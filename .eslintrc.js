@@ -1,5 +1,3 @@
-const isProduction = process.env.NODE_ENV === 'production';
-
 const off = 0;
 const warn = 1;
 const error = 2;
@@ -60,8 +58,8 @@ module.exports = {
     'lodash-fp/prefer-identity': [error, { arrowFunctions: false }],
     'lodash-fp/preferred-alias': off,
     'lodash-fp/use-fp': error,
-    'max-len': [error, 150, { ignoreComments: true }],
-    'no-console': isProduction ? error : off,
+    'max-len': [error, 150, { ignoreComments: true, ignoreStrings: true, ignoreTemplateLiterals: true }],
+    'no-console': error,
     'no-multiple-empty-lines': [error, { max: error, maxEOF: error }],
     'no-implicit-coercion': error,
     'no-shadow': off,
@@ -83,7 +81,7 @@ module.exports = {
       },
     },
     {
-      files: ['src/components/Post/index.jsx', 'src/templates/*.jsx'],
+      files: ['src/components/Resume/index.jsx', 'src/components/Portfolio/index.jsx', 'src/components/Post/index.jsx', 'src/templates/*.jsx'],
       rules: {
         'react/no-danger': off,
       },
@@ -97,9 +95,10 @@ module.exports = {
       },
     },
     {
-      files: ['src/store/**/*.js'],
+      files: ['src/store/**/sagas.js'],
       rules: {
         'react/button-has-type': off,
+        'no-alert': off,
       },
     },
     {

@@ -61,3 +61,9 @@
 
 ## 0.2.0-1 - 2018-07-22
 - add `LICENCE.md`
+
+## 0.2.1 - 2018-08-10
+- update `gatsby` to use `Link` in `gatsby` instead of `gatsby-link` ((ISSUE 8)[https://github.com/wonism/gatsby-advanced-blog/issues/8])
+- remove all `css`s and add styles into `Styled Components`. ((ISSUE 9)[https://github.com/wonism/gatsby-advanced-blog/issues/9])
+- fix SSR ((ISSUE 9)[https://github.com/wonism/gatsby-advanced-blog/issues/9])
+- update `.eslintrc` to change some rules

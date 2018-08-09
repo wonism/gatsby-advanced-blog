@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Link from 'gatsby-link';
+import { Link } from 'gatsby';
 import styled from 'styled-components';
 import Helmet from 'react-helmet';
 import FaTags from 'react-icons/lib/fa/tags';
@@ -9,7 +9,6 @@ import Bio from '~/components/Bio';
 import PostWrapper from '~/components/Common/PostWrapper';
 import { SITE_URL } from '~/constants';
 import formattedDate from '~/utils/formattedDate';
-import './index.css';
 
 const Tags = styled.div`
   margin: 1em 0;

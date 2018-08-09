@@ -1,6 +1,6 @@
 {
   "name": "gatsby-advanced-blog",
-  "version": "0.2.0-1",
+  "version": "0.2.1",
   "description": "Gatsby starter for advanced blog",
   "main": "n/a",
   "author": "wonism",
@@ -17,16 +17,16 @@
     "url": "https://github.com/wonism/gatsby-advanced-blo/issues"
   },
   "peerDependencies": {
-    "gatsby": "^2.0.0-beta.19",
-    "react": "^16.4.0",
-    "prop-types": "^15.0.0"
+    "gatsby": "^2.0.0-beta.92",
+    "react": ">=16.3.0",
+    "prop-types": ">=15.0.0",
+    "styled-components": ">=3.3.3"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.52",
     "clipboard": "^2.0.1",
     "emotion": "^9.2.5",
-    "gatsby": "^2.0.0-beta.19",
-    "gatsby-link": "^1.6.45",
+    "gatsby": "^2.0.0-beta.92",
     "i": "^0.3.6",
     "lodash": "^4.17.10",
     "npm": "^6.1.0",
@@ -48,6 +48,7 @@
   "devDependencies": {
     "babel-loader": "^8.0.0-beta.4",
     "babel-plugin-emotion": "^9.2.5",
+    "babel-plugin-styled-components": "^1.5.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-import-resolver-webpack": "^0.10.1",
     "eslint-loader": "^2.0.0",
@@ -59,6 +60,7 @@
     "gatsby-plugin-manifest": "^1.0.27",
     "gatsby-plugin-offline": "^1.0.18",
     "gatsby-plugin-react-helmet": "^2.0.11",
+    "gatsby-plugin-styled-components": "^3.0.0-beta.3",
     "gatsby-remark-copy-linked-files": "^1.5.37",
     "gatsby-remark-images": "^1.5.67",
     "gatsby-remark-prismjs": "^2.0.4",
@@ -74,6 +76,7 @@
   "scripts": {
     "lint": "eslint ./src --ext .js,.jsx --config .eslintrc.js",
     "dev": "gatsby develop",
+    "clean": "rm -rf .cache && rm -rf public",
     "build": "gatsby build",
     "serve": "gatsby serve",
     "deploy": "gatsby build --prefix-paths && gh-pages -d public -b master",

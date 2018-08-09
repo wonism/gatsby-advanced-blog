@@ -1,6 +1,22 @@
+import { renderToString } from 'react-dom/server';
 import Helmet from 'react-helmet';
+import { ServerStyleSheet } from 'styled-components';
 
-exports.onRenderBody = ({
+export const replaceRenderer = ({
+  bodyComponent,
+  replaceBodyHTMLString,
+  setHeadComponents
+}) => {
+  const sheet = new ServerStyleSheet();
+  const body = renderToString(sheet.collectStyles(bodyComponent));
+
+  replaceBodyHTMLString(body);
+  setHeadComponents([sheet.getStyleElement()]);
+
+  return;
+};
+
+export const onRenderBody = ({
   setHeadComponents,
   setHtmlAttributes,
   setBodyAttributes,

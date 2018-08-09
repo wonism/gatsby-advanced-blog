@@ -1,5 +1,5 @@
 import { call, put } from 'redux-saga/effects';
-import { navigateTo } from 'gatsby-link';
+import { navigateTo } from 'gatsby';
 import {
   HISTORY_GO_BACK_SUCCESS,
   HISTORY_GO_BACK_FAILED,
@@ -16,7 +16,7 @@ export function* historyGoBack() {
 
     yield put({ type: HISTORY_GO_BACK_SUCCESS });
   } catch (e) {
-    yield call(() => { alert('can not access the history API'); }); // eslint-disable-line no-alert
+    yield call(() => { alert('can not access the history API'); });
     yield put({ type: HISTORY_GO_BACK_FAILED });
   }
 }

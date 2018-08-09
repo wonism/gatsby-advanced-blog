@@ -162,12 +162,10 @@ class Resume extends PureComponent {
             </a>
           </SocialInformation>
           <MDInformation>
-            {/* eslint-disable react/no-danger */}
             <div
               ref={(mdWrapper) => { this.$mdWrapper = mdWrapper; }}
               dangerouslySetInnerHTML={{ __html: get('html')(resume) }}
             />
-            {/* eslint-enable react/no-danger */}
           </MDInformation>
         </Clearfix>
       </Wrapper>

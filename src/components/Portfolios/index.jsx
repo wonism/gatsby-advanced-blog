@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Helmet from 'react-helmet';
-import Link from 'gatsby-link';
+import { Link } from 'gatsby';
 import { isEmpty, isArray, includes, map, get, first } from 'lodash/fp';
 import SimpleWrapper from '~/components/Common/SimpleWrapper';
 import PortfolioCard from '~/components/Common/PortfolioCard';

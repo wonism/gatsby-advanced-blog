@@ -15,7 +15,6 @@ import {
 } from '~/store';
 import ConnectedLayout from '~/containers/HigherOrderLayout';
 import { POST, PORTFOLIO } from '~/constants';
-import './layout.css';
 
 const GatsbyApp = ({ children, ...otherProps }) => (
   <StaticQuery

@@ -180,7 +180,7 @@ export function* renderComponents({ components }) {
     yield all(each((component) => {
       const { rootId: componentRootId, fileName: componentFileName } = component;
       const componentContainer$ = global.document.getElementById(componentRootId);
-      const App = require(`~/postComponents/${componentFileName}`).default; // eslint-disable-line
+      const App = require(`~/postComponents/${componentFileName}`).default;
 
       render(
         <ComponentInPost>

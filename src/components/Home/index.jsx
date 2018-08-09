@@ -1,15 +1,15 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'gatsby';
 import styled from 'styled-components';
-import Link from 'gatsby-link';
 import { flow, slice, map, includes, get, size, isEmpty, isArray, first } from 'lodash/fp';
 import Helmet from 'react-helmet';
 import Wrapper from '~/components/Common/Wrapper';
 import SimpleWrapper from '~/components/Common/SimpleWrapper';
 import PortfolioCard from '~/components/Common/PortfolioCard';
-import './index.css';
 
 const Title = styled.h1`
+  @import url("https://fonts.googleapis.com/css?family=Kaushan+Script");
   position: absolute;
   top: 0;
   bottom: 0;

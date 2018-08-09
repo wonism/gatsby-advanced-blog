@@ -103,9 +103,7 @@ const Portfolio = ({ data }) => {
         <meta name="og:title" content={`WONISM | ${toUpper(title)}`} />
       </Helmet>
       <PortfolioDescription>
-        {/* eslint-disable react/no-danger */}
         <section dangerouslySetInnerHTML={{ __html: get('html')(portfolio) }} />
-        {/* eslint-enable react/no-danger */}
       </PortfolioDescription>
       <PortfolioImages>
         {map((image) => {
