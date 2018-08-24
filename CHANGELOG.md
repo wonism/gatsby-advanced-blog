@@ -67,3 +67,6 @@
 - remove all `css`s and add styles into `Styled Components`. ((ISSUE 9)[https://github.com/wonism/gatsby-advanced-blog/issues/9])
 - fix SSR ((ISSUE 9)[https://github.com/wonism/gatsby-advanced-blog/issues/9])
 - update `.eslintrc` to change some rules
+
+## 0.2.2 - 2018-08-24
+- fix issue that is related with media query for print ((ISSUE 11)[https://github.com/wonism/gatsby-advanced-blog/issues/11])

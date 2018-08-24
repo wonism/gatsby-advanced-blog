@@ -81,12 +81,3 @@ button, a, label {
   /*background-color: #3B9CFF;*/
   /*border-radius: 6px;*/
 /*}*/
-@media print {
-  div, section, header, footer {
-    display: none;
-  }
-
-  .resume-page {
-    display: block;
-  }
-}
