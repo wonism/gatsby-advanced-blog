@@ -70,3 +70,6 @@
 
 ## 0.2.2 - 2018-08-24
 - fix issue that is related with media query for print ((ISSUE 11)[https://github.com/wonism/gatsby-advanced-blog/issues/11])
+
+## 0.2.3 - 2018-09-26
+- update `gatsby` version (`v2.0.8`)

@@ -1,5 +1,5 @@
 import { call, put } from 'redux-saga/effects';
-import { navigateTo } from 'gatsby';
+import { push } from 'gatsby';
 import {
   HISTORY_GO_BACK_SUCCESS,
   HISTORY_GO_BACK_FAILED,
@@ -24,7 +24,7 @@ export function* historyGoBack() {
 export function* navigateToPath({ path }) {
   yield put({ type: INPUT_KEYWORD, input: '' });
   yield call(() => {
-    navigateTo(path);
+    push(path);
   });
 }
 
