@@ -19,6 +19,7 @@
   "peerDependencies": {
     "gatsby": ">=2.2.9",
     "react": ">=16.8.5",
+    "react-dom": ">=16.8.5",
     "prop-types": ">=15.7.2",
     "styled-components": ">=4.2.0"
   },
@@ -44,7 +45,7 @@
     "redux-saga": "^1.0.2",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "styled-components": "^3.3.3"
+    "styled-components": "^4.2.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.0",
@@ -102,7 +103,9 @@
         "git add"
       ]
     },
-    "ignore": ["./.*.js"]
+    "ignore": [
+      "./.*.js"
+    ]
   },
   "husky": {
     "hooks": {
