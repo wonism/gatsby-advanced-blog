@@ -1,12 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
-import FaPinrt from 'react-icons/lib/fa/print';
-import FaGithub from 'react-icons/lib/fa/github';
-import FaFacebook from 'react-icons/lib/fa/facebook';
-import FaTwitter from 'react-icons/lib/fa/twitter';
-import FaLinkedin from 'react-icons/lib/fa/linkedin';
+import { FaPrint, FaGithub, FaFacebook, FaTwitter, FaLinkedin } from 'react-icons/fa';
 import { forEach, startsWith, get } from 'lodash/fp';
 import Clearfix from '~/components/Common/Clearfix';
 import * as profileUrl from '~/resources/me.png';
@@ -80,14 +76,14 @@ const MDInformation = styled.section`
   }
 `;
 
-class Resume extends PureComponent {
-  static propTypes = {
-    data: PropTypes.shape({ date: PropTypes.object }).isRequired,
-    printPage: PropTypes.func.isRequired,
-  };
+const Resume = ({
+  data,
+  printPage,
+}) => {
+  const $mdWrapper = useRef(null);
 
-  componentDidMount() {
-    const anchors = this.$mdWrapper.getElementsByTagName('a');
+  useEffect(() => {
+    const anchors = $mdWrapper.current.getElementsByTagName('a');
 
     forEach((anchor) => {
       const href = anchor.getAttribute('href');
@@ -96,81 +92,83 @@ class Resume extends PureComponent {
         anchor.setAttribute('rel', 'noreferrer noopener');
       }
     })(anchors);
-  }
+  }, []);
 
-  render() {
-    const { data, printPage } = this.props;
-    const resume = get('markdownRemark')(data);
+  const resume = data.markdownRemark;
 
-    return (
-      <Wrapper>
+  return (
+    <Wrapper>
+      <Clearfix>
+        <Helmet>
+          <title>
+            WONISM | RESUME
+          </title>
+          <meta name="og:title" content="WONISM | RESUME" />
+        </Helmet>
         <Clearfix>
-          <Helmet>
-            <title>
-              WONISM | RESUME
-            </title>
-            <meta name="og:title" content="WONISM | RESUME" />
-          </Helmet>
-          <Clearfix>
-            <button type="button" onClick={printPage}>
-              <FaPinrt />
-              Print
-            </button>
-          </Clearfix>
-          <BasicInformation>
-            <img
-              src={profileUrl.default}
-              alt=""
-              width="120"
-              height="120"
-            />
-            <h1>
-              wonism
-            </h1>
-            <p>
-              yocee57@gmail.com
-            </p>
-          </BasicInformation>
-          <SocialInformation>
-            <a
-              href="https://github.com/wonism"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <FaGithub />
-            </a>
-            <a
-              href="https://twitter.com/j1ism"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <FaTwitter />
-            </a>
-            <a
-              href="https://www.facebook.com/j1.chic"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <FaFacebook />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/wonism/"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <FaLinkedin />
-            </a>
-          </SocialInformation>
-          <MDInformation>
-            <div
-              ref={(mdWrapper) => { this.$mdWrapper = mdWrapper; }}
-              dangerouslySetInnerHTML={{ __html: get('html')(resume) }}
-            />
-          </MDInformation>
+          <button type="button" onClick={printPage}>
+            <FaPrint />
+            Print
+          </button>
         </Clearfix>
-      </Wrapper>
-    );
-  }
-}
+        <BasicInformation>
+          <img
+            src={profileUrl.default}
+            alt=""
+            width="120"
+            height="120"
+          />
+          <h1>
+            wonism
+          </h1>
+          <p>
+            yocee57@gmail.com
+          </p>
+        </BasicInformation>
+        <SocialInformation>
+          <a
+            href="https://github.com/wonism"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <FaGithub />
+          </a>
+          <a
+            href="https://twitter.com/j1ism"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <FaTwitter />
+          </a>
+          <a
+            href="https://www.facebook.com/j1.chic"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <FaFacebook />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/wonism/"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <FaLinkedin />
+          </a>
+        </SocialInformation>
+        <MDInformation>
+          <div
+            ref={$mdWrapper}
+            dangerouslySetInnerHTML={{ __html: get('html')(resume) }}
+          />
+        </MDInformation>
+      </Clearfix>
+    </Wrapper>
+  );
+};
+
+Resume.propTypes = {
+  data: PropTypes.shape({ date: PropTypes.object }).isRequired,
+  printPage: PropTypes.func.isRequired,
+};
 
 export default Resume;

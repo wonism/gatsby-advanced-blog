@@ -2,10 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 import styled from 'styled-components';
-import FaCaretDown from 'react-icons/lib/fa/caret-down';
-import FaHome from 'react-icons/lib/fa/home';
-import FaSearch from 'react-icons/lib/fa/search';
-import FaTags from 'react-icons/lib/fa/tags';
+import { FaCaretDown, FaHome, FaSearch, FaTags } from 'react-icons/fa';
 import { flow, isEmpty, isEqual, filter, map, uniq, get, size, toLower, replace, startsWith } from 'lodash/fp';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '~/components/Common/constants';
 

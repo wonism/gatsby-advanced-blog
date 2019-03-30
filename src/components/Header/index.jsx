@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 import styled from 'styled-components';
-import FaAngleLeft from 'react-icons/lib/fa/angle-left';
+import FaAngleLeft from 'react-icons/fa/angle-left';
 
 const BackButtonIcon = styled(FaAngleLeft)`
   display: none;

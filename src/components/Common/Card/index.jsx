@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 import Truncate from 'react-truncate';
-import FaTags from 'react-icons/lib/fa/tags';
+import { FaTags } from 'react-icons/fa';
 import styled from 'styled-components';
 import { isNil, includes, map, first } from 'lodash/fp';
 

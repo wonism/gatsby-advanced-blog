@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 import styled from 'styled-components';
 import Helmet from 'react-helmet';
-import FaTags from 'react-icons/lib/fa/tags';
-import { flow, isEmpty, isNil, map, includes, add, get, first, defaultTo } from 'lodash/fp';
+import { FaTags } from 'react-icons/fa';
+import { isEmpty, isNil, map, includes, add, get } from 'lodash/fp';
 import Bio from '~/components/Bio';
 import PostWrapper from '~/components/Common/PostWrapper';
 import { SITE_URL } from '~/constants';
@@ -82,99 +82,98 @@ const ImageWrapper = styled.figure`
   }
 `;
 
-class PostTemplate extends PureComponent {
-  static propTypes = {
-    data: PropTypes.shape({ date: PropTypes.object }).isRequired,
-    location: PropTypes.shape({}).isRequired,
-    loadDisqus: PropTypes.func.isRequired,
-    renderTweets: PropTypes.func.isRequired,
-    renderComponents: PropTypes.func.isRequired,
-    createCopyButton: PropTypes.func.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-    const { location, loadDisqus } = this.props;
+const PostTemplate = ({
+  data,
+  location,
+  loadDisqus,
+  renderTweets,
+  renderComponents,
+  createCopyButton,
+}) => {
+  useEffect(() => {
     const { pathname: identifier } = location;
     const url = add(SITE_URL, identifier);
-    const title = get('data.markdownRemark.frontmatter.title')(this.props);
+    const { title } = data.markdownRemark.frontmatter;
 
     loadDisqus({
       url,
       identifier,
       title,
     });
-  }
+  }, []);
 
-  componentDidMount() {
-    const { data, createCopyButton, renderTweets, renderComponents } = this.props;
-    const frontmatter = get('markdownRemark.frontmatter')(data);
-    const { tweets, components } = frontmatter;
+  useEffect(() => {
+    const { tweets, components } = data.markdownRemark.frontmatter;
 
     createCopyButton();
     renderTweets(tweets);
     renderComponents(components);
-  }
+  }, []);
 
-  render() {
-    const { props } = this;
-    const { data } = props;
-    const post = flow(get('markdownRemark.frontmatter'), defaultTo({}))(data);
-    const { title, tags, date, images } = post;
-    const image = first(images);
+  const post = data.markdownRemark.frontmatter;
+  const { title, tags, date, images } = post;
+  const [image] = images;
 
-    return (
-      <PostWrapper>
-        <Helmet>
-          <title>
-            {`WONISM | ${title}`}
-          </title>
-          <meta name="og:title" content={`WONISM | ${title}`} />
-        </Helmet>
-        {isNil(image) ? null : (
-          <ImageWrapper>
-            <img
-              src={includes('//')(image) ? image : require(`~/resources/${image}`)}
-              alt={title}
-            />
-          </ImageWrapper>
-        )}
-        <h1>
-          {title}
-        </h1>
-        <time>
-          {formattedDate(date)}
-        </time>
-        {isEmpty(tags) ? null : (
-          <Tags>
-            <FaTags />
-            {map(tag => (
-              <Link
-                key={tag}
-                to={`/tags/${tag}/1`}
-              >
-                <small>
-                  {tag}
-                </small>
-              </Link>
-            ))(tags)}
-          </Tags>
-        )}
-        <Bio />
-        <PostContent>
-          <div id="post-contents" dangerouslySetInnerHTML={{ __html: get('markdownRemark.html')(data) }} />
-        </PostContent>
-        <div id="disqus_thread" />
-        <noscript>
-          Please enable JavaScript to view the
-          &nbsp;
-          <a href="https://disqus.com/?ref_noscript">
-            comments powered by Disqus.
-          </a>
-        </noscript>
-      </PostWrapper>
-    );
-  }
-}
+  return (
+    <PostWrapper>
+      <Helmet>
+        <title>
+          {`WONISM | ${title}`}
+        </title>
+        <meta name="og:title" content={`WONISM | ${title}`} />
+      </Helmet>
+      {isNil(image) ? null : (
+        <ImageWrapper>
+          <img
+            src={includes('//')(image) ? image : require(`~/resources/${image}`)}
+            alt={title}
+          />
+        </ImageWrapper>
+      )}
+      <h1>
+        {title}
+      </h1>
+      <time>
+        {formattedDate(date)}
+      </time>
+      {isEmpty(tags) ? null : (
+        <Tags>
+          <FaTags />
+          {map(tag => (
+            <Link
+              key={tag}
+              to={`/tags/${tag}/1`}
+            >
+              <small>
+                {tag}
+              </small>
+            </Link>
+          ))(tags)}
+        </Tags>
+      )}
+      <Bio />
+      <PostContent>
+        <div id="post-contents" dangerouslySetInnerHTML={{ __html: get('markdownRemark.html')(data) }} />
+      </PostContent>
+      <div id="disqus_thread" />
+      <noscript>
+        Please enable JavaScript to view the
+        &nbsp;
+        <a href="https://disqus.com/?ref_noscript">
+          comments powered by Disqus.
+        </a>
+      </noscript>
+    </PostWrapper>
+  );
+};
+
+PostTemplate.propTypes = {
+  data: PropTypes.shape({ date: PropTypes.object }).isRequired,
+  location: PropTypes.shape({}).isRequired,
+  loadDisqus: PropTypes.func.isRequired,
+  renderTweets: PropTypes.func.isRequired,
+  renderComponents: PropTypes.func.isRequired,
+  createCopyButton: PropTypes.func.isRequired,
+};
 
 export default PostTemplate;

@@ -37,7 +37,6 @@ exports.onCreateWebpackConfig = ({
 
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions;
-  const contentTypes = [POST, PORTFOLIO, RESUME];
 
   return new Promise((resolve, reject) => {
     const post = path.resolve('./src/templates/Post.jsx');
@@ -67,7 +66,7 @@ exports.createPages = ({ graphql, actions }) => {
         }
       `).then((result) => {
         if (result.errors) {
-          console.log(result.errors);
+          console.log(result.errors); // eslint-disable-line no-console
           reject(result.errors);
         }
 
@@ -156,7 +155,7 @@ exports.createPages = ({ graphql, actions }) => {
           })(pages);
         } else {
           createPage({
-            path: `/pages/1`,
+            path: '/pages/1',
             component: list,
             context: {
             },
@@ -178,8 +177,7 @@ exports.createPages = ({ graphql, actions }) => {
 
             return count;
           }, 0)(edges);
-          const taggedListCount = taggedPostCount ?
-            (Math.ceil(taggedPostCount / CONTENT_PER_PAGE) + 1) : 1;
+          const taggedListCount = taggedPostCount ? (Math.ceil(taggedPostCount / CONTENT_PER_PAGE) + 1) : 1;
           const taggedListPages = range(1, taggedListCount);
 
           each((taggedListPage) => {
@@ -207,8 +205,7 @@ exports.createPages = ({ graphql, actions }) => {
 
             return count;
           }, 0)(edges);
-          const categorizedListCount = categorizedPostCount ?
-            (Math.ceil(categorizedPostCount / CONTENT_PER_PAGE) + 1) : 1;
+          const categorizedListCount = categorizedPostCount ? (Math.ceil(categorizedPostCount / CONTENT_PER_PAGE) + 1) : 1;
           const categorizedListPages = range(1, categorizedListCount);
 
           each((categorizedListPage) => {
@@ -228,11 +225,11 @@ exports.createPages = ({ graphql, actions }) => {
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions;
 
-  if (node.internal.type === `MarkdownRemark`) {
+  if (node.internal.type === 'MarkdownRemark') {
     const value = createFilePath({ node, getNode });
 
     createNodeField({
-      name: `slug`,
+      name: 'slug',
       node,
       value,
     });

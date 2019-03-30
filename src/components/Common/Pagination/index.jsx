@@ -2,11 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'gatsby';
 import styled from 'styled-components';
-import FaAngleDoubleLeft from 'react-icons/lib/fa/angle-double-left';
-import FaAngleDoubleRight from 'react-icons/lib/fa/angle-double-right';
-import FaAngleLeft from 'react-icons/lib/fa/angle-left';
-import FaAngleRight from 'react-icons/lib/fa/angle-right';
-import FaEllipsisH from 'react-icons/lib/fa/ellipsis-h';
+import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight, FaEllipsisH } from 'react-icons/fa';
 import { isEmpty, isEqual, range, filter, map, includes } from 'lodash/fp';
 import {
   CONTENT_PER_PAGE,

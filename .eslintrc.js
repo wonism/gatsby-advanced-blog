@@ -4,7 +4,7 @@ const error = 2;
 
 module.exports = {
   extends: ['airbnb', 'plugin:import/errors', 'plugin:import/warnings'],
-  plugins: ['import', 'lodash-fp'],
+  plugins: ['react', 'import', 'lodash-fp'],
   env: {
     es6: true,
     node: true,
@@ -30,12 +30,19 @@ module.exports = {
     'import/no-unresolved': off,
     'import/no-webpack-loader-syntax': off,
     'import/prefer-default-export': off,
-    indent: off,
+    indent: [
+      error,
+      2,
+      {
+        SwitchCase: 1,
+      },
+    ],
     'jsx-a11y/anchor-is-valid': off,
     'jsx-a11y/click-events-have-key-events': error,
     'jsx-a11y/heading-has-content': off,
     'jsx-a11y/href-no-hash': off,
     'jsx-a11y/label-has-for': off,
+    'jsx-a11y/label-has-associated-control': off,
     'jsx-a11y/mouse-events-have-key-events': off,
     'jsx-a11y/no-autofocus': off,
     'lodash-fp/consistent-compose': error,
@@ -73,7 +80,27 @@ module.exports = {
     'react/no-unescaped-entities': off,
   },
   parser: 'babel-eslint',
+  parserOptions: {
+    ecmaVersion: 6,
+    sourceType: 'module',
+    allowImportExportEverywhere: false,
+    ecmaFeatures: {
+      jsx: true,
+      modules: true,
+      globalReturn: false,
+      experimentalObjectRestSpread: true,
+    },
+    babelOptions: {
+      configFile: '.babelrc.js',
+    },
+  },
   overrides: [
+    {
+      files: ['gatsby-node.js'],
+      rules: {
+        'import/no-extraneous-dependencies': off,
+      },
+    },
     {
       files: ['src/components/HigherOrderLayout/index.jsx'],
       rules: {
@@ -109,4 +136,10 @@ module.exports = {
       },
     },
   ],
+  settings: {
+    react: {
+      pragma: 'React',
+      version: '16.8.5',
+    }
+  }
 };
