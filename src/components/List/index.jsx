@@ -6,7 +6,7 @@ import Card from '~/components/Common/Card';
 import Pagination from '~/components/Common/Pagination';
 import getPosts from '~/utils/getPosts';
 import getPage from '~/utils/getPage';
-import { CONTENT_PER_PAGE } from '~/constants';
+import { PREFIX, CONTENT_PER_PAGE } from '~/constants';
 
 const List = ({ data, location }) => {
   const page = getPage(location);
@@ -19,9 +19,9 @@ const List = ({ data, location }) => {
       <PostsWrapper>
         <Helmet>
           <title>
-            WONISM | POST
+            {`${PREFIX}POST`}
           </title>
-          <meta name="og:title" content="WONISM | POST" />
+          <meta name="og:title" content={`${PREFIX}POST`} />
         </Helmet>
         {posts.map(({ node: { frontmatter: { images, tags, path, ...otherProps } } }) => (
           <Card key={path} path={path} images={images} tags={tags} {...otherProps} />

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Tweet } from 'react-twitter-widgets';
 import { all, call, put } from 'redux-saga/effects';
 import Clipboard from 'clipboard';
+import { DISQUS_ID } from '~/constants';
 import {
   INIT_COPY_SUCCESS,
   INIT_COPY_FAILED,
@@ -58,7 +59,7 @@ export function* loadDisqusScript() {
 
       if (!d.getElementById('disqus-sdk')) {
         const s = d.createElement('script');
-        s.src = 'https://jaewonism.disqus.com/embed.js';
+        s.src = `https://${DISQUS_ID}.disqus.com/embed.js`;
         s.setAttribute('data-timestamp', Date.now());
         d.body.appendChild(s);
       }

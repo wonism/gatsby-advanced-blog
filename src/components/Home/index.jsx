@@ -6,6 +6,7 @@ import Helmet from 'react-helmet';
 import Wrapper from '~/components/Common/Wrapper';
 import SimpleWrapper from '~/components/Common/SimpleWrapper';
 import PortfolioCard from '~/components/Common/PortfolioCard';
+import { TITLE } from '~/constants';
 
 const Title = styled.h1`
   @import url("https://fonts.googleapis.com/css?family=Kaushan+Script");
@@ -29,16 +30,16 @@ const Title = styled.h1`
 
 const Home = ({ portfolios }) => (
   <Fragment>
+    <Helmet>
+      <title>
+        {TITLE}
+      </title>
+      <meta name="og:title" content={TITLE} />
+    </Helmet>
     <Wrapper isHome>
       <Title>
         Hello, Blog!
       </Title>
-      <Helmet>
-        <title>
-          I'm Wonism!
-        </title>
-        <meta name="og:title" content="I'm Wonism!" />
-      </Helmet>
     </Wrapper>
     {portfolios.length >= 4 ? (
       <SimpleWrapper>

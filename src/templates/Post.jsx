@@ -13,6 +13,13 @@ export default PostTemplate;
 
 export const pageQuery = graphql`
   query PostByPath($path: String!) {
+    site {
+      siteMetadata {
+        title
+        author
+        homepage
+      }
+    }
     post: markdownRemark (
       frontmatter: { path: { eq: $path } }
     ) {

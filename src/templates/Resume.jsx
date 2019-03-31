@@ -13,6 +13,13 @@ export default ResumeTemplate;
 
 export const pageQuery = graphql`
   query ResumeQuery ($path: String!) {
+    site {
+      siteMetadata {
+        title
+        author
+        homepage
+      }
+    }
     resume: markdownRemark (
       frontmatter: { path: { eq: $path } }
     ) {

@@ -5,7 +5,7 @@ import Helmet from 'react-helmet';
 import { FaTags } from 'react-icons/fa';
 import Bio from '~/components/Bio';
 import PostWrapper from '~/components/Common/PostWrapper';
-import { SITE_URL } from '~/constants';
+import { PREFIX, SITE_URL } from '~/constants';
 import formattedDate from '~/utils/formattedDate';
 import { Tags, PostContent, ImageWrapper } from './styled';
 
@@ -52,9 +52,9 @@ const PostTemplate = ({
     <PostWrapper>
       <Helmet>
         <title>
-          {`WONISM | ${title}`}
+          {`${PREFIX}${title}`}
         </title>
-        <meta name="og:title" content={`WONISM | ${title}`} />
+        <meta name="og:title" content={`${PREFIX}${title}`} />
       </Helmet>
       {image === null ? null : (
         <ImageWrapper>

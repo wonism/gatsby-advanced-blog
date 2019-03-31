@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { PREFIX } from '~/constants';
 import { Wrapper, PortfolioDescription, PortfolioImages } from './styled';
 
 const Portfolio = ({ data: { portfolio: { frontmatter: { title, images }, html } } }) => (
   <Wrapper>
     <Helmet>
       <title>
-        {`WONISM | ${title.toUpperCase()}`}
+        {`${PREFIX}${title.toUpperCase()}`}
       </title>
-      <meta name="og:title" content={`WONISM | ${title.toUpperCase()}`} />
+      <meta name="og:title" content={`${PREFIX}${title.toUpperCase()}`} />
     </Helmet>
     <PortfolioDescription>
       <section dangerouslySetInnerHTML={{ __html: html }} />

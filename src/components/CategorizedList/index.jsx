@@ -6,7 +6,7 @@ import Card from '~/components/Common/Card';
 import Pagination from '~/components/Common/Pagination';
 import getPosts from '~/utils/getPosts';
 import getPage from '~/utils/getPage';
-import { CONTENT_PER_PAGE } from '~/constants';
+import { PREFIX, CONTENT_PER_PAGE } from '~/constants';
 
 const CategorizedList = ({ data, location }) => {
   const page = getPage(location);
@@ -22,9 +22,9 @@ const CategorizedList = ({ data, location }) => {
       <PostsWrapper>
         <Helmet>
           <title>
-            {`WONISM | ${category.toUpperCase()}`}
+            {`${PREFIX}${category.toUpperCase()}`}
           </title>
-          <meta name="og:title" content={`WONISM | ${category.toUpperCase()}`} />
+          <meta name="og:title" content={`${PREFIX}${category.toUpperCase()}`} />
         </Helmet>
         {posts.length === 0 ? (
           <div>

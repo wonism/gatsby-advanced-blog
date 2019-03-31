@@ -13,6 +13,13 @@ export default ListTemplate;
 
 export const pageQuery = graphql`
   query ListQuery {
+    site {
+      siteMetadata {
+        title
+        author
+        homepage
+      }
+    }
     posts: allMarkdownRemark (
       filter: { frontmatter: { hide: { ne: true } } }
       sort: { fields: [frontmatter___date], order: DESC }

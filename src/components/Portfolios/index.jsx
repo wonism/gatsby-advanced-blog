@@ -3,15 +3,16 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { Link } from 'gatsby';
 import PortfolioCard from '~/components/Common/PortfolioCard';
+import { PREFIX } from '~/constants';
 import { Wrapper } from './styled';
 
 const Portfolios = ({ data: { portfolios: { edges: portfolios } } }) => (
   <Wrapper>
     <Helmet>
       <title>
-        WONISM | PORTFOLIOS
+        {`${PREFIX}PORTFOLIOS`}
       </title>
-      <meta name="og:title" content="WONISM | PORTFOLIOS" />
+      <meta name="og:title" content={`${PREFIX}PORTFOLIOS`} />
     </Helmet>
     {portfolios.map(({ node: { frontmatter: { path, title, images = [] } } }) => {
       const [image = null] = images;

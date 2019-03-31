@@ -6,7 +6,7 @@ import Card from '~/components/Common/Card';
 import Pagination from '~/components/Common/Pagination';
 import getPosts from '~/utils/getPosts';
 import getPage from '~/utils/getPage';
-import { CONTENT_PER_PAGE } from '~/constants';
+import { PREFIX, CONTENT_PER_PAGE } from '~/constants';
 
 const TaggedList = ({ data, location }) => {
   const page = getPage(location);
@@ -22,9 +22,9 @@ const TaggedList = ({ data, location }) => {
       <PostsWrapper>
         <Helmet>
           <title>
-            {`WONISM | ${tag.toUpperCase()}`}
+            {`${PREFIX}${tag.toUpperCase()}`}
           </title>
-          <meta name="og:title" content={`WONISM | ${tag.toUpperCase()}`} />
+          <meta name="og:title" content={`${PREFIX}${tag.toUpperCase()}`} />
         </Helmet>
         {posts.length === 0 ? (
           <div>
