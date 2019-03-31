@@ -1,29 +1,8 @@
 import React, { Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import Gnb from '~/containers/Gnb';
 import Footer from '~/components/Footer';
-
-const Background = styled.div`
-  background-color: #fff;
-
-  @media print {
-    & > nav,
-    & > footer {
-      display: none;
-    }
-
-    & > main {
-      & > section {
-        padding: 0;
-      }
-    }
-
-    button {
-      display: none;
-    }
-  }
-`;
+import { Background } from './styled';
 
 const Layout = ({
   categories,
