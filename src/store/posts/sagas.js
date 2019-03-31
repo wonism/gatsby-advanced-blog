@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { Tweet } from 'react-twitter-widgets';
 import { all, call, put } from 'redux-saga/effects';
 import Clipboard from 'clipboard';
-import { each, get } from 'lodash/fp';
 import {
   INIT_COPY_SUCCESS,
   INIT_COPY_FAILED,
@@ -24,7 +23,7 @@ export function* initCopy() {
   try {
     yield call(() => {
       const clipboard = new Clipboard('.copy-button', {
-        target: get('previousElementSibling'),
+        target: ({ previousElementSibling }) => previousElementSibling,
       });
       clipboard.on('success', (e) => {
         e.clearSelection();
@@ -39,13 +38,13 @@ export function* initCopy() {
 export function* createCopyButton() {
   try {
     const codes = yield call(() => global.document.querySelectorAll('#post-contents .gatsby-highlight'));
-    yield all(each((code) => {
+    yield all(codes.forEach((code) => {
       const button = document.createElement('button');
       button.setAttribute('class', 'copy-button');
       button.innerHTML = 'COPY';
 
       code.appendChild(button);
-    })(codes));
+    }));
     yield put({ type: CREATE_COPY_BUTTON_SUCCESS });
   } catch (e) {
     yield put({ type: CREATE_COPY_BUTTON_FAILED });
@@ -89,23 +88,26 @@ export function* initDisqusConfig({ url, identifier, title }) {
 
 export function* renderTweets({ tweets }) {
   try {
-    yield all(each((tweet) => {
-      const { rootId: tweetRootId, tweetId, userId: username } = tweet;
-      const tweetContainer$ = global.document.getElementById(tweetRootId);
+    if (Array.isArray(tweets)) {
+      yield all(tweets.forEach((tweet) => {
+        const { rootId: tweetRootId, tweetId, userId: username } = tweet;
+        const tweetContainer$ = global.document.getElementById(tweetRootId);
 
-      render(
-        <div>
-          <Tweet
-            tweetId={tweetId}
-            options={{
-              username,
-            }}
-          />
-        </div>,
-        tweetContainer$
-      );
-    })(tweets));
-    yield put({ type: RENDER_TWEETS_SUCCESS });
+        render(
+          <div>
+            <Tweet
+              tweetId={tweetId}
+              options={{
+                username,
+              }}
+            />
+          </div>,
+          tweetContainer$
+        );
+      }));
+
+      yield put({ type: RENDER_TWEETS_SUCCESS });
+    }
   } catch (e) {
     yield put({ type: RENDER_TWEETS_FAILED });
   }
@@ -177,19 +179,22 @@ export function* renderComponents({ components }) {
       }
     `;
 
-    yield all(each((component) => {
-      const { rootId: componentRootId, fileName: componentFileName } = component;
-      const componentContainer$ = global.document.getElementById(componentRootId);
-      const App = require(`~/postComponents/${componentFileName}`).default;
+    if (Array.isArray(components)) {
+      yield all(components.forEach((component) => {
+        const { rootId: componentRootId, fileName: componentFileName } = component;
+        const componentContainer$ = global.document.getElementById(componentRootId);
+        const App = require(`~/postComponents/${componentFileName}`).default;
 
-      render(
-        <ComponentInPost>
-          <App />
-        </ComponentInPost>,
-        componentContainer$
-      );
-    })(components));
-    yield put({ type: RENDER_COMPONENTS_SUCCESS });
+        render(
+          <ComponentInPost>
+            <App />
+          </ComponentInPost>,
+          componentContainer$
+        );
+      }));
+
+      yield put({ type: RENDER_COMPONENTS_SUCCESS });
+    }
   } catch (e) {
     yield put({ type: RENDER_COMPONENTS_FAILED });
   }

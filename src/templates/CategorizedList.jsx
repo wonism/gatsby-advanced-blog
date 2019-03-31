@@ -13,7 +13,7 @@ export default CategorizedListTemplate;
 
 export const pageQuery = graphql`
   query CategorizedListQuery {
-    allMarkdownRemark (
+    posts: allMarkdownRemark (
       filter: { frontmatter: { hide: { ne: true } } }
       sort: { fields: [frontmatter___date], order: DESC }
     ) {

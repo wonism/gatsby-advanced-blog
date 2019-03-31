@@ -3,7 +3,6 @@ import createSagaMiddleware from 'redux-saga';
 import { takeLatest, takeEvery } from 'redux-saga/effects';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { flow } from 'lodash/fp';
 import createReducer from '~/utils/createReducer';
 
 /* reducers */
@@ -48,10 +47,10 @@ const initialState = {
   posts: postsInitialState,
 };
 
-const initializeStore = flow(
-  appInitializer,
-  postsInitializer,
-);
+const initializeStore = store =>
+  store
+    |> appInitializer
+    |> postsInitializer;
 
 const sagaMiddleware = createSagaMiddleware();
 

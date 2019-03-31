@@ -1,89 +1,28 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
-import styled from 'styled-components';
 import Helmet from 'react-helmet';
 import { FaTags } from 'react-icons/fa';
-import { isEmpty, isNil, map, includes, add, get } from 'lodash/fp';
 import Bio from '~/components/Bio';
 import PostWrapper from '~/components/Common/PostWrapper';
 import { SITE_URL } from '~/constants';
 import formattedDate from '~/utils/formattedDate';
-
-const Tags = styled.div`
-  margin: 1em 0;
-
-  a {
-    margin: 0 0 0 4px;
-    color: #000;
-    text-decoration: blink;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
-
-const PostContent = styled.section`
-  padding: 1em 0 4em;
-  line-height: 1.6em;
-
-  h2 {
-    margin: 24px 0 10px;
-    font-size: 28px;
-  }
-
-  h3 {
-    margin: 24px 0 10px;
-    font-size: 24px;
-  }
-
-  h4 {
-    margin: 24px 0 10px;
-    font-size: 21px;
-  }
-
-  p {
-    margin: 16px 0 0;
-    font-size: 16px;
-  }
-
-  blockquote {
-    margin: 40px 0 0;
-    padding: 0 0 0 2em;
-    line-height: 1.2em;
-    color: #aaa;
-    font-style: italic;
-    font-family: 'Kaushan Script';
-    font-size: 24px;
-  }
-
-  pre {
-    margin: 20px 0 0;
-  }
-`;
-
-const ImageWrapper = styled.figure`
-  position: relative;
-  margin: 0 0 48px;
-  padding: 56.25% 0 0;
-  width: 100%;
-  overflow: hidden;
-
-  img {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    margin: auto;
-    width: 100%;
-    height: auto;
-  }
-`;
+import { Tags, PostContent, ImageWrapper } from './styled';
 
 const PostTemplate = ({
-  data,
+  data: {
+    post: {
+      html,
+      frontmatter: {
+        title,
+        date,
+        tags = [],
+        images = [],
+        tweets = [],
+        components = [],
+      },
+    },
+  },
   location,
   loadDisqus,
   renderTweets,
@@ -92,8 +31,7 @@ const PostTemplate = ({
 }) => {
   useEffect(() => {
     const { pathname: identifier } = location;
-    const url = add(SITE_URL, identifier);
-    const { title } = data.markdownRemark.frontmatter;
+    const url = `${SITE_URL}${identifier}`;
 
     loadDisqus({
       url,
@@ -103,16 +41,12 @@ const PostTemplate = ({
   }, []);
 
   useEffect(() => {
-    const { tweets, components } = data.markdownRemark.frontmatter;
-
     createCopyButton();
     renderTweets(tweets);
     renderComponents(components);
   }, []);
 
-  const post = data.markdownRemark.frontmatter;
-  const { title, tags, date, images } = post;
-  const [image] = images;
+  const [image = null] = images;
 
   return (
     <PostWrapper>
@@ -122,10 +56,10 @@ const PostTemplate = ({
         </title>
         <meta name="og:title" content={`WONISM | ${title}`} />
       </Helmet>
-      {isNil(image) ? null : (
+      {image === null ? null : (
         <ImageWrapper>
           <img
-            src={includes('//')(image) ? image : require(`~/resources/${image}`)}
+            src={image.includes('//') ? image : require(`~/resources/${image}`)}
             alt={title}
           />
         </ImageWrapper>
@@ -136,10 +70,10 @@ const PostTemplate = ({
       <time>
         {formattedDate(date)}
       </time>
-      {isEmpty(tags) ? null : (
+      {tags.length === 0 ? null : (
         <Tags>
           <FaTags />
-          {map(tag => (
+          {tags.map(tag => (
             <Link
               key={tag}
               to={`/tags/${tag}/1`}
@@ -148,12 +82,12 @@ const PostTemplate = ({
                 {tag}
               </small>
             </Link>
-          ))(tags)}
+          ))}
         </Tags>
       )}
       <Bio />
       <PostContent>
-        <div id="post-contents" dangerouslySetInnerHTML={{ __html: get('markdownRemark.html')(data) }} />
+        <div id="post-contents" dangerouslySetInnerHTML={{ __html: html }} />
       </PostContent>
       <div id="disqus_thread" />
       <noscript>

@@ -1,44 +1,43 @@
 import { createSelector } from 'reselect';
-import { get } from 'lodash/fp';
 
-const getAppSubState = get('app');
+const getAppSubState = ({ app }) => app;
 
 export const isProduction = createSelector(
   getAppSubState,
-  get('isProduction')
+  ({ isProduction }) => isProduction
 );
 
 export const isTickerBarOpened = createSelector(
   getAppSubState,
-  get('isTickerBarOpened')
+  ({ isTickerBarOpened }) => isTickerBarOpened
 );
 
 export const getSearchKeyword = createSelector(
   getAppSubState,
-  get('searchKeyword')
+  ({ searchKeyword }) => searchKeyword
 );
 
 export const getCategories = createSelector(
   getAppSubState,
-  get('categories')
+  ({ categories }) => categories
 );
 
 export const getPostInformations = createSelector(
   getAppSubState,
-  get('postInformations')
+  ({ postInformations }) => postInformations
 );
 
 export const getPortfolios = createSelector(
   getAppSubState,
-  get('portfolios')
+  ({ portfolios }) => portfolios
 );
 
 export const isMenuOpened = createSelector(
   getAppSubState,
-  get('isMenuOpened')
+  ({ isMenuOpened }) => isMenuOpened
 );
 
 export const isSubMenuOpened = createSelector(
   getAppSubState,
-  get('isSubMenuOpened')
+  ({ isSubMenuOpened }) => isSubMenuOpened
 );

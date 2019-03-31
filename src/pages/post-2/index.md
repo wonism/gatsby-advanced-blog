@@ -1,6 +1,6 @@
 ---
 path: "/post-2/"
-category: "test"
+category: "test-2"
 tags: ["tag"]
 title: "Lorem Ipsum"
 date: "2018-01-02T00:00:00.000Z"

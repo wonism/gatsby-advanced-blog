@@ -3,7 +3,6 @@ require('dotenv').config({
 });
 
 const path = require('path');
-const { flow, isNull, isArray, isString, each, filter, reduce, range, flatten, uniq, includes, get, size } = require('lodash/fp');
 const { createFilePath } = require('gatsby-source-filesystem');
 const {
   CONTENT_PER_PAGE,
@@ -64,27 +63,23 @@ exports.createPages = ({ graphql, actions }) => {
             }
           }
         }
-      `).then((result) => {
-        if (result.errors) {
-          console.log(result.errors); // eslint-disable-line no-console
-          reject(result.errors);
+      `).then(({ errors, data: { allMarkdownRemark: { edges } } }) => {
+        if (errors) {
+          console.log(errors); // eslint-disable-line no-console
+          reject(errors);
         }
 
-        const edges = get('data.allMarkdownRemark.edges')(result);
         const tagMatrix = [];
         const categoryMatrix = [];
 
         // Create blog posts pages.
-        each((edge) => {
-          const frontmatter = get('node.frontmatter')(edge);
-          const { tags, category, type, hide } = frontmatter;
-
+        edges.forEach(({ node: { frontmatter: { path, tags, category, type, hide } } }) => {
           if (hide !== true) {
-            if (isArray(tags)) {
+            if (Array.isArray(tags)) {
               tagMatrix.push(tags);
             }
 
-            if (isString(category)) {
+            if (typeof category === 'string') {
               categoryMatrix.push(category);
             }
 
@@ -102,26 +97,19 @@ exports.createPages = ({ graphql, actions }) => {
                 break;
             }
 
-            if (!isNull(component)) {
+            if (component !== null) {
               createPage({
-                path: edge.node.frontmatter.path,
+                path,
                 component,
-                context: {
-                },
+                context: {},
               });
             }
           }
-        })(edges);
+        });
 
-        const portfoliosCount = flow(
-          filter((edge) => {
-            const frontmatter = get('node.frontmatter')(edge);
-            const { type } = frontmatter;
-
-            return type === PORTFOLIO;
-          }),
-          size
-        )(edges);
+        const portfoliosCount = edges
+          .filter(({ node: { frontmatter: { type } } }) => (type === PORTFOLIO))
+          .length;
 
         if (portfoliosCount) {
           createPage({
@@ -132,27 +120,21 @@ exports.createPages = ({ graphql, actions }) => {
           });
         }
 
-        const postsCount = flow(
-          filter((edge) => {
-            const frontmatter = get('node.frontmatter')(edge);
-            const { hide, type } = frontmatter;
-
-            return !hide && (type || POST) === POST;
-          }),
-          size
-        )(edges);
+        const postsCount = edges
+          .filter(({ node: { frontmatter: { hide, type } } }) => (!hide && (type || POST) === POST))
+          .length;
         const pagesCount = postsCount ? (Math.ceil(postsCount / CONTENT_PER_PAGE) + 1) : 1;
-        const pages = range(1, pagesCount);
+        const pages = Array.from(new Array(pagesCount), (el, i) => i + 1);
 
-        if (size(pages)) {
-          each((page) => {
+        if (pages.length > 0) {
+          pages.forEach((page) => {
             createPage({
               path: `/pages/${page}`,
               component: list,
               context: {
               },
             });
-          })(pages);
+          });
         } else {
           createPage({
             path: '/pages/1',
@@ -162,61 +144,51 @@ exports.createPages = ({ graphql, actions }) => {
           });
         }
 
-        const tags = flow(
-          flatten,
-          uniq
-        )(tagMatrix);
+        const tags = [...new Set(tagMatrix.reduce((prev, curr) => (curr !== null ? [...prev, ...curr] : prev), []))];
 
-        each((tag) => {
-          const taggedPostCount = reduce((count, edge) => {
-            const postTags = get('node.frontmatter.tags')(edge);
-
-            if (includes(tag)(postTags)) {
+        tags.forEach((tag) => {
+          const taggedPostCount = edges.reduce((count, { node: { frontmatter: { tags: postTags } } }) => {
+            if (postTags !== null && postTags.includes(tag)) {
               return count + 1;
             }
 
             return count;
-          }, 0)(edges);
+          }, 0);
           const taggedListCount = taggedPostCount ? (Math.ceil(taggedPostCount / CONTENT_PER_PAGE) + 1) : 1;
-          const taggedListPages = range(1, taggedListCount);
+          const taggedListPages = Array.from(new Array(taggedListCount), (el, i) => i + 1);
 
-          each((taggedListPage) => {
+          taggedListPages.forEach((taggedListPage) => {
             createPage({
               path: `/tags/${tag}/${taggedListPage}`,
               component: taggedList,
               context: {
               },
             });
-          })(taggedListPages);
-        })(tags);
+          });
+        });
 
-        const categories = flow(
-          flatten,
-          uniq
-        )(categoryMatrix);
+        const categories = [...new Set(categoryMatrix)];
 
-        each((category) => {
-          const categorizedPostCount = reduce((count, edge) => {
-            const postCategory = get('node.frontmatter.category')(edge);
-
-            if (includes(category)(postCategory)) {
+        categories.forEach((category) => {
+          const categorizedPostCount = edges.reduce((count, { node: { frontmatter: { category: postCategory } } }) => {
+            if (postCategory !== null && postCategory.includes(category)) {
               return count + 1;
             }
 
             return count;
-          }, 0)(edges);
+          }, 0);
           const categorizedListCount = categorizedPostCount ? (Math.ceil(categorizedPostCount / CONTENT_PER_PAGE) + 1) : 1;
-          const categorizedListPages = range(1, categorizedListCount);
+          const categorizedListPages = Array.from(new Array(categorizedListCount), (el, i) => i + 1);
 
-          each((categorizedListPage) => {
+          categorizedListPages.forEach((categorizedListPage) => {
             createPage({
               path: `/categories/${category}/${categorizedListPage}`,
               component: categorizedList,
               context: {
               },
             });
-          })(categorizedListPages);
-        })(categories);
+          });
+        });
       })
     );
   });

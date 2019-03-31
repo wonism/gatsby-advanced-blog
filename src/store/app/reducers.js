@@ -1,4 +1,3 @@
-import { set } from 'lodash/fp';
 import {
   INPUT_KEYWORD,
   OPEN_MENU,
@@ -8,9 +7,9 @@ import {
 } from './actionTypes';
 
 export default {
-  [INPUT_KEYWORD]: (state, { input }) => set('searchKeyword', input)(state),
-  [OPEN_MENU]: set('isMenuOpened', true),
-  [CLOSE_MENU]: set('isMenuOpened', false),
-  [OPEN_SUB_MENU]: set('isSubMenuOpened', true),
-  [CLOSE_SUB_MENU]: set('isSubMenuOpened', false),
+  [INPUT_KEYWORD]: (state, { input }) => ({ ...state, searchKeyword: input }),
+  [OPEN_MENU]: state => ({ ...state, isMenuOpened: true }),
+  [CLOSE_MENU]: state => ({ ...state, isMenuOpened: false }),
+  [OPEN_SUB_MENU]: state => ({ ...state, isSubMenuOpened: true }),
+  [CLOSE_SUB_MENU]: state => ({ ...state, isSubMenuOpened: false }),
 };

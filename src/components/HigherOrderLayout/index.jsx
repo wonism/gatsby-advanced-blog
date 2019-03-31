@@ -1,7 +1,6 @@
 import React, { Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { size } from 'lodash/fp';
 import Gnb from '~/containers/Gnb';
 import Footer from '~/components/Footer';
 
@@ -54,7 +53,7 @@ const Layout = ({
           location={location}
           categories={categories}
           postInformations={postInformations}
-          hasPortfolio={size(portfolios) > 0}
+          hasPortfolio={portfolios.length > 0}
         />
       </nav>
       <main>

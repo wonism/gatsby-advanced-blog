@@ -1,6 +1,6 @@
 ---
 path: "/post-9/"
-category: "test"
+category: "test-999"
 tags: ["tag"]
 title: "React application inside of post"
 date: "2018-01-09T00:00:00.000Z"

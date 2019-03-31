@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 import styled from 'styled-components';
-import { flow, slice, map, includes, get, size, isEmpty, isArray, first } from 'lodash/fp';
 import Helmet from 'react-helmet';
 import Wrapper from '~/components/Common/Wrapper';
 import SimpleWrapper from '~/components/Common/SimpleWrapper';
@@ -41,20 +40,18 @@ const Home = ({ portfolios }) => (
         <meta name="og:title" content="I'm Wonism!" />
       </Helmet>
     </Wrapper>
-    {size(portfolios) >= 4 ? (
+    {portfolios.length >= 4 ? (
       <SimpleWrapper>
-        {flow(
-          slice(0, 4),
-          map((edge) => {
-            const portfolio = get('node.frontmatter')(edge);
-            const { path, title, images } = portfolio;
-            const image = isArray(images) ? first(images) : null;
+        {portfolios
+          .slice(0, 4)
+          .map(({ node: { frontmatter: { path, title, images } } }) => {
+            const image = Array.isArray(images) ? images[0] : null;
 
-            if (!isEmpty(image)) {
+            if (image !== null) {
               return (
                 <PortfolioCard key={path}>
                   <Link to={path}>
-                    {includes('//')(image) ? (
+                    {image.includes('//') ? (
                       <img src={image} alt="portfolio" />
                     ) : (
                       <img src={require(`~/resources/${image}`)} alt="portfolio" />
@@ -76,8 +73,7 @@ const Home = ({ portfolios }) => (
                 </Link>
               </PortfolioCard>
             );
-          })
-        )(portfolios)}
+          })}
       </SimpleWrapper>
     ) : null}
   </Fragment>

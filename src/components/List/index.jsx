@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { size, slice, map, get } from 'lodash/fp';
 import PostsWrapper from '~/components/Common/PostsWrapper';
 import Card from '~/components/Common/Card';
 import Pagination from '~/components/Common/Pagination';
@@ -10,13 +9,10 @@ import getPage from '~/utils/getPage';
 import { CONTENT_PER_PAGE } from '~/constants';
 
 const List = ({ data, location }) => {
-  const page = getPage(2)(location);
+  const page = getPage(location);
   const allPosts = getPosts(data);
-  const postCount = size(allPosts);
-  const posts = slice(
-    (page - 1) * CONTENT_PER_PAGE,
-    page * CONTENT_PER_PAGE
-  )(allPosts);
+  const postCount = allPosts.length;
+  const posts = allPosts.slice((page - 1) * CONTENT_PER_PAGE, page * CONTENT_PER_PAGE);
 
   return (
     <Fragment>
@@ -27,18 +23,9 @@ const List = ({ data, location }) => {
           </title>
           <meta name="og:title" content="WONISM | POST" />
         </Helmet>
-        {map((post) => {
-          if (post.node.path !== '/404/') {
-            const frontmatter = get('node.frontmatter')(post);
-            const { images, tags, path } = frontmatter;
-
-            return (
-              <Card key={path} path={path} images={images} tags={tags} {...frontmatter} />
-            );
-          }
-
-          return null;
-        })(posts)}
+        {posts.map(({ node: { frontmatter: { images, tags, path, ...otherProps } } }) => (
+          <Card key={path} path={path} images={images} tags={tags} {...otherProps} />
+        ))}
       </PostsWrapper>
       <Pagination postCount={postCount} location={location} />
     </Fragment>

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'gatsby';
 import Helmet from 'react-helmet';
+import styled from 'styled-components';
 import SimpleWrapper from '~/components/Common/SimpleWrapper';
 
-const Wrapper = SimpleWrapper.extend`
+const Wrapper = styled(SimpleWrapper)`
   padding: 100px 0 0;
   min-height: 100vh;
   text-align: center;

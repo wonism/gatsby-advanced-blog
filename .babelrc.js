@@ -16,5 +16,11 @@ module.exports = {
         loose: true,
       },
     ],
+    [
+      '@babel/plugin-proposal-pipeline-operator',
+      {
+        proposal: 'minimal',
+      },
+    ],
   ],
 };

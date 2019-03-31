@@ -13,7 +13,7 @@ export default ListTemplate;
 
 export const pageQuery = graphql`
   query ListQuery {
-    allMarkdownRemark (
+    posts: allMarkdownRemark (
       filter: { frontmatter: { hide: { ne: true } } }
       sort: { fields: [frontmatter___date], order: DESC }
     ) {

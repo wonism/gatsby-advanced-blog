@@ -1,8 +1,6 @@
-import { has } from 'lodash/fp';
-
 const createReducer = (reducers = {}, initialState = {}) =>
   (state = initialState, { type, ...action }) =>
-    (has(type)(reducers)
+    ({}.hasOwnProperty.call(reducers, type)
       ? reducers[type](state, action)
       : state);
 

@@ -13,7 +13,7 @@ export default ResumeTemplate;
 
 export const pageQuery = graphql`
   query ResumeQuery ($path: String!) {
-    markdownRemark (
+    resume: markdownRemark (
       frontmatter: { path: { eq: $path } }
     ) {
       id

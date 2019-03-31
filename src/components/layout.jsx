@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { StaticQuery, graphql } from 'gatsby';
-import { flow, isString, isEqual, keys, map, filter, reduce, set, get, size, defaultTo } from 'lodash/fp';
 import {
   reducers,
   initialState,
@@ -20,7 +19,7 @@ const GatsbyApp = ({ children, ...otherProps }) => (
   <StaticQuery
     query={graphql`
       query GatsbyQuery {
-        allMarkdownRemark(
+        posts: allMarkdownRemark(
           filter: { frontmatter: { hide: { ne: true } } }
         ){
           edges {
@@ -39,47 +38,62 @@ const GatsbyApp = ({ children, ...otherProps }) => (
         }
       }
     `}
-    render={(data) => {
-      const edges = get('allMarkdownRemark.edges')(data);
-      const portfolios = filter(flow(
-        get('node.frontmatter.type'),
-        isEqual(PORTFOLIO)
-      ))(edges);
-      const categories = flow(
-        map(get('node.frontmatter.category')),
-        filter(isString),
-        _ => (reduce((prev, curr) => ({
-          ...prev,
-          [curr]: prev[curr] ? prev[curr] + 1 : 1,
-        }), { __ALL__: size(_) }))(_),
-        _ => flow(
-          keys,
-          map(key => ({
-            key,
-            length: _[key],
-          }))
-        )(_)
-      )(edges);
-      const postInformations = flow(
-        filter(flow(
-          get('node.frontmatter.type'),
-          defaultTo(POST),
-          isEqual(POST)
-        )),
-        map(edge => ({
-          path: get('node.frontmatter.path')(edge),
-          title: get('node.frontmatter.title')(edge),
-          summary: get('node.frontmatter.summary')(edge),
-          tags: get('node.frontmatter.tags')(edge) || [],
-          category: get('node.frontmatter.category')(edge),
-        }))
-      )(edges);
+    render={({ posts }) => {
+      const { edges } = posts;
+      const portfolios = edges.filter(({ node: { frontmatter: { type } } }) => type === PORTFOLIO);
+      const categories = edges.reduce((categories, { node }) => {
+        const { category } = node.frontmatter;
 
-      const state = flow(
-        set('app.portfolios', portfolios),
-        set('app.categories', categories),
-        set('app.postInformations', postInformations),
-      )(initialState);
+        if (category === null) {
+          return categories;
+        }
+
+        const [{ length: total }] = categories;
+        const categoryIndex = categories.findIndex(({ key }) => key === category);
+
+        if (categoryIndex === -1) {
+          return [
+            { key: '__ALL__', length: total + 1 },
+            ...categories.slice(1),
+            { key: category, length: 1 },
+          ];
+        }
+
+        return [
+          { key: '__ALL__', length: total + 1 },
+          ...categories.slice(1, categoryIndex - 1),
+          { key: category, length: categories[categoryIndex].length + 1 },
+          ...categories.slice(categoryIndex + 1),
+        ];
+      }, [{ key: '__ALL__', length: 0 }]);
+      const postInformations = edges.reduce((postInformations, { node: { frontmatter } }) => {
+        const { type, path, title, summary, tags = [], category } = frontmatter;
+
+        if (type === POST || type === null) {
+          return [
+            ...postInformations,
+            {
+              path,
+              title,
+              summary,
+              tags,
+              category,
+            },
+          ];
+        }
+
+        return postInformations;
+      }, []);
+
+      const state = {
+        ...initialState,
+        app: {
+          ...initialState.app,
+          portfolios,
+          categories,
+          postInformations,
+        },
+      };
 
       const createdStore = createStore(reducers, state, composeEnhancers(middleware));
       sagaMiddleware.run(sagas);
