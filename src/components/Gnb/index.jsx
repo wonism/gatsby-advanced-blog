@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 import { FaCaretDown, FaSearch, FaTags } from 'react-icons/fa';
@@ -75,13 +75,13 @@ const Gnb = ({
               </StyledLink>
               {categories.length > 0
                 ? (
-                  <Fragment>
+                  <>
                     &nbsp;
                     <MovableFaCaretDown
                       className={isSubMenuOpened ? 'is-active' : ''}
                       onClick={isSubMenuOpened ? closeSubMenu : openSubMenu}
                     />
-                  </Fragment>
+                  </>
                 )
                 : null}
               <SubMenu>

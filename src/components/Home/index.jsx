@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 import Helmet from 'react-helmet';
@@ -9,7 +9,7 @@ import { TITLE } from '~/constants';
 import { Title } from './styled';
 
 const Home = ({ portfolios }) => (
-  <Fragment>
+  <>
     <Helmet>
       <title>
         {TITLE}
@@ -57,7 +57,7 @@ const Home = ({ portfolios }) => (
           })}
       </SimpleWrapper>
     ) : null}
-  </Fragment>
+  </>
 );
 
 Home.propTypes = {

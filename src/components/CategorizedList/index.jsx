@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import PostsWrapper from '~/components/Common/PostsWrapper';
@@ -18,7 +18,7 @@ const CategorizedList = ({ data, location }) => {
   const posts = allPosts.slice((page - 1) * CONTENT_PER_PAGE, page * CONTENT_PER_PAGE);
 
   return (
-    <Fragment>
+    <>
       <PostsWrapper>
         <Helmet>
           <title>
@@ -40,7 +40,7 @@ const CategorizedList = ({ data, location }) => {
         postCount={postCount}
         location={location}
       />
-    </Fragment>
+    </>
   );
 };
 
