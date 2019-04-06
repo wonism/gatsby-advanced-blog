@@ -69,3 +69,13 @@ export const MDInformation = styled.section`
     text-decoration: underline;
   }
 `;
+
+export const Button = styled.button`
+  display: flex;
+  align-items: center;
+  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.backgroundColor};
+  border: 1px solid ${({ theme }) => theme.color};
+  border-radius: 4px;
+  outline: 0;
+`;

@@ -5,7 +5,7 @@ import { FaPrint, FaGithub, FaFacebook, FaTwitter, FaLinkedin } from 'react-icon
 import Clearfix from '~/components/Common/Clearfix';
 import { PREFIX, AUTHOR, EMAIL, GITHUB_ID, TWITTER_ID, FACEBOOK_ID, LINKEDIN_ID } from '~/constants';
 import * as profileUrl from '~/resources/me.png';
-import { Wrapper, BasicInformation, SocialInformation, MDInformation } from './styled';
+import { Wrapper, BasicInformation, SocialInformation, MDInformation, Button } from './styled';
 
 const Resume = ({
   data: {
@@ -43,10 +43,10 @@ const Resume = ({
           <meta name="og:title" content={`${PREFIX}RESUME`} />
         </Helmet>
         <Clearfix>
-          <button type="button" onClick={printPage}>
+          <Button type="button" onClick={printPage}>
             <FaPrint />
             Print
-          </button>
+          </Button>
         </Clearfix>
         <BasicInformation>
           <img
