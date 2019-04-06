@@ -6,7 +6,11 @@ import Footer from '~/components/Footer';
 import { BLACK_COLOR, WHITE_COLOR } from '~/components/Common/constants';
 import { Wrapper } from './styled';
 
-export default class App extends Component {
+interface Props {
+  a: string;
+};
+
+export default class App extends Component<Props> {
   static propTypes = {
     children: PropTypes.node.isRequired,
     location: PropTypes.shape({ pathname: PropTypes.string.isRequired }).isRequired,

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-
 export const Wrapper = styled.div`
   color: ${({ theme: { color } }) => color};
   background-color: ${({ theme: { backgroundColor } }) => backgroundColor};

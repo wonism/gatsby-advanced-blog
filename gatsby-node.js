@@ -38,13 +38,13 @@ exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions;
 
   return new Promise((resolve, reject) => {
-    const post = path.resolve('./src/templates/Post.jsx');
-    const list = path.resolve('./src/templates/List.jsx');
-    const taggedList = path.resolve('./src/templates/TaggedList.jsx');
-    const categorizedList = path.resolve('./src/templates/CategorizedList.jsx');
-    const resume = path.resolve('./src/templates/Resume.jsx');
-    const portfolios = path.resolve('./src/templates/Portfolios.jsx');
-    const portfolio = path.resolve('./src/templates/Portfolio.jsx');
+    const post = path.resolve('./src/templates/Post.tsx');
+    const list = path.resolve('./src/templates/List.tsx');
+    const taggedList = path.resolve('./src/templates/TaggedList.tsx');
+    const categorizedList = path.resolve('./src/templates/CategorizedList.tsx');
+    const resume = path.resolve('./src/templates/Resume.tsx');
+    const portfolios = path.resolve('./src/templates/Portfolios.tsx');
+    const portfolio = path.resolve('./src/templates/Portfolio.tsx');
 
     resolve(
       graphql(`
