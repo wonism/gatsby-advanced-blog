@@ -22,5 +22,6 @@ module.exports = {
         proposal: 'minimal',
       },
     ],
+    '@babel/plugin-syntax-dynamic-import',
   ],
 };
