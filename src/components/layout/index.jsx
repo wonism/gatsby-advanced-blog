@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import { StaticQuery, graphql } from 'gatsby';
 import { POST, PORTFOLIO } from '~/constants';
@@ -74,14 +74,18 @@ const Layout = ({ children, location }) => (
         return postInformations;
       }, []);
 
+      const hasPortfolio = portfolios.length > 0;
+
+      const childrenWithProps = Children.map(children, child => cloneElement(child, { portfolios }));
+
       return (
         <App
           location={location}
           categories={categories}
           postInformations={postInformations}
-          hasPortfolio={portfolios.length > 0}
+          hasPortfolio={hasPortfolio}
         >
-          {children}
+          {childrenWithProps}
         </App>
       );
     }}

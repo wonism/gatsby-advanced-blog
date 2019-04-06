@@ -1,6 +1,7 @@
 import React, { useReducer, useCallback, useEffect } from 'react';
-import { Link, navigate } from 'gatsby';
 import PropTypes from 'prop-types';
+import { Link, navigate } from 'gatsby';
+import Toggle from 'react-toggle';
 import { FaCaretDown, FaSearch, FaTags } from 'react-icons/fa';
 import {
   Hamburger,
@@ -21,6 +22,7 @@ import {
   Background,
   MobileMenus,
   MobileMenu,
+  ToggleWrapper,
 } from './styled';
 
 const TOGGLE_MENU = 'TOGGLE_MENU';
@@ -66,6 +68,8 @@ const reducer = (state = initialState, action) => {
 
 const Gnb = ({
   location,
+  toggleTheme,
+  isDracula,
   categories,
   postInformations,
   hasPortfolio,
@@ -210,6 +214,16 @@ const Gnb = ({
           </ul>
         </MobileMenus>
       </MobileMenu>
+      <ToggleWrapper>
+        <Toggle
+          defaultChecked={isDracula}
+          icons={{
+            checked: <span role="img" aria-label="change-theme">🌙</span>,
+            unchecked: <span role="img" aria-label="change-theme">☀️</span>,
+          }}
+          onChange={toggleTheme}
+        />
+      </ToggleWrapper>
       <Hamburger
         className={`hamburger hamburger--spin js-hamburger ${isMenuOpened ? 'is-active' : ''}`}
         onClick={toggleMenu}
@@ -304,6 +318,8 @@ const Gnb = ({
 
 Gnb.propTypes = {
   location: PropTypes.shape({ pathname: PropTypes.string.isRequired }).isRequired,
+  toggleTheme: PropTypes.func.isRequired,
+  isDracula: PropTypes.bool.isRequired,
   categories: PropTypes.arrayOf(PropTypes.shape({})),
   postInformations: PropTypes.arrayOf(PropTypes.shape({})),
   hasPortfolio: PropTypes.bool.isRequired,
