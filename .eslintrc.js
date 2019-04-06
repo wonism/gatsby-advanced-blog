@@ -82,12 +82,6 @@ module.exports = {
       },
     },
     {
-      files: ['src/components/HigherOrderLayout/index.jsx'],
-      rules: {
-        'react/prefer-stateless-function': off,
-      },
-    },
-    {
       files: ['src/components/Resume/index.jsx', 'src/components/Portfolio/index.jsx', 'src/components/Post/index.jsx', 'src/templates/*.jsx'],
       rules: {
         'react/no-danger': off,
@@ -102,18 +96,8 @@ module.exports = {
       },
     },
     {
-      files: ['src/store/**/sagas.js'],
-      rules: {
-        'react/button-has-type': off,
-        'no-alert': off,
-      },
-    },
-    {
       files: ['src/**/*.test.js'],
-      rules: {
-        'max-len': off,
-        'no-undef': off,
-      },
+      rules: {},
     },
   ],
   settings: {
