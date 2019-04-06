@@ -73,7 +73,7 @@ export const List = styled.ul`
 
 export const SubMenu = styled.ul`
   position: absolute;
-  top: 100px;
+  top: 40px;
   line-height: 1.8em;
   background-color: ${({ theme: { backgroundColor } }) => backgroundColor};
   font-size: 12px;

@@ -3,6 +3,9 @@
 ## TODO
 - [ ] use typescript for typing
 
+## 1.1.2 - 2019-04-07
+- [x] fix ui bug (dropdown in GNB)
+
 ## 1.1.1 - 2019-04-07
 - [x] add theming features
 
