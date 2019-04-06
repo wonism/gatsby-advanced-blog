@@ -3,10 +3,10 @@
 ## TODO
 - [ ] use typescript for typing
 
-## 1.1.0 - 2019-04-07
+## 1.1.1 - 2019-04-07
 - [x] add theming features
 
-## 1.0.0 - 2019-04-06
+## 1.0.0 - 2019-04-06 (unpublished)
 - [x] update packages (React, Gatsby, etc.)
 - [x] use hooks instead of redux
 
