@@ -1,32 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'gatsby';
-import styled from 'styled-components';
-import FaAngleDoubleLeft from 'react-icons/lib/fa/angle-double-left';
-import FaAngleDoubleRight from 'react-icons/lib/fa/angle-double-right';
-import FaAngleLeft from 'react-icons/lib/fa/angle-left';
-import FaAngleRight from 'react-icons/lib/fa/angle-right';
-import FaEllipsisH from 'react-icons/lib/fa/ellipsis-h';
-import { isEmpty, isEqual, range, filter, map, includes } from 'lodash/fp';
-import {
-  CONTENT_PER_PAGE,
-  PAGE_PER_SCREEN,
-} from '~/constants';
+import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight, FaEllipsisH } from 'react-icons/fa';
+import { CONTENT_PER_PAGE, PAGE_PER_SCREEN } from '~/constants';
 import getPage from '~/utils/getPage';
-
-const Wrapper = styled.nav`
-  margin: 1em 0;
-  text-align: center;
-
-  li {
-    display: inline-block;
-    padding: 0 .4em;
-  }
-
-  svg {
-    margin: -2px 0 0;
-  }
-`;
+import { Wrapper } from './styled';
 
 const Pagination = ({
   postCount,
@@ -34,47 +12,47 @@ const Pagination = ({
   prefix,
 }) => {
   const pageCount = postCount ? Math.ceil(postCount / CONTENT_PER_PAGE) : 0;
-  const pages = range(1, pageCount + 1);
-  const index = prefix === '/pages/' ? 2 : 3;
-  const page = getPage(index)(location);
+  const pages = Array.from(new Array(pageCount), (cnt, i) => i + 1);
+  const page = getPage(location);
   const hasManyPages = pageCount >= PAGE_PER_SCREEN;
-  const filteredPages = hasManyPages ? filter((p) => {
-    const range = page - p;
-    return Math.abs(range) <= Math.floor(PAGE_PER_SCREEN / 2);
-  })(pages) : pages;
-  const isNearStart = includes(1)(filteredPages);
-  const isNearEnd = includes(pageCount)(filteredPages);
+  const filteredPages = hasManyPages ? pages.filter(p => (
+    Math.abs(page - p) <= Math.floor(PAGE_PER_SCREEN / 2)
+  )) : pages;
+  const isNearStart = filteredPages.includes(1);
+  const isNearEnd = filteredPages.includes(pageCount);
 
-  if (isEmpty(pages)) {
+  if (pages.length === 0) {
     return null;
   }
 
   return (
     <Wrapper>
       <ul>
-        {hasManyPages && !isNearStart ? ([
-          <li key="first">
-            <Link to={`${prefix}1`}>
-              <FaAngleDoubleLeft />
-            </Link>
-          </li>,
-          <li key="ellipsis">
-            <FaEllipsisH />
-          </li>,
-        ]) : null}
-        {!isEqual(1)(page) ? (
+        {hasManyPages && !isNearStart ? (
+          <>
+            <li>
+              <Link to={`${prefix}1`}>
+                <FaAngleDoubleLeft />
+              </Link>
+            </li>
+            <li>
+              <FaEllipsisH />
+            </li>
+          </>
+        ) : null}
+        {page !== 1 ? (
           <li>
             <Link to={`${prefix}${page - 1}`}>
               <FaAngleLeft />
             </Link>
           </li>
         ) : null}
-        {map((i) => {
-          if (isEqual(i)(page)) {
+        {filteredPages.map((i) => {
+          if (page === i) {
             return (
               <li
                 key={i}
-                className={isEqual(i)(page) ? 'active' : ''}
+                className={page === i ? 'active' : ''}
               >
                 {i}
               </li>
@@ -84,31 +62,33 @@ const Pagination = ({
           return (
             <li
               key={i}
-              className={isEqual(i)(page) ? 'active' : ''}
+              className={page === i ? 'active' : ''}
             >
               <Link to={`${prefix}${i}`}>
                 {i}
               </Link>
             </li>
           );
-        })(filteredPages)}
-        {!isEqual(pageCount)(page) ? (
+        })}
+        {pageCount !== page ? (
           <li>
             <Link to={`${prefix}${page + 1}`}>
               <FaAngleRight />
             </Link>
           </li>
         ) : null}
-        {hasManyPages && !isNearEnd ? ([
-          <li key="ellipsis">
-            <FaEllipsisH />
-          </li>,
-          <li key="last">
-            <Link to={`${prefix}${pageCount}`}>
-              <FaAngleDoubleRight />
-            </Link>
-          </li>,
-        ]) : null}
+        {hasManyPages && !isNearEnd ? (
+          <>
+            <li>
+              <FaEllipsisH />
+            </li>
+            <li>
+              <Link to={`${prefix}${pageCount}`}>
+                <FaAngleDoubleRight />
+              </Link>
+            </li>
+          </>
+        ) : null}
       </ul>
     </Wrapper>
   );

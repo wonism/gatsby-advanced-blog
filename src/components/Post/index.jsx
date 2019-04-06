@@ -1,180 +1,185 @@
-import React, { PureComponent } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { render } from 'react-dom';
 import PropTypes from 'prop-types';
+import { Tweet } from 'react-twitter-widgets';
 import { Link } from 'gatsby';
-import styled from 'styled-components';
 import Helmet from 'react-helmet';
-import FaTags from 'react-icons/lib/fa/tags';
-import { flow, isEmpty, isNil, map, includes, add, get, first, defaultTo } from 'lodash/fp';
+import { FaTags } from 'react-icons/fa';
+import Clipboard from 'clipboard';
 import Bio from '~/components/Bio';
 import PostWrapper from '~/components/Common/PostWrapper';
-import { SITE_URL } from '~/constants';
+import { PREFIX, SITE_URL, DISQUS_ID } from '~/constants';
 import formattedDate from '~/utils/formattedDate';
+import { Tags, PostContent, ImageWrapper, ComponentInPost } from './styled';
 
-const Tags = styled.div`
-  margin: 1em 0;
+const PostTemplate = ({
+  data: {
+    post: {
+      html,
+      frontmatter: {
+        title,
+        date,
+        tags = [],
+        images = [],
+        tweets = [],
+        components = [],
+      },
+    },
+  },
+  location,
+}) => {
+  const loadDisqus = useCallback(({ url, identifier, title }) => {
+    const d = global.document;
 
-  a {
-    margin: 0 0 0 4px;
-    color: #000;
-    text-decoration: blink;
+    if (!d.getElementById('disqus-sdk')) {
+      const s = d.createElement('script');
 
-    &:hover {
-      text-decoration: underline;
+      s.src = `https://${DISQUS_ID}.disqus.com/embed.js`;
+      s.setAttribute('data-timestamp', Date.now());
+      d.body.appendChild(s);
     }
-  }
-`;
 
-const PostContent = styled.section`
-  padding: 1em 0 4em;
-  line-height: 1.6em;
+    global.disqus_config = function disqusCallback() {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+  }, []);
 
-  h2 {
-    margin: 24px 0 10px;
-    font-size: 28px;
-  }
+  const createCopyButton = useCallback(() => {
+    const codes = global.document.querySelectorAll('#post-contents .gatsby-highlight');
 
-  h3 {
-    margin: 24px 0 10px;
-    font-size: 24px;
-  }
+    codes.forEach((code) => {
+      const button = document.createElement('button');
+      button.setAttribute('class', 'copy-button');
+      button.innerHTML = 'COPY';
 
-  h4 {
-    margin: 24px 0 10px;
-    font-size: 21px;
-  }
+      code.appendChild(button);
+    });
 
-  p {
-    margin: 16px 0 0;
-    font-size: 16px;
-  }
+    const clipboard = new Clipboard('.copy-button', {
+      target: ({ previousElementSibling }) => previousElementSibling,
+    });
 
-  blockquote {
-    margin: 40px 0 0;
-    padding: 0 0 0 2em;
-    line-height: 1.2em;
-    color: #aaa;
-    font-style: italic;
-    font-family: 'Kaushan Script';
-    font-size: 24px;
-  }
+    clipboard.on('success', (e) => {
+      e.clearSelection();
+    });
+  }, []);
 
-  pre {
-    margin: 20px 0 0;
-  }
-`;
+  const renderComponents = useCallback((components) => {
+    if (Array.isArray(components)) {
+      try {
+        components.forEach(({ rootId: componentRootId, fileName: componentFileName }) => {
+          const $componentContainer = global.document.getElementById(componentRootId);
+          const App = require(`~/postComponents/${componentFileName}`).default;
 
-const ImageWrapper = styled.figure`
-  position: relative;
-  margin: 0 0 48px;
-  padding: 56.25% 0 0;
-  width: 100%;
-  overflow: hidden;
+          render(
+            <ComponentInPost>
+              <App />
+            </ComponentInPost>,
+            $componentContainer
+          );
+        });
+      } catch (e) {
+        console.warn(e); // eslint-disable-line no-console
+      }
+    }
+  }, []);
 
-  img {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    margin: auto;
-    width: 100%;
-    height: auto;
-  }
-`;
+  const renderTweets = useCallback((tweets) => {
+    if (Array.isArray(tweets)) {
+      try {
+        tweets.forEach(({ rootId: tweetRootId, tweetId, userId: username }) => {
+          const $tweetContainer = global.document.getElementById(tweetRootId);
 
-class PostTemplate extends PureComponent {
-  static propTypes = {
-    data: PropTypes.shape({ date: PropTypes.object }).isRequired,
-    location: PropTypes.shape({}).isRequired,
-    loadDisqus: PropTypes.func.isRequired,
-    renderTweets: PropTypes.func.isRequired,
-    renderComponents: PropTypes.func.isRequired,
-    createCopyButton: PropTypes.func.isRequired,
-  };
+          render(
+            <div>
+              <Tweet tweetId={tweetId} options={{ username }} />
+            </div>,
+            $tweetContainer
+          );
+        });
+      } catch (e) {
+        console.warn(e); // eslint-disable-line no-console
+      }
+    }
+  }, []);
 
-  constructor(props) {
-    super(props);
-    const { location, loadDisqus } = this.props;
+  useEffect(() => {
     const { pathname: identifier } = location;
-    const url = add(SITE_URL, identifier);
-    const title = get('data.markdownRemark.frontmatter.title')(this.props);
+    const url = `${SITE_URL}${identifier}`;
 
     loadDisqus({
       url,
       identifier,
       title,
     });
-  }
+  }, []);
 
-  componentDidMount() {
-    const { data, createCopyButton, renderTweets, renderComponents } = this.props;
-    const frontmatter = get('markdownRemark.frontmatter')(data);
-    const { tweets, components } = frontmatter;
-
+  useEffect(() => {
     createCopyButton();
     renderTweets(tweets);
     renderComponents(components);
-  }
+  }, []);
 
-  render() {
-    const { props } = this;
-    const { data } = props;
-    const post = flow(get('markdownRemark.frontmatter'), defaultTo({}))(data);
-    const { title, tags, date, images } = post;
-    const image = first(images);
+  const [image = null] = images;
 
-    return (
-      <PostWrapper>
-        <Helmet>
-          <title>
-            {`WONISM | ${title}`}
-          </title>
-          <meta name="og:title" content={`WONISM | ${title}`} />
-        </Helmet>
-        {isNil(image) ? null : (
-          <ImageWrapper>
-            <img
-              src={includes('//')(image) ? image : require(`~/resources/${image}`)}
-              alt={title}
-            />
-          </ImageWrapper>
-        )}
-        <h1>
-          {title}
-        </h1>
-        <time>
-          {formattedDate(date)}
-        </time>
-        {isEmpty(tags) ? null : (
-          <Tags>
-            <FaTags />
-            {map(tag => (
-              <Link
-                key={tag}
-                to={`/tags/${tag}/1`}
-              >
-                <small>
-                  {tag}
-                </small>
-              </Link>
-            ))(tags)}
-          </Tags>
-        )}
-        <Bio />
-        <PostContent>
-          <div id="post-contents" dangerouslySetInnerHTML={{ __html: get('markdownRemark.html')(data) }} />
-        </PostContent>
-        <div id="disqus_thread" />
-        <noscript>
-          Please enable JavaScript to view the
-          &nbsp;
-          <a href="https://disqus.com/?ref_noscript">
-            comments powered by Disqus.
-          </a>
-        </noscript>
-      </PostWrapper>
-    );
-  }
-}
+  return (
+    <PostWrapper>
+      <Helmet>
+        <title>
+          {`${PREFIX}${title}`}
+        </title>
+        <meta name="og:title" content={`${PREFIX}${title}`} />
+      </Helmet>
+      {image === null ? null : (
+        <ImageWrapper>
+          <img
+            src={image.includes('//') ? image : require(`~/resources/${image}`)}
+            alt={title}
+          />
+        </ImageWrapper>
+      )}
+      <h1>
+        {title}
+      </h1>
+      <time>
+        {formattedDate(date)}
+      </time>
+      {tags.length === 0 ? null : (
+        <Tags>
+          <FaTags />
+          {tags.map(tag => (
+            <Link
+              key={tag}
+              to={`/tags/${tag}/1`}
+            >
+              <small>
+                {tag}
+              </small>
+            </Link>
+          ))}
+        </Tags>
+      )}
+      <Bio />
+      <PostContent>
+        <div id="post-contents" dangerouslySetInnerHTML={{ __html: html }} />
+      </PostContent>
+      <div id="disqus_thread" />
+      <noscript>
+        Please enable JavaScript to view the
+        &nbsp;
+        <a href="https://disqus.com/?ref_noscript">
+          comments powered by Disqus.
+        </a>
+      </noscript>
+    </PostWrapper>
+  );
+};
+
+PostTemplate.propTypes = {
+  data: PropTypes.shape({ date: PropTypes.object }).isRequired,
+  location: PropTypes.shape({}).isRequired,
+};
 
 export default PostTemplate;

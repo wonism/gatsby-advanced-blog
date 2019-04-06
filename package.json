@@ -1,6 +1,6 @@
 {
   "name": "gatsby-advanced-blog",
-  "version": "0.2.3",
+  "version": "1.0.0",
   "description": "Gatsby starter for advanced blog",
   "main": "n/a",
   "author": "wonism",
@@ -17,65 +17,72 @@
     "url": "https://github.com/wonism/gatsby-advanced-blo/issues"
   },
   "peerDependencies": {
-    "gatsby": ">=2.0.8",
-    "react": ">=16.3.0",
-    "prop-types": ">=15.0.0",
-    "styled-components": ">=3.3.3"
+    "gatsby": ">=2.2.9",
+    "react": ">=16.8.5",
+    "react-dom": ">=16.8.5",
+    "prop-types": ">=15.7.2",
+    "styled-components": ">=4.2.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0-beta.52",
-    "clipboard": "^2.0.1",
-    "emotion": "^9.2.5",
-    "gatsby": "^2.0.8",
+    "@babel/polyfill": "^7.4.0",
+    "clipboard": "^2.0.4",
+    "core-js": "^2.6.5",
+    "emotion": "^10.0.9",
+    "gatsby": "^2.2.9",
     "i": "^0.3.6",
-    "lodash": "^4.17.10",
-    "npm": "^6.4.1",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-emotion": "^9.2.5",
+    "npm": "^6.9.0",
+    "react": "^16.8.5",
+    "react-dom": "^16.8.5",
+    "react-emotion": "^10.0.0",
     "react-helmet": "^5.2.0",
-    "react-icons": "^2.2.7",
-    "react-redux": "^5.0.7",
-    "react-truncate": "^2.3.0",
+    "react-icons": "^3.5.0",
+    "react-redux": "^6.0.1",
+    "react-truncate": "^2.4.0",
     "react-twitter-widgets": "^1.7.1",
-    "redux": "^4.0.0",
-    "redux-devtools-extension": "^2.13.5",
-    "redux-saga": "^0.16.0",
+    "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-saga": "^1.0.2",
     "redux-thunk": "^2.3.0",
-    "reselect": "^3.0.1",
-    "styled-components": "^3.3.3"
+    "reselect": "^4.0.0",
+    "styled-components": "^4.2.0"
   },
   "devDependencies": {
-    "babel-loader": "^8.0.0-beta.4",
-    "babel-plugin-emotion": "^9.2.5",
-    "babel-plugin-styled-components": "^1.5.1",
-    "eslint-config-airbnb": "^17.0.0",
-    "eslint-import-resolver-webpack": "^0.10.1",
-    "eslint-loader": "^2.0.0",
-    "eslint-plugin-import": "^2.13.0",
-    "eslint-plugin-jsx-a11y": "^6.1.0",
-    "eslint-plugin-lodash-fp": "^2.1.3",
-    "eslint-plugin-react": "^7.10.0",
-    "gatsby-plugin-google-analytics": "^1.0.31",
-    "gatsby-plugin-manifest": "^1.0.27",
-    "gatsby-plugin-offline": "^1.0.18",
-    "gatsby-plugin-react-helmet": "^2.0.11",
-    "gatsby-plugin-sharp": "^2.0.5",
-    "gatsby-plugin-styled-components": "^3.0.0",
-    "gatsby-remark-copy-linked-files": "^1.5.37",
-    "gatsby-remark-images": "^2.0.2",
-    "gatsby-remark-prismjs": "^2.0.5",
-    "gatsby-remark-responsive-iframe": "^1.4.20",
-    "gatsby-remark-smartypants": "^1.4.12",
-    "gatsby-source-filesystem": "^1.5.39",
-    "gatsby-transformer-remark": "^1.7.44",
-    "husky": "^1.0.0-rc.1",
-    "prettier": "^1.12.0",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-proposal-pipeline-operator": "^7.3.2",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-emotion": "^10.0.9",
+    "babel-plugin-styled-components": "^1.10.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-import-resolver-webpack": "^0.11.0",
+    "eslint-loader": "^2.1.2",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4",
+    "gatsby-plugin-google-analytics": "^2.0.17",
+    "gatsby-plugin-manifest": "^2.0.24",
+    "gatsby-plugin-offline": "^2.0.25",
+    "gatsby-plugin-react-helmet": "^3.0.10",
+    "gatsby-plugin-sharp": "^2.0.31",
+    "gatsby-plugin-styled-components": "^3.0.7",
+    "gatsby-remark-copy-linked-files": "^2.0.11",
+    "gatsby-remark-images": "^3.0.10",
+    "gatsby-remark-prismjs": "^3.2.6",
+    "gatsby-remark-responsive-iframe": "^2.1.1",
+    "gatsby-remark-smartypants": "^2.0.9",
+    "gatsby-source-filesystem": "^2.0.28",
+    "gatsby-transformer-remark": "^2.3.8",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.5",
+    "prettier": "^1.16.4",
     "prettier-eslint-cli": "^4.7.1",
     "prismjs": "^1.15.0"
   },
   "scripts": {
-    "lint": "eslint ./src --ext .js,.jsx --config .eslintrc.js",
+    "precommit": "lint-staged",
+    "lint": "eslint --ext .js,.jsx --config .eslintrc.js",
     "dev": "gatsby develop",
     "clean": "rm -rf .cache && rm -rf public",
     "build": "gatsby build",
@@ -88,9 +95,20 @@
     "IE >= 9",
     "last 2 versions"
   ],
+  "lint-staged": {
+    "linters": {
+      "*.{js,jsx}": [
+        "npm run lint",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "./.*.js"
+    ]
+  },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "npm run precommit"
     }
   }
 }
