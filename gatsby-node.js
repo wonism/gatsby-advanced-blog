@@ -3,6 +3,7 @@ require('dotenv').config({
 });
 
 const path = require('path');
+const { flow, isNull, isArray, isString, each, filter, reduce, range, flatten, uniq, includes, get, size } = require('lodash/fp');
 const { createFilePath } = require('gatsby-source-filesystem');
 const {
   CONTENT_PER_PAGE,
@@ -36,6 +37,7 @@ exports.onCreateWebpackConfig = ({
 
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions;
+  const contentTypes = [POST, PORTFOLIO, RESUME];
 
   return new Promise((resolve, reject) => {
     const post = path.resolve('./src/templates/Post.jsx');
@@ -63,23 +65,27 @@ exports.createPages = ({ graphql, actions }) => {
             }
           }
         }
-      `).then(({ errors, data: { allMarkdownRemark: { edges } } }) => {
-        if (errors) {
-          console.log(errors); // eslint-disable-line no-console
-          reject(errors);
+      `).then((result) => {
+        if (result.errors) {
+          console.log(result.errors);
+          reject(result.errors);
         }
 
+        const edges = get('data.allMarkdownRemark.edges')(result);
         const tagMatrix = [];
         const categoryMatrix = [];
 
         // Create blog posts pages.
-        edges.forEach(({ node: { frontmatter: { path, tags, category, type, hide } } }) => {
+        each((edge) => {
+          const frontmatter = get('node.frontmatter')(edge);
+          const { tags, category, type, hide } = frontmatter;
+
           if (hide !== true) {
-            if (Array.isArray(tags)) {
+            if (isArray(tags)) {
               tagMatrix.push(tags);
             }
 
-            if (typeof category === 'string') {
+            if (isString(category)) {
               categoryMatrix.push(category);
             }
 
@@ -97,19 +103,26 @@ exports.createPages = ({ graphql, actions }) => {
                 break;
             }
 
-            if (component !== null) {
+            if (!isNull(component)) {
               createPage({
-                path,
+                path: edge.node.frontmatter.path,
                 component,
-                context: {},
+                context: {
+                },
               });
             }
           }
-        });
+        })(edges);
 
-        const portfoliosCount = edges
-          .filter(({ node: { frontmatter: { type } } }) => (type === PORTFOLIO))
-          .length;
+        const portfoliosCount = flow(
+          filter((edge) => {
+            const frontmatter = get('node.frontmatter')(edge);
+            const { type } = frontmatter;
+
+            return type === PORTFOLIO;
+          }),
+          size
+        )(edges);
 
         if (portfoliosCount) {
           createPage({
@@ -120,75 +133,93 @@ exports.createPages = ({ graphql, actions }) => {
           });
         }
 
-        const postsCount = edges
-          .filter(({ node: { frontmatter: { hide, type } } }) => (!hide && (type || POST) === POST))
-          .length;
-        const pagesCount = postsCount ? (Math.ceil(postsCount / CONTENT_PER_PAGE) + 1) : 1;
-        const pages = Array.from(new Array(pagesCount), (el, i) => i + 1);
+        const postsCount = flow(
+          filter((edge) => {
+            const frontmatter = get('node.frontmatter')(edge);
+            const { hide, type } = frontmatter;
 
-        if (pages.length > 0) {
-          pages.forEach((page) => {
+            return !hide && (type || POST) === POST;
+          }),
+          size
+        )(edges);
+        const pagesCount = postsCount ? (Math.ceil(postsCount / CONTENT_PER_PAGE) + 1) : 1;
+        const pages = range(1, pagesCount);
+
+        if (size(pages)) {
+          each((page) => {
             createPage({
               path: `/pages/${page}`,
               component: list,
               context: {
               },
             });
-          });
+          })(pages);
         } else {
           createPage({
-            path: '/pages/1',
+            path: `/pages/1`,
             component: list,
             context: {
             },
           });
         }
 
-        const tags = [...new Set(tagMatrix.reduce((prev, curr) => (curr !== null ? [...prev, ...curr] : prev), []))];
+        const tags = flow(
+          flatten,
+          uniq
+        )(tagMatrix);
 
-        tags.forEach((tag) => {
-          const taggedPostCount = edges.reduce((count, { node: { frontmatter: { tags: postTags } } }) => {
-            if (postTags !== null && postTags.includes(tag)) {
+        each((tag) => {
+          const taggedPostCount = reduce((count, edge) => {
+            const postTags = get('node.frontmatter.tags')(edge);
+
+            if (includes(tag)(postTags)) {
               return count + 1;
             }
 
             return count;
-          }, 0);
-          const taggedListCount = taggedPostCount ? (Math.ceil(taggedPostCount / CONTENT_PER_PAGE) + 1) : 1;
-          const taggedListPages = Array.from(new Array(taggedListCount), (el, i) => i + 1);
+          }, 0)(edges);
+          const taggedListCount = taggedPostCount ?
+            (Math.ceil(taggedPostCount / CONTENT_PER_PAGE) + 1) : 1;
+          const taggedListPages = range(1, taggedListCount);
 
-          taggedListPages.forEach((taggedListPage) => {
+          each((taggedListPage) => {
             createPage({
               path: `/tags/${tag}/${taggedListPage}`,
               component: taggedList,
               context: {
               },
             });
-          });
-        });
+          })(taggedListPages);
+        })(tags);
 
-        const categories = [...new Set(categoryMatrix)];
+        const categories = flow(
+          flatten,
+          uniq
+        )(categoryMatrix);
 
-        categories.forEach((category) => {
-          const categorizedPostCount = edges.reduce((count, { node: { frontmatter: { category: postCategory } } }) => {
-            if (postCategory !== null && postCategory.includes(category)) {
+        each((category) => {
+          const categorizedPostCount = reduce((count, edge) => {
+            const postCategory = get('node.frontmatter.category')(edge);
+
+            if (includes(category)(postCategory)) {
               return count + 1;
             }
 
             return count;
-          }, 0);
-          const categorizedListCount = categorizedPostCount ? (Math.ceil(categorizedPostCount / CONTENT_PER_PAGE) + 1) : 1;
-          const categorizedListPages = Array.from(new Array(categorizedListCount), (el, i) => i + 1);
+          }, 0)(edges);
+          const categorizedListCount = categorizedPostCount ?
+            (Math.ceil(categorizedPostCount / CONTENT_PER_PAGE) + 1) : 1;
+          const categorizedListPages = range(1, categorizedListCount);
 
-          categorizedListPages.forEach((categorizedListPage) => {
+          each((categorizedListPage) => {
             createPage({
               path: `/categories/${category}/${categorizedListPage}`,
               component: categorizedList,
               context: {
               },
             });
-          });
-        });
+          })(categorizedListPages);
+        })(categories);
       })
     );
   });
@@ -197,11 +228,11 @@ exports.createPages = ({ graphql, actions }) => {
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions;
 
-  if (node.internal.type === 'MarkdownRemark') {
+  if (node.internal.type === `MarkdownRemark`) {
     const value = createFilePath({ node, getNode });
 
     createNodeField({
-      name: 'slug',
+      name: `slug`,
       node,
       value,
     });

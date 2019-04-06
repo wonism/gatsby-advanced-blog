@@ -1,7 +1,7 @@
 ---
 path: "/post-10/"
-category: "test-3"
-tags: ["tag", "tag-3"]
+category: "test-2"
+tags: ["tag", "tag2"]
 title: "Lorem Ipsum"
 date: "2018-01-10T00:00:00.000Z"
 summary: "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."

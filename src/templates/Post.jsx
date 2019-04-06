@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'gatsby';
 import Layout from '~/components/layout';
-import Post from '~/components/Post';
+import Post from '~/containers/Post';
 
 const PostTemplate = props => (
   <Layout {...props}>
@@ -13,14 +13,7 @@ export default PostTemplate;
 
 export const pageQuery = graphql`
   query PostByPath($path: String!) {
-    site {
-      siteMetadata {
-        title
-        author
-        homepage
-      }
-    }
-    post: markdownRemark (
+    markdownRemark (
       frontmatter: { path: { eq: $path } }
     ) {
       id

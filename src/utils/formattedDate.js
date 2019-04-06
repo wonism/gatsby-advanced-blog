@@ -1,5 +1,7 @@
-export default (str) => {
-  const [date = '', time = ''] = str.split('T');
+import { flow, split, slice, join } from 'lodash/fp';
 
-  return `${date} ${time.slice(0, 5)}`;
+export default (str) => {
+  const [date, time] = split('T')(str);
+
+  return `${date} ${flow(slice(0, 5), join(''))(time)}`;
 };

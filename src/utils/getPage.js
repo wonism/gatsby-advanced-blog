@@ -1,10 +1,11 @@
-const getPage = ({ pathname }) => {
-  const [, type, $2, $3] = pathname.split('/');
-  if (type === 'pages') {
-    return Number($2) || 1;
-  }
+import { flow, split, toNumber, get, defaultTo } from 'lodash/fp';
 
-  return Number($3) || 1;
-};
+const getPage = index => flow(
+  get('pathname'),
+  split('/'),
+  get(index),
+  defaultTo('1'),
+  toNumber
+);
 
 export default getPage;

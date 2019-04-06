@@ -4,7 +4,7 @@ const error = 2;
 
 module.exports = {
   extends: ['airbnb', 'plugin:import/errors', 'plugin:import/warnings'],
-  plugins: ['react', 'import'],
+  plugins: ['import', 'lodash-fp'],
   env: {
     es6: true,
     node: true,
@@ -30,21 +30,34 @@ module.exports = {
     'import/no-unresolved': off,
     'import/no-webpack-loader-syntax': off,
     'import/prefer-default-export': off,
-    indent: [
-      error,
-      2,
-      {
-        SwitchCase: 1,
-      },
-    ],
+    indent: off,
     'jsx-a11y/anchor-is-valid': off,
     'jsx-a11y/click-events-have-key-events': error,
     'jsx-a11y/heading-has-content': off,
     'jsx-a11y/href-no-hash': off,
     'jsx-a11y/label-has-for': off,
-    'jsx-a11y/label-has-associated-control': off,
     'jsx-a11y/mouse-events-have-key-events': off,
     'jsx-a11y/no-autofocus': off,
+    'lodash-fp/consistent-compose': error,
+    'lodash-fp/consistent-name': [error, 'fp'],
+    'lodash-fp/no-argumentless-calls': error,
+    'lodash-fp/no-chain': error,
+    'lodash-fp/no-extraneous-args': error,
+    'lodash-fp/no-extraneous-function-wrapping': error,
+    'lodash-fp/no-extraneous-iteratee-args': error,
+    'lodash-fp/no-for-each': off,
+    'lodash-fp/no-partial-of-curried': error,
+    'lodash-fp/no-single-composition': error,
+    'lodash-fp/no-submodule-destructuring': error,
+    'lodash-fp/no-unused-result': error,
+    'lodash-fp/prefer-compact': error,
+    'lodash-fp/prefer-composition-grouping': error,
+    'lodash-fp/prefer-constant': [error, { arrowFunctions: false }],
+    'lodash-fp/prefer-flat-map': error,
+    'lodash-fp/prefer-get': error,
+    'lodash-fp/prefer-identity': [error, { arrowFunctions: false }],
+    'lodash-fp/preferred-alias': off,
+    'lodash-fp/use-fp': error,
     'max-len': [error, 150, { ignoreComments: true, ignoreStrings: true, ignoreTemplateLiterals: true }],
     'no-console': error,
     'no-multiple-empty-lines': [error, { max: error, maxEOF: error }],
@@ -60,27 +73,7 @@ module.exports = {
     'react/no-unescaped-entities': off,
   },
   parser: 'babel-eslint',
-  parserOptions: {
-    ecmaVersion: 6,
-    sourceType: 'module',
-    allowImportExportEverywhere: false,
-    ecmaFeatures: {
-      jsx: true,
-      modules: true,
-      globalReturn: false,
-      experimentalObjectRestSpread: true,
-    },
-    babelOptions: {
-      configFile: '.babelrc.js',
-    },
-  },
   overrides: [
-    {
-      files: ['gatsby-node.js'],
-      rules: {
-        'import/no-extraneous-dependencies': off,
-      },
-    },
     {
       files: ['src/components/HigherOrderLayout/index.jsx'],
       rules: {
@@ -116,10 +109,4 @@ module.exports = {
       },
     },
   ],
-  settings: {
-    react: {
-      pragma: 'React',
-      version: '16.8.5',
-    }
-  }
 };

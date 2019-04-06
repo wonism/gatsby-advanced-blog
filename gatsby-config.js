@@ -1,10 +1,7 @@
-const { TITLE, AUTHOR, SITE_URL } = require('./src/constants');
-
 module.exports = {
   siteMetadata: {
-    title: TITLE,
-    author: AUTHOR,
-    homepage: SITE_URL,
+    title: 'Gatsby Advanced Blog',
+    author: 'wonism',
   },
   pathPrefix: '/',
   plugins: [
@@ -52,12 +49,12 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-google-analytics',
       options: {
-        trackingId: '<<YOUR_OWN_KEY>>',
+        trackingId: 'UA-80620216-1',
       },
     },
     'gatsby-plugin-offline',
     'gatsby-plugin-react-helmet',
-    'gatsby-plugin-styled-components',
+    `gatsby-plugin-styled-components`,
     {
       resolve: 'gatsby-plugin-manifest',
       options: {

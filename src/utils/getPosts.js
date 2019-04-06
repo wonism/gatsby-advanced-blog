@@ -1,8 +1,13 @@
+import { flow, filter, get } from 'lodash/fp';
 import { POST } from '~/constants';
 
-const getPosts = data =>
-  data.posts.edges.filter(({ node: { frontmatter: { hide, type } } }) => (
-    hide !== true && (type || POST) === POST
-  ));
+const getPosts = flow(
+  get('allMarkdownRemark.edges'),
+  filter((edge) => {
+    const frontmatter = get('node.frontmatter')(edge);
+    const { hide, type } = frontmatter;
+    return (hide !== true) && ((type || POST) === POST);
+  })
+);
 
 export default getPosts;

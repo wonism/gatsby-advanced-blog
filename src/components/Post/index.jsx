@@ -1,185 +1,180 @@
-import React, { useCallback, useEffect } from 'react';
-import { render } from 'react-dom';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Tweet } from 'react-twitter-widgets';
 import { Link } from 'gatsby';
+import styled from 'styled-components';
 import Helmet from 'react-helmet';
-import { FaTags } from 'react-icons/fa';
-import Clipboard from 'clipboard';
+import FaTags from 'react-icons/lib/fa/tags';
+import { flow, isEmpty, isNil, map, includes, add, get, first, defaultTo } from 'lodash/fp';
 import Bio from '~/components/Bio';
 import PostWrapper from '~/components/Common/PostWrapper';
-import { PREFIX, SITE_URL, DISQUS_ID } from '~/constants';
+import { SITE_URL } from '~/constants';
 import formattedDate from '~/utils/formattedDate';
-import { Tags, PostContent, ImageWrapper, ComponentInPost } from './styled';
 
-const PostTemplate = ({
-  data: {
-    post: {
-      html,
-      frontmatter: {
-        title,
-        date,
-        tags = [],
-        images = [],
-        tweets = [],
-        components = [],
-      },
-    },
-  },
-  location,
-}) => {
-  const loadDisqus = useCallback(({ url, identifier, title }) => {
-    const d = global.document;
+const Tags = styled.div`
+  margin: 1em 0;
 
-    if (!d.getElementById('disqus-sdk')) {
-      const s = d.createElement('script');
+  a {
+    margin: 0 0 0 4px;
+    color: #000;
+    text-decoration: blink;
 
-      s.src = `https://${DISQUS_ID}.disqus.com/embed.js`;
-      s.setAttribute('data-timestamp', Date.now());
-      d.body.appendChild(s);
+    &:hover {
+      text-decoration: underline;
     }
+  }
+`;
 
-    global.disqus_config = function disqusCallback() {
-      this.page.url = url;
-      this.page.identifier = identifier;
-      this.page.title = title;
-    };
-  }, []);
+const PostContent = styled.section`
+  padding: 1em 0 4em;
+  line-height: 1.6em;
 
-  const createCopyButton = useCallback(() => {
-    const codes = global.document.querySelectorAll('#post-contents .gatsby-highlight');
+  h2 {
+    margin: 24px 0 10px;
+    font-size: 28px;
+  }
 
-    codes.forEach((code) => {
-      const button = document.createElement('button');
-      button.setAttribute('class', 'copy-button');
-      button.innerHTML = 'COPY';
+  h3 {
+    margin: 24px 0 10px;
+    font-size: 24px;
+  }
 
-      code.appendChild(button);
-    });
+  h4 {
+    margin: 24px 0 10px;
+    font-size: 21px;
+  }
 
-    const clipboard = new Clipboard('.copy-button', {
-      target: ({ previousElementSibling }) => previousElementSibling,
-    });
+  p {
+    margin: 16px 0 0;
+    font-size: 16px;
+  }
 
-    clipboard.on('success', (e) => {
-      e.clearSelection();
-    });
-  }, []);
+  blockquote {
+    margin: 40px 0 0;
+    padding: 0 0 0 2em;
+    line-height: 1.2em;
+    color: #aaa;
+    font-style: italic;
+    font-family: 'Kaushan Script';
+    font-size: 24px;
+  }
 
-  const renderComponents = useCallback((components) => {
-    if (Array.isArray(components)) {
-      try {
-        components.forEach(({ rootId: componentRootId, fileName: componentFileName }) => {
-          const $componentContainer = global.document.getElementById(componentRootId);
-          const App = require(`~/postComponents/${componentFileName}`).default;
+  pre {
+    margin: 20px 0 0;
+  }
+`;
 
-          render(
-            <ComponentInPost>
-              <App />
-            </ComponentInPost>,
-            $componentContainer
-          );
-        });
-      } catch (e) {
-        console.warn(e); // eslint-disable-line no-console
-      }
-    }
-  }, []);
+const ImageWrapper = styled.figure`
+  position: relative;
+  margin: 0 0 48px;
+  padding: 56.25% 0 0;
+  width: 100%;
+  overflow: hidden;
 
-  const renderTweets = useCallback((tweets) => {
-    if (Array.isArray(tweets)) {
-      try {
-        tweets.forEach(({ rootId: tweetRootId, tweetId, userId: username }) => {
-          const $tweetContainer = global.document.getElementById(tweetRootId);
+  img {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    width: 100%;
+    height: auto;
+  }
+`;
 
-          render(
-            <div>
-              <Tweet tweetId={tweetId} options={{ username }} />
-            </div>,
-            $tweetContainer
-          );
-        });
-      } catch (e) {
-        console.warn(e); // eslint-disable-line no-console
-      }
-    }
-  }, []);
+class PostTemplate extends PureComponent {
+  static propTypes = {
+    data: PropTypes.shape({ date: PropTypes.object }).isRequired,
+    location: PropTypes.shape({}).isRequired,
+    loadDisqus: PropTypes.func.isRequired,
+    renderTweets: PropTypes.func.isRequired,
+    renderComponents: PropTypes.func.isRequired,
+    createCopyButton: PropTypes.func.isRequired,
+  };
 
-  useEffect(() => {
+  constructor(props) {
+    super(props);
+    const { location, loadDisqus } = this.props;
     const { pathname: identifier } = location;
-    const url = `${SITE_URL}${identifier}`;
+    const url = add(SITE_URL, identifier);
+    const title = get('data.markdownRemark.frontmatter.title')(this.props);
 
     loadDisqus({
       url,
       identifier,
       title,
     });
-  }, []);
+  }
 
-  useEffect(() => {
+  componentDidMount() {
+    const { data, createCopyButton, renderTweets, renderComponents } = this.props;
+    const frontmatter = get('markdownRemark.frontmatter')(data);
+    const { tweets, components } = frontmatter;
+
     createCopyButton();
     renderTweets(tweets);
     renderComponents(components);
-  }, []);
+  }
 
-  const [image = null] = images;
+  render() {
+    const { props } = this;
+    const { data } = props;
+    const post = flow(get('markdownRemark.frontmatter'), defaultTo({}))(data);
+    const { title, tags, date, images } = post;
+    const image = first(images);
 
-  return (
-    <PostWrapper>
-      <Helmet>
-        <title>
-          {`${PREFIX}${title}`}
-        </title>
-        <meta name="og:title" content={`${PREFIX}${title}`} />
-      </Helmet>
-      {image === null ? null : (
-        <ImageWrapper>
-          <img
-            src={image.includes('//') ? image : require(`~/resources/${image}`)}
-            alt={title}
-          />
-        </ImageWrapper>
-      )}
-      <h1>
-        {title}
-      </h1>
-      <time>
-        {formattedDate(date)}
-      </time>
-      {tags.length === 0 ? null : (
-        <Tags>
-          <FaTags />
-          {tags.map(tag => (
-            <Link
-              key={tag}
-              to={`/tags/${tag}/1`}
-            >
-              <small>
-                {tag}
-              </small>
-            </Link>
-          ))}
-        </Tags>
-      )}
-      <Bio />
-      <PostContent>
-        <div id="post-contents" dangerouslySetInnerHTML={{ __html: html }} />
-      </PostContent>
-      <div id="disqus_thread" />
-      <noscript>
-        Please enable JavaScript to view the
-        &nbsp;
-        <a href="https://disqus.com/?ref_noscript">
-          comments powered by Disqus.
-        </a>
-      </noscript>
-    </PostWrapper>
-  );
-};
-
-PostTemplate.propTypes = {
-  data: PropTypes.shape({ date: PropTypes.object }).isRequired,
-  location: PropTypes.shape({}).isRequired,
-};
+    return (
+      <PostWrapper>
+        <Helmet>
+          <title>
+            {`WONISM | ${title}`}
+          </title>
+          <meta name="og:title" content={`WONISM | ${title}`} />
+        </Helmet>
+        {isNil(image) ? null : (
+          <ImageWrapper>
+            <img
+              src={includes('//')(image) ? image : require(`~/resources/${image}`)}
+              alt={title}
+            />
+          </ImageWrapper>
+        )}
+        <h1>
+          {title}
+        </h1>
+        <time>
+          {formattedDate(date)}
+        </time>
+        {isEmpty(tags) ? null : (
+          <Tags>
+            <FaTags />
+            {map(tag => (
+              <Link
+                key={tag}
+                to={`/tags/${tag}/1`}
+              >
+                <small>
+                  {tag}
+                </small>
+              </Link>
+            ))(tags)}
+          </Tags>
+        )}
+        <Bio />
+        <PostContent>
+          <div id="post-contents" dangerouslySetInnerHTML={{ __html: get('markdownRemark.html')(data) }} />
+        </PostContent>
+        <div id="disqus_thread" />
+        <noscript>
+          Please enable JavaScript to view the
+          &nbsp;
+          <a href="https://disqus.com/?ref_noscript">
+            comments powered by Disqus.
+          </a>
+        </noscript>
+      </PostWrapper>
+    );
+  }
+}
 
 export default PostTemplate;

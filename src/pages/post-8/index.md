@@ -1,6 +1,6 @@
 ---
 path: "/post-8/"
-category: "test8"
+category: "test"
 tags: ["tag"]
 title: "Tweets inside of post"
 date: "2018-01-08T00:00:00.000Z"

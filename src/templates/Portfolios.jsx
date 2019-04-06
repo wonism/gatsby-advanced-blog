@@ -13,14 +13,7 @@ export default PortfoliosTemplate;
 
 export const pageQuery = graphql`
   query PortfoliosQuery {
-    site {
-      siteMetadata {
-        title
-        author
-        homepage
-      }
-    }
-    portfolios: allMarkdownRemark (
+    allMarkdownRemark (
       filter: {
         frontmatter: {
           type: { eq: "portfolio" }
