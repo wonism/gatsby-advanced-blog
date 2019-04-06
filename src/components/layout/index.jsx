@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import { StaticQuery, graphql } from 'gatsby';
 import { POST, PORTFOLIO } from '~/constants';
-import Gnb from '~/components/Gnb';
-import Footer from '~/components/Footer';
-import { Background } from './styled';
+import App from '~/components/App';
 
-const GatsbyApp = ({ children, location }) => (
+const Layout = ({ children, location }) => (
   <StaticQuery
     query={graphql`
       query GatsbyQuery {
@@ -76,31 +74,27 @@ const GatsbyApp = ({ children, location }) => (
         return postInformations;
       }, []);
 
+      const hasPortfolio = portfolios.length > 0;
+
+      const childrenWithProps = Children.map(children, child => cloneElement(child, { portfolios }));
+
       return (
-        <Background>
-          <nav>
-            <Gnb
-              location={location}
-              categories={categories}
-              postInformations={postInformations}
-              hasPortfolio={portfolios.length > 0}
-            />
-          </nav>
-          <main>
-            {children}
-          </main>
-          <footer>
-            <Footer />
-          </footer>
-        </Background>
+        <App
+          location={location}
+          categories={categories}
+          postInformations={postInformations}
+          hasPortfolio={hasPortfolio}
+        >
+          {childrenWithProps}
+        </App>
       );
     }}
   />
 );
 
-GatsbyApp.propTypes = {
+Layout.propTypes = {
   children: PropTypes.node.isRequired,
   location: PropTypes.shape({ pathname: PropTypes.string.isRequired }).isRequired,
 };
 
-export default GatsbyApp;
+export default Layout;

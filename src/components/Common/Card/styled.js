@@ -51,19 +51,17 @@ export const StyledArticle = styled.article`
     position: relative;
     top: 0;
     padding: 14px;
-    background-color: #fff;
+    background-color: ${({ theme: { backgroundColor } }) => backgroundColor};
     border-radius: 6px;
-    transition: all .4s ease .1s;
     border: 1px solid #e5e5e5;
 
     &:hover {
       top: -8px;
-      background: #efefef;
     }
   }
 
   a {
-    color: #000;
+    color: ${({ theme: { color } }) => color};
 
     &:hover {
       h3,

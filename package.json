@@ -1,6 +1,6 @@
 {
   "name": "gatsby-advanced-blog",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Gatsby starter for advanced blog",
   "main": "n/a",
   "author": "wonism",
@@ -37,6 +37,7 @@
     "react-helmet": "^5.2.0",
     "react-icons": "^3.5.0",
     "react-redux": "^6.0.1",
+    "react-toggle": "^4.0.2",
     "react-truncate": "^2.4.0",
     "react-twitter-widgets": "^1.7.1",
     "redux": "^4.0.1",
