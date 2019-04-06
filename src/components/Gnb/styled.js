@@ -152,7 +152,7 @@ export const SearchBarWrapper = styled.div`
   top: 0;
   bottom: 0;
   right: 0;
-  width: 240px;
+  width: 276px;
   margin: auto;
   padding: 0 36px 0 0;
   text-align: right;
@@ -165,9 +165,17 @@ export const SearchBarWrapper = styled.div`
   }
 
   label {
-    position: relative;
+    position: absolute;
+    top: 33px;
+    right: 36px;
     padding: 0 8px 0 0;
     z-index: 1001;
+
+    @media (max-width: 414px) {
+      position: relative;
+      top: 0;
+      right: 0;
+    }
   }
 `;
 
