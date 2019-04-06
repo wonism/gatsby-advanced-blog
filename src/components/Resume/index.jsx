@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { FaPrint, FaGithub, FaFacebook, FaTwitter, FaLinkedin } from 'react-icons/fa';
@@ -13,7 +13,6 @@ const Resume = ({
       html,
     },
   },
-  printPage,
 }) => {
   const $mdWrapper = useRef(null);
 
@@ -28,6 +27,10 @@ const Resume = ({
         anchor.setAttribute('rel', 'noreferrer noopener');
       }
     });
+  }, []);
+
+  const printPage = useCallback(() => {
+    global.print();
   }, []);
 
   return (
@@ -110,7 +113,6 @@ const Resume = ({
 
 Resume.propTypes = {
   data: PropTypes.shape({ date: PropTypes.object }).isRequired,
-  printPage: PropTypes.func.isRequired,
 };
 
 export default Resume;

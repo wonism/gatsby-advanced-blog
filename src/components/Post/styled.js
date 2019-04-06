@@ -71,3 +71,67 @@ export const ImageWrapper = styled.figure`
     height: auto;
   }
 `;
+
+export const ComponentInPost = styled.div`
+  position: relative;
+  margin: 1em 0 1em;
+  padding: 55px 16px 16px;
+  color: #263238;
+  border: 1px solid #263238;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  overflow: hidden;
+
+  &:before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    padding: 0 0 0 80px;
+    width: 100%;
+    height: 35px;
+    line-height: 35px;
+    color: #fff;
+    background-color: #263238;
+    font-weight: 100;
+    content: 'Application for example';
+  }
+
+  &:after {
+    display: inline-block;
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    width: 10px;
+    height: 10px;
+    background-color: #ff5f56;
+    border-radius: 50%;
+    content: '';
+  }
+
+  & > *:first-child {
+    &:before {
+      display: inline-block;
+      position: absolute;
+      top: 15px;
+      left: 40px;
+      width: 10px;
+      height: 10px;
+      background-color: #ffbd2e;
+      border-radius: 50%;
+      content: '';
+    }
+
+    &:after {
+      display: inline-block;
+      position: absolute;
+      top: 15px;
+      left: 60px;
+      width: 10px;
+      height: 10px;
+      background-color: #27c93f;
+      border-radius: 50%;
+      content: '';
+    }
+  }
+`;

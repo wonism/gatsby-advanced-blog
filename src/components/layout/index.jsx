@@ -1,21 +1,12 @@
-import React, { Children, cloneElement } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
 import { StaticQuery, graphql } from 'gatsby';
-import {
-  reducers,
-  initialState,
-  composeEnhancers,
-  middleware,
-  sagaMiddleware,
-  sagas,
-  initializeStore,
-} from '~/store';
-import ConnectedLayout from '~/containers/HigherOrderLayout';
 import { POST, PORTFOLIO } from '~/constants';
+import Gnb from '~/components/Gnb';
+import Footer from '~/components/Footer';
+import { Background } from './styled';
 
-const GatsbyApp = ({ children, ...otherProps }) => (
+const GatsbyApp = ({ children, location }) => (
   <StaticQuery
     query={graphql`
       query GatsbyQuery {
@@ -85,30 +76,23 @@ const GatsbyApp = ({ children, ...otherProps }) => (
         return postInformations;
       }, []);
 
-      const state = {
-        ...initialState,
-        app: {
-          ...initialState.app,
-          portfolios,
-          categories,
-          postInformations,
-        },
-      };
-
-      const createdStore = createStore(reducers, state, composeEnhancers(middleware));
-      sagaMiddleware.run(sagas);
-      const store = initializeStore(createdStore);
-
-      const childrenWithProps = Children.map(children, child => cloneElement(child, otherProps));
-
       return (
-        <Provider store={store}>
-          <ConnectedLayout {...otherProps}>
-            <>
-              {childrenWithProps}
-            </>
-          </ConnectedLayout>
-        </Provider>
+        <Background>
+          <nav>
+            <Gnb
+              location={location}
+              categories={categories}
+              postInformations={postInformations}
+              hasPortfolio={portfolios.length > 0}
+            />
+          </nav>
+          <main>
+            {children}
+          </main>
+          <footer>
+            <Footer />
+          </footer>
+        </Background>
       );
     }}
   />
@@ -116,6 +100,7 @@ const GatsbyApp = ({ children, ...otherProps }) => (
 
 GatsbyApp.propTypes = {
   children: PropTypes.node.isRequired,
+  location: PropTypes.shape({ pathname: PropTypes.string.isRequired }).isRequired,
 };
 
 export default GatsbyApp;

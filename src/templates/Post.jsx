@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql } from 'gatsby';
 import Layout from '~/components/layout';
-import Post from '~/containers/Post';
+import Post from '~/components/Post';
 
 const PostTemplate = props => (
   <Layout {...props}>

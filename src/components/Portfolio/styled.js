@@ -4,6 +4,7 @@ import { PRIMARY_COLOR } from '~/components/Common/constants';
 
 export const Wrapper = styled(SimpleWrapper)`
   padding: 100px 0 0;
+
   @media (max-width: 414px) {
     padding: 70px 16px 0;
   }
@@ -20,7 +21,9 @@ export const PortfolioDescription = styled.section`
   float: left;
   padding: 0 0 0 36px;
   width: 50%;
+
   @media (max-width: 414px) {
+    float: none;
     margin: 0 0 16px;
     padding: 0 0 16px;
     width: 100%;
@@ -53,7 +56,9 @@ export const PortfolioImages = styled.section`
   width: 50%;
   max-height: calc(100vh - 100px);
   overflow-y: scroll;
+
   @media (max-width: 414px) {
+    float: none;
     padding: 0;
     width: 100%;
     height: auto;
@@ -64,6 +69,7 @@ export const PortfolioImages = styled.section`
     padding: 16px;
     width: 100%;
     height: auto;
+
     @media (max-width: 414px) {
       float: left;
       margin: 0 0 8px;

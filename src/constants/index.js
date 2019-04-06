@@ -17,7 +17,7 @@ exports.KEYWORDS = [
   'ReactJS',
 ].join(', ');
 exports.SITE_URL = 'https://wonism.github.io';
-exports.PROFILE = 'https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png';
+exports.PROFILE = 'https://avatars3.githubusercontent.com/u/42737121?s=200&v=4';
 
 // Social
 exports.GITHUB_ID = 'wonism';

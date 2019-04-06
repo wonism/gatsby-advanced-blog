@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useReducer, useCallback, useEffect } from 'react';
+import { Link, navigate } from 'gatsby';
 import PropTypes from 'prop-types';
-import { Link } from 'gatsby';
 import { FaCaretDown, FaSearch, FaTags } from 'react-icons/fa';
 import {
   Hamburger,
   MovableFaCaretDown,
   GnbWrapper,
+  List,
   SubMenu,
   ListMenu,
   Home,
@@ -22,21 +23,76 @@ import {
   MobileMenu,
 } from './styled';
 
+const TOGGLE_MENU = 'TOGGLE_MENU';
+const TOGGLE_SUB_MENU = 'TOGGLE_SUB_MENU';
+const INPUT_KEYWORD = 'INPUT_KEYWORD';
+
+const initialState = {
+  isMenuOpened: false,
+  isSubMenuClosed: false,
+  searchKeyword: '',
+};
+
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case TOGGLE_MENU: {
+      const isMenuOpened = !state.isMenuOpened;
+
+      return {
+        ...state,
+        isMenuOpened,
+      };
+    }
+    case TOGGLE_SUB_MENU: {
+      const isSubMenuClosed = !state.isSubMenuClosed;
+
+      return {
+        ...state,
+        isSubMenuClosed,
+      };
+    }
+    case INPUT_KEYWORD: {
+      const { searchKeyword } = action;
+
+      return {
+        ...state,
+        searchKeyword,
+      };
+    }
+    default:
+      return state;
+  }
+};
+
 const Gnb = ({
   location,
   categories,
   postInformations,
   hasPortfolio,
-  navigateToPath,
-  inputKeyword,
-  searchKeyword,
-  isMenuOpened,
-  openMenu,
-  closeMenu,
-  isSubMenuOpened,
-  openSubMenu,
-  closeSubMenu,
 }) => {
+  const [{ isMenuOpened, isSubMenuClosed, searchKeyword }, dispatch] = useReducer(reducer, initialState);
+  const toggleMenu = useCallback(() => {
+    dispatch({ type: TOGGLE_MENU });
+  }, []);
+  const toggleSubMenu = useCallback(() => {
+    dispatch({ type: TOGGLE_SUB_MENU });
+  }, []);
+  const navigateToPath = useCallback((path) => {
+    navigate(path);
+  }, []);
+  const inputKeyword = useCallback((e) => {
+    const searchKeyword = e.target.value;
+
+    dispatch({ type: INPUT_KEYWORD, searchKeyword });
+  });
+  useEffect(() => {
+    if (isMenuOpened) {
+      global.document.body.style.overflow = 'hidden';
+    } else {
+      global.document.body.style.overflow = 'visible';
+    }
+  }, [isMenuOpened]);
+
   const filteredPosts = searchKeyword.length > 0
     ? (
       postInformations
@@ -60,17 +116,17 @@ const Gnb = ({
 
   return (
     <GnbWrapper>
-      <MobileMenu isActive={isMenuOpened} isSubActive={isSubMenuOpened}>
-        <Background onClick={closeMenu} isActive={isMenuOpened} />
+      <MobileMenu isActive={isMenuOpened} isSubActive={isSubMenuClosed}>
+        <Background onClick={toggleMenu} isActive={isMenuOpened} />
         <MobileMenus>
           <ul>
             <ListMenu>
-              <StyledLink to="/" onClick={closeMenu}>
+              <StyledLink to="/" onClick={toggleMenu}>
                 <Home />
               </StyledLink>
             </ListMenu>
             <ListMenu>
-              <StyledLink to="/pages/1" className={isPost ? 'active' : ''} onClick={closeMenu}>
+              <StyledLink to="/pages/1" className={isPost ? 'active' : ''} onClick={toggleMenu}>
                 Posts
               </StyledLink>
               {categories.length > 0
@@ -78,8 +134,8 @@ const Gnb = ({
                   <>
                     &nbsp;
                     <MovableFaCaretDown
-                      className={isSubMenuOpened ? 'is-active' : ''}
-                      onClick={isSubMenuOpened ? closeSubMenu : openSubMenu}
+                      className={isSubMenuClosed ? 'is-active' : ''}
+                      onClick={toggleSubMenu}
                     />
                   </>
                 )
@@ -93,7 +149,7 @@ const Gnb = ({
 
                     return (
                       <li key={key}>
-                        <Link to={`/categories/${key}/1`} onClick={closeMenu}>
+                        <Link to={`/categories/${key}/1`} onClick={toggleMenu}>
                           {key}
                           &nbsp;
                           <small>
@@ -108,13 +164,13 @@ const Gnb = ({
             </ListMenu>
             {hasPortfolio ? (
               <ListMenu>
-                <StyledLink to="/portfolios" className={isPortfolio ? 'active' : ''} onClick={closeMenu}>
+                <StyledLink to="/portfolios" className={isPortfolio ? 'active' : ''} onClick={toggleMenu}>
                   Portfolio
                 </StyledLink>
               </ListMenu>
             ) : null}
             <ListMenu>
-              <StyledLink to="/resume" className={isResume ? 'active' : ''} onClick={closeMenu}>
+              <StyledLink to="/resume" className={isResume ? 'active' : ''} onClick={toggleMenu}>
                 Resume
               </StyledLink>
             </ListMenu>
@@ -126,9 +182,7 @@ const Gnb = ({
                 id="search"
                 type="text"
                 value={searchKeyword}
-                onChange={(e) => {
-                  inputKeyword(e.target.value);
-                }}
+                onChange={inputKeyword}
               />
             </SearchBarWrapper>
             <SearchedPosts isEmpty={filteredPosts.length === 0}>
@@ -158,13 +212,13 @@ const Gnb = ({
       </MobileMenu>
       <Hamburger
         className={`hamburger hamburger--spin js-hamburger ${isMenuOpened ? 'is-active' : ''}`}
-        onClick={isMenuOpened ? closeMenu : openMenu}
+        onClick={toggleMenu}
       >
         <div className="hamburger-box">
           <div className="hamburger-inner" />
         </div>
       </Hamburger>
-      <ul>
+      <List>
         <ListMenu>
           <StyledLink to="/">
             <Home />
@@ -210,42 +264,40 @@ const Gnb = ({
             Resume
           </StyledLink>
         </ListMenu>
-        <SearchBarWrapper>
-          <label htmlFor="search">
-            <FaSearch />
-          </label>
-          <SearchBar
-            id="search"
-            type="text"
-            value={searchKeyword}
-            onChange={(e) => {
-              inputKeyword(e.target.value);
-            }}
-          />
-        </SearchBarWrapper>
-        <SearchedPosts isEmpty={filteredPosts.length === 0}>
-          {filteredPosts.map(({ path, title, summary, tags }) => (
-            <SearchedPost key={path}>
-              <Title onClick={() => { navigateToPath(path); }}>
-                {title}
-              </Title>
-              <Summary onClick={() => { navigateToPath(path); }}>
-                {summary}
-              </Summary>
-              {tags.length > 0 ? (
-                <FaTags />
-              ) : null}
-              {[...new Set(tags)].map(tag => (
-                <Tag key={tag} onClick={() => { navigateToPath(`/tags/${tag}/1`); }}>
-                  <small>
-                    {tag}
-                  </small>
-                </Tag>
-              ))}
-            </SearchedPost>
-          ))}
-        </SearchedPosts>
-      </ul>
+      </List>
+      <SearchBarWrapper>
+        <label htmlFor="search">
+          <FaSearch />
+        </label>
+        <SearchBar
+          id="search"
+          type="text"
+          value={searchKeyword}
+          onChange={inputKeyword}
+        />
+      </SearchBarWrapper>
+      <SearchedPosts isEmpty={filteredPosts.length === 0}>
+        {filteredPosts.map(({ path, title, summary, tags }) => (
+          <SearchedPost key={path}>
+            <Title onClick={() => { navigateToPath(path); }}>
+              {title}
+            </Title>
+            <Summary onClick={() => { navigateToPath(path); }}>
+              {summary}
+            </Summary>
+            {tags.length > 0 ? (
+              <FaTags />
+            ) : null}
+            {[...new Set(tags)].map(tag => (
+              <Tag key={tag} onClick={() => { navigateToPath(`/tags/${tag}/1`); }}>
+                <small>
+                  {tag}
+                </small>
+              </Tag>
+            ))}
+          </SearchedPost>
+        ))}
+      </SearchedPosts>
     </GnbWrapper>
   );
 };
@@ -255,15 +307,6 @@ Gnb.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.shape({})),
   postInformations: PropTypes.arrayOf(PropTypes.shape({})),
   hasPortfolio: PropTypes.bool.isRequired,
-  navigateToPath: PropTypes.func.isRequired,
-  inputKeyword: PropTypes.func.isRequired,
-  searchKeyword: PropTypes.string.isRequired,
-  isMenuOpened: PropTypes.bool.isRequired,
-  openMenu: PropTypes.func.isRequired,
-  closeMenu: PropTypes.func.isRequired,
-  isSubMenuOpened: PropTypes.bool.isRequired,
-  openSubMenu: PropTypes.func.isRequired,
-  closeSubMenu: PropTypes.func.isRequired,
 };
 
 Gnb.defaultProps = {

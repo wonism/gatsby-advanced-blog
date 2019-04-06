@@ -74,8 +74,10 @@
 ## 0.2.3 - 2018-09-26
 - [x] update `gatsby` version (`v2.0.8`)
 
-## 1.0.0 - 2019-??-??
+## 1.0.0 - 2019-04-06
 - [x] update packages (React, Gatsby, etc.)
-- [ ] remove redux
-- [ ] add theming features (WIP)
-- [ ] use typescript for typing (WIP)
+- [x] use hooks instead of redux
+
+## TODO
+- [ ] add theming features
+- [ ] use typescript for typing
