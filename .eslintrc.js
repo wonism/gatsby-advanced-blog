@@ -47,6 +47,7 @@ module.exports = {
     'jsx-a11y/no-autofocus': off,
     'max-len': [error, 150, { ignoreComments: true, ignoreStrings: true, ignoreTemplateLiterals: true }],
     'no-console': error,
+    'no-lonely-if': off,
     'no-multiple-empty-lines': [error, { max: error, maxEOF: error }],
     'no-implicit-coercion': error,
     'no-shadow': off,

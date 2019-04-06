@@ -16,16 +16,20 @@ export default class App extends Component {
   }
 
   state = {
-    isDracula: localStorage.getItem('theme') === 'dracula',
+    isDracula: global.localStorage && global.localStorage.getItem('theme') === 'dracula',
   }
 
   toggleTheme = () => {
     const { isDracula } = this.state;
 
     if (isDracula) {
-      localStorage.setItem('theme', 'normal');
+      if (global.localStorage) {
+        global.localStorage.setItem('theme', 'normal');
+      }
     } else {
-      localStorage.setItem('theme', 'dracula');
+      if (global.localStorage) {
+        global.localStorage.setItem('theme', 'dracula');
+      }
     }
 
     this.setState({
