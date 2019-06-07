@@ -3,6 +3,10 @@
 ## TODO
 - [ ] use typescript for typing
 
+## 1.1.3 - 2019-06-07
+- [x] update packages to fix dependency error
+- [x] fix typo in README
+
 ## 1.1.2 - 2019-04-07
 - [x] fix ui bug (dropdown in GNB)
 

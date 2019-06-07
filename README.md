@@ -4,7 +4,7 @@
 ## Install
 ```
 $ git clone git@github.com:wonism/gatsby-advanced-blog.git <<PROJECT_NAME>>
-# Recommend you to install delete `.git`
+# Recommend you to delete `.git`
 $ cd <<PROJECT_NAME>> && rm -r .git
 ```
 
