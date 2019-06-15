@@ -23,6 +23,10 @@ $ npm run dev
 $ npm run build
 ```
 
+## ⚠️ Caution
+You **SHOULD** change some constants variable in `src/constants/index.js`.
+They are related with site informations, social media and Disqus.
+
 ## Features
 - Post
   - Pagination

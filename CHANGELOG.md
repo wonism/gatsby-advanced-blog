@@ -3,6 +3,9 @@
 ## TODO
 - [ ] use typescript for typing
 
+## 1.1.4 - 2019-06-16
+- [x] add sitemap.xml & robots.txt
+
 ## 1.1.3 - 2019-06-07
 - [x] update packages to fix dependency error
 - [x] fix typo in README

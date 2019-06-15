@@ -1,11 +1,14 @@
 const { TITLE, AUTHOR, SITE_URL } = require('./src/constants');
 
+const siteMetadata = {
+  title: TITLE,
+  author: AUTHOR,
+  homepage: SITE_URL,
+  siteUrl: SITE_URL,
+};
+
 module.exports = {
-  siteMetadata: {
-    title: TITLE,
-    author: AUTHOR,
-    homepage: SITE_URL,
-  },
+  siteMetadata,
   pathPrefix: '/',
   plugins: [
     {
@@ -82,6 +85,15 @@ module.exports = {
           type: `image/png`,
         }],
         */
+      },
+    },
+    'gatsby-plugin-sitemap',
+    {
+      resolve: 'gatsby-plugin-robots-txt',
+      options: {
+        host: SITE_URL,
+        sitemap: `${SITE_URL}/sitemap.xml`,
+        policy: [{ userAgent: '*', allow: '/' }],
       },
     },
   ],
