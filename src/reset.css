@@ -64,7 +64,6 @@ img {
   user-select: none;
 }
 body {
-  -webkit-filter: blur(0.000001px);
   -webkit-font-smoothing: antialiased;
 }
 button, a, label {

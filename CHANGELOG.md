@@ -3,6 +3,9 @@
 ## TODO
 - [ ] use typescript for typing
 
+## 1.1.5 - 2019-07-28
+- [x] remove `filter` style of body
+
 ## 1.1.4 - 2019-06-16
 - [x] add sitemap.xml & robots.txt
 
